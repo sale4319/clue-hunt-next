@@ -13,7 +13,7 @@
   min-height: 100svh;
   padding: 80px;
   gap: 50px;
-  font-family: var(--font-geist-sans);
+  font-family: "Nunito Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
