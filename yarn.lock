@@ -1003,6 +1003,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"distributed-ui@npm:^0.2.2":
+  version: 0.2.2
+  resolution: "distributed-ui@npm:0.2.2"
+  peerDependencies:
+    next: 15.0.3
+    react: 19.0.0-rc-66855b96-20241106
+    react-dom: 19.0.0-rc-66855b96-20241106
+  checksum: 10c0/b463f88c6bc7ce5c5be70a6884e3bd1d11a386baebc946e0b79dc5d0d02e43e537c02a51cfa90b7ac48344edf3de30e140b410c075530dd83f6cccd08befe1c8
+  languageName: node
+  linkType: hard
+
 "doctrine@npm:^2.1.0":
   version: 2.1.0
   resolution: "doctrine@npm:2.1.0"
@@ -2275,6 +2286,7 @@ __metadata:
     "@types/node": "npm:^20"
     "@types/react": "npm:^18"
     "@types/react-dom": "npm:^18"
+    distributed-ui: "npm:^0.2.2"
     eslint: "npm:^8"
     eslint-config-next: "npm:15.0.3"
     next: "npm:15.0.3"
