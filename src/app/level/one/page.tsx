@@ -1,4 +1,4 @@
-import LevelOne from "./_components/LevelOne/LevelOne";
+import LevelOne from "../../../shared/levels/LevelOne/LevelOne";
 
 import styles from "../../page.module.css";
 

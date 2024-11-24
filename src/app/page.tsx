@@ -1,4 +1,4 @@
-import Start from "./_components/LevelOne/Start";
+import Start from "../shared/levels/Start/Start";
 
 import styles from "./page.module.css";
 
