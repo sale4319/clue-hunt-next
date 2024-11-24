@@ -1,4 +1,4 @@
-import { DefaultButton } from "@/components/DefaultButton/DefaultButton";
+import { DefaultButton } from "@/shared/components/DefaultButton";
 import { getRoute } from "@/utils";
 
 import styles from "../../page.module.css";

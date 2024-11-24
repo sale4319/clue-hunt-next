@@ -7,8 +7,8 @@ export default function page() {
     <div className={styles.page}>
       <main className={styles.main}>
         <h1>Level one</h1>
-        <LevelOne />
       </main>
+      <LevelOne />
     </div>
   );
 }

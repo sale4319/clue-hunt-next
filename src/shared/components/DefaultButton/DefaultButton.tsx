@@ -29,7 +29,7 @@ export function DefaultButton({
   const mode = primary
     ? styles.storybookButtonPrimary
     : primary === undefined
-    ? styles["default"]
+    ? styles.default
     : styles.storybookButtonSecondary;
 
   return (

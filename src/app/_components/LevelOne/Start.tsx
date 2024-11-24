@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { DefaultButton } from "@/shared/components/DefaultButton";
 import { getRoute } from "@/utils";
 
-export default function LevelOne() {
+export default function Start() {
   const [state, setstate] = useState(true);
 
   const handleState = () => {
@@ -19,7 +19,7 @@ export default function LevelOne() {
       />
       <DefaultButton
         size="medium"
-        href={`${getRoute(state, "one")}`}
+        href={`${getRoute(state, "start")}`}
         label="Continue"
         primary={state}
       />
