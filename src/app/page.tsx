@@ -1,15 +1,15 @@
-import Link from "next/link";
 import { getRoute } from "@/utils";
 
 import styles from "./page.module.css";
+import { DefaultButton } from "@/components/DefaultButton/DefaultButton";
 
 export default function Home() {
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <Link href={`${getRoute(false, "start")}`}>Start</Link>
+        <h1>Start</h1>
       </main>
-      <footer className={styles.footer}>Footer</footer>
+      <DefaultButton href={`${getRoute(false, "start")}`} label="Start" />
     </div>
   );
 }
