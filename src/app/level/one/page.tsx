@@ -1,10 +1,14 @@
-import { getRoute } from "@/utils";
-import Link from "next/link";
+import LevelOne from "../../../shared/levels/LevelOne/LevelOne";
+
+import styles from "../../page.module.css";
 
 export default function page() {
   return (
-    <div>
-      Level one <Link href={`${getRoute(false, "one")}`}>Continue</Link>
+    <div className={styles.page}>
+      <main className={styles.main}>
+        <h1>Level one</h1>
+      </main>
+      <LevelOne />
     </div>
   );
 }
