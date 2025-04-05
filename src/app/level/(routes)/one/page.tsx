@@ -1,5 +1,5 @@
 import "server-only";
-import LevelOne from "@/shared/levels/LevelOne/LevelOne";
+import LevelOne from "./_components/LevelOne";
 import { Page } from "@/shared/components/Page";
 
 export default function page() {

@@ -1,5 +1,5 @@
 import "server-only";
-import Start from "@/shared/levels/Start/Start";
+import Start from "./_components/Start";
 
 import { Page } from "@/shared/components/Page";
 

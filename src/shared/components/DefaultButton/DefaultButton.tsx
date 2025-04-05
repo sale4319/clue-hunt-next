@@ -1,43 +1,42 @@
-import styles from "./DefaultButton.module.css";
+'use client"';
 import Link from "next/link";
+import styles from "./DefaultButton.module.css";
 
 export interface ButtonProps {
-  /** Is this the principal call to action on the page? */
   primary?: boolean;
-  /** What background color to use */
   backgroundColor?: string;
-  /** How large should the button be? */
+  isLocked?: boolean;
   size?: "small" | "medium" | "large";
-  /** Button contents */
-  label: string;
-  /** Optional click handler */
+  mode?: "fill" | "pulse" | "close" | "raise" | "up" | "slide" | "offset";
+  label?: string;
   onClick?: () => void;
   href: string;
 }
 
-/** Primary UI component for user interaction */
 export function DefaultButton({
   primary,
   size = "medium",
+  mode = "fill",
+  isLocked,
   backgroundColor,
   label,
   href,
   ...props
 }: ButtonProps) {
-  const mode = primary
-    ? styles.storybookButtonPrimary
+  const toggleColor = primary
+    ? styles.fill
     : primary === undefined
-    ? styles.default
-    : styles.storybookButtonSecondary;
+    ? styles[mode]
+    : styles.pulse;
 
   return (
     <Link
       href={href}
-      className={[styles.storybookButton, styles[`${size}`], mode].join(" ")}
+      className={[styles.primaryButton, styles[size], toggleColor].join(" ")}
       style={{ backgroundColor }}
       {...props}
     >
-      {label}
+      {isLocked ? "Locked" : isLocked === undefined ? label : "Unlocked"}
     </Link>
   );
 }

@@ -1,7 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
+import { QuizForm } from "distributed-ui";
 import { DefaultButton } from "@/shared/components/DefaultButton";
-import { getRoute } from "@/utils";
+import { getRoute } from "@/shared/utils";
+import { questionSetOne } from "../../../../../../QuizSets";
+import { Button } from "chn-ui";
 
 export default function Start() {
   const [state, setstate] = useState(true);
@@ -11,16 +14,13 @@ export default function Start() {
   };
   return (
     <>
-      <DefaultButton
-        size="medium"
-        href={""}
-        label="Unlock"
-        onClick={handleState}
-      />
+      <Button label="Start" />
+      <QuizForm questions={questionSetOne} handleUnlock={handleState} />
+
       <DefaultButton
         size="medium"
         href={`${getRoute(state, "start")}`}
-        label="Continue"
+        isLocked={state}
         primary={state}
       />
     </>
