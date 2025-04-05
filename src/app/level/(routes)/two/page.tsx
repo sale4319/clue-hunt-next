@@ -1,19 +1,16 @@
+import "server-only";
 import { DefaultButton } from "@/shared/components/DefaultButton";
 import { getRoute } from "@/utils";
-
-import styles from "../../page.module.css";
+import { Page } from "@/shared/components/Page/";
 
 export default function page() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <h1>Level two</h1>
-      </main>
+    <Page title="Level two">
       <DefaultButton
         size="medium"
         href={`${getRoute(true, "start")}`}
         label="Recycle"
       />
-    </div>
+    </Page>
   );
 }
