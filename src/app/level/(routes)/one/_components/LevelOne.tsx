@@ -15,12 +15,13 @@ export default function LevelOne() {
         size="medium"
         href={""}
         label="Unlock"
+        mode="pulse"
         onClick={handleState}
       />
       <DefaultButton
         size="medium"
         href={`${getRoute(state, "one")}`}
-        label="Continue"
+        isLocked={state}
         primary={state}
       />
     </>

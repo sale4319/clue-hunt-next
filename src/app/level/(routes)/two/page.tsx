@@ -9,6 +9,7 @@ export default function page() {
       <DefaultButton
         size="medium"
         href={`${getRoute(true, "start")}`}
+        mode="raise"
         label="Recycle"
       />
     </Page>

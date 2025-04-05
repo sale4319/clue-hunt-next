@@ -1,36 +1,109 @@
-.storybookButton {
-  display: inline-block;
+.fill:hover,
+.fill:focus {
+  box-shadow: inset 0 0 0 2em var(--hover);
+}
+
+.pulse:hover,
+.pulse:focus {
+  background: var(--hover);
+  animation: pulse 1s;
+  box-shadow: 0 0 0 2em transparent;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 var(--hover);
+  }
+}
+
+.close:hover,
+.close:focus {
+  box-shadow: inset -3.5em 0 0 0 var(--hover), inset 3.5em 0 0 0 var(--hover);
+}
+.raise:hover,
+.raise:focus {
+  background: var(--color);
+  box-shadow: 0 0.5em 0.5em -0.4em var(--hover);
+  transform: translateY(-0.25em);
+}
+.up:hover,
+.up:focus {
+  box-shadow: inset 0 -3.25em 0 0 var(--hover);
+}
+.slide:hover,
+.slide:focus {
+  box-shadow: inset 8em 0 0 0 var(--hover);
+}
+.offset {
+  box-shadow: 0.3em 0.3em 0 0 var(--color), inset 0.3em 0.3em 0 0 var(--color);
+}
+.offset:hover,
+.offset:focus {
+  box-shadow: 0 0 0 0 var(--hover), inset 6em 3.5em 0 0 var(--hover);
+}
+.fill {
+  --color: #e91e63;
+  --hover: #e91e63;
+}
+
+.pulse {
+  --color: #8ed622;
+  --hover: #8ed622;
+}
+
+.close {
+  --color: #e91e63;
+  --hover: #e91e63;
+}
+
+.raise {
+  --color: #ffa260;
+  --hover: #ffa260;
+}
+
+.up {
+  --color: #75f8e2;
+  --hover: #75d3f8;
+}
+
+.slide {
+  --color: #8fc866;
+  --hover: #66c887;
+}
+
+.offset {
+  --color: #e91e63;
+  --hover: #e91e63;
+}
+
+.primaryButton {
+  color: var(--color);
+  transition: 0.25s;
+  user-select: none;
   cursor: pointer;
-  border: 0;
-  border-radius: 3em;
-  font-weight: 700;
+  background: none;
+  border: 2px solid;
+  font: inherit;
   line-height: 1;
-  font-family: "Nunito Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 0.5em;
+  padding: 1em 2em;
 }
-.storybookButtonPrimary {
-  box-shadow: red 0px 0px 0px 1px inset;
-  background-color: transparent;
-  color: red;
+
+.primaryButton:hover,
+.primaryButton:focus {
+  border-color: var(--hover);
+  color: #fff;
 }
-.storybookButtonSecondary {
-  box-shadow: greenyellow 0px 0px 0px 1px inset;
-  background-color: transparent;
-  color: greenyellow;
-}
-.default {
-  box-shadow: white 0px 0px 0px 1px inset;
-  background-color: transparent;
-  color: white;
-}
+
 .small {
+  font-size: 14px;
   padding: 10px 16px;
-  font-size: 12px;
 }
 .medium {
+  font-size: 16px;
   padding: 11px 20px;
-  font-size: 14px;
 }
 .large {
+  font-size: 18px;
   padding: 12px 24px;
-  font-size: 16px;
 }
