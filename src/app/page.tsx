@@ -1,14 +1,12 @@
-import Start from "../shared/levels/Start/Start";
+import "server-only";
+import Start from "@/shared/levels/Start/Start";
 
-import styles from "./page.module.css";
+import { Page } from "@/shared/components/Page";
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <h1>Start</h1>
-      </main>
+    <Page title="Start">
       <Start />
-    </div>
+    </Page>
   );
 }
