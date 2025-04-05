@@ -1,11 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  basePath: "/clue-hunt-next",
   async redirects() {
     return [
       {
         source: "/",
-        destination: "/clue-hunt-next/level/start",
+        destination: "/level/start",
         permanent: true,
       },
     ];
