@@ -1,7 +1,7 @@
 {
   "name": "next-app",
   "version": "0.1.0",
-  "homepage": "https://sale4319.github.io/",
+  "homepage": "https://sale4319.github.io/clue-hunt-next/",
   "private": true,
   "scripts": {
     "dev": "next dev",

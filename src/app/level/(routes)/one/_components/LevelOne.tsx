@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { DefaultButton } from "@/shared/components/DefaultButton";
-import { getRoute } from "@/utils";
+import { getRoute } from "@/shared/utils";
 
 export default function LevelOne() {
   const [state, setstate] = useState(true);
