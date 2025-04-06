@@ -1,7 +1,6 @@
-import Start from "./_components/Start";
 import "server-only";
-
-import { Page } from "@/shared/components/Page";
+import { Page } from "@app/page-component";
+import Start from "./_components/Start";
 
 export default function Home() {
   return (

@@ -1,5 +1,6 @@
-import { MainHeader } from "@app/header-component";
+import "server-only";
 import type { Metadata } from "next";
+import { MainHeader } from "@app/header-component";
 
 import "./globals.css";
 

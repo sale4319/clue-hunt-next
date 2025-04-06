@@ -1,7 +1,7 @@
 "use client";
+import { useState } from "react";
 import { DefaultButton } from "@app/default-button";
 import { getRoute } from "@app/utils";
-import { useState } from "react";
 
 export default function Start() {
   const [state, setstate] = useState(true);

@@ -1,4 +1,5 @@
 import "server-only";
+
 import styles from "./MainHeader.module.css";
 
 export const MainHeader = () => (

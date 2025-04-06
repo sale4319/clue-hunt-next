@@ -1,7 +1,7 @@
+import "server-only";
 import { DefaultButton } from "@app/default-button";
 import { Page } from "@app/page-component";
 import { getRoute } from "@app/utils";
-import "server-only";
 
 export default function page() {
   return (
