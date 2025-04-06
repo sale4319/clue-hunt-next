@@ -16,7 +16,7 @@
     "**/*.tsx",
     "next-env.d.ts",
     ".next/types/**/*.ts",
-    "next.config.cjs"
+    "next.config.ts"
   ],
   "references": [
     {
