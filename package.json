@@ -5,6 +5,7 @@
   "type": "module",
   "workspaces": [
     "src/shared/components/*",
+    "src/shared/constants/*",
     "src/shared/utils/*"
   ],
   "scripts": {

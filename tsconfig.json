@@ -7,6 +7,7 @@
       "@app/default-button": ["src/shared/components/default-button/src"],
       "@app/page-component:": ["src/shared/components/page-component/src"],
       "@app/header-component": ["src/shared/components/header-component/src"],
+      "@app/constants": ["src/shared/constants"],
       "@app/utils": ["src/shared/utils"]
     }
   },
@@ -26,6 +27,9 @@
     },
     {
       "path": "src/shared/components/main-header/tsconfig.next.json"
+    },
+    {
+      "path": "src/shared/constants/tsconfig.next.json"
     },
     {
       "path": "src/shared/utils/tsconfig.next.json"
