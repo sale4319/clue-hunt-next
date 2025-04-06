@@ -5,21 +5,21 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
-"@app/default-button@workspace:src/shared/components/DefaultButton":
+"@app/default-button@workspace:src/shared/components/default-button":
   version: 0.0.0-use.local
-  resolution: "@app/default-button@workspace:src/shared/components/DefaultButton"
+  resolution: "@app/default-button@workspace:src/shared/components/default-button"
   languageName: unknown
   linkType: soft
 
-"@app/header-component@workspace:src/shared/components/MainHeader":
+"@app/header-component@workspace:src/shared/components/main-header":
   version: 0.0.0-use.local
-  resolution: "@app/header-component@workspace:src/shared/components/MainHeader"
+  resolution: "@app/header-component@workspace:src/shared/components/main-header"
   languageName: unknown
   linkType: soft
 
-"@app/page-component@workspace:src/shared/components/Page":
+"@app/page-component@workspace:src/shared/components/page":
   version: 0.0.0-use.local
-  resolution: "@app/page-component@workspace:src/shared/components/Page"
+  resolution: "@app/page-component@workspace:src/shared/components/page"
   languageName: unknown
   linkType: soft
 
@@ -848,16 +848,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chn-ui@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "chn-ui@npm:0.1.2"
-  peerDependencies:
-    react: ^19.0.0
-    react-dom: ^19.0.0
-  checksum: 10c0/b9d2040d80e5a9ae0536f835a9d84b3c9f136b952975316070b6be2f65a5903f312c73277393ae249992419125247c5f46e703ea0c1e97103d49614730a9279c
-  languageName: node
-  linkType: hard
-
 "client-only@npm:0.0.1":
   version: 0.0.1
   resolution: "client-only@npm:0.0.1"
@@ -872,7 +862,7 @@ __metadata:
     "@types/node": "npm:^20"
     "@types/react": "npm:^19"
     "@types/react-dom": "npm:^19"
-    chn-ui: "npm:^0.1.2"
+    clue-hunt-ui: "npm:^0.1.0"
     eslint: "npm:^8"
     eslint-config-next: "npm:15.0.3"
     next: "npm:15.0.3"
@@ -882,6 +872,16 @@ __metadata:
     typescript: "npm:^5"
   languageName: unknown
   linkType: soft
+
+"clue-hunt-ui@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "clue-hunt-ui@npm:0.1.0"
+  peerDependencies:
+    react: ^18.2.0
+    react-dom: ^18.2.0
+  checksum: 10c0/5211c3012f4ef659fe9f68a88524898cb5aafb165bd2ad96912532cc56db35625fcb2a967b5cef1c71115c4876f43d25654d7d7c64e251831c5f8799e4d10c1d
+  languageName: node
+  linkType: hard
 
 "color-convert@npm:^2.0.1":
   version: 2.0.1

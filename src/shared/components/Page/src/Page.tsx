@@ -1,19 +1,15 @@
 import "server-only";
-
+import { Container } from "clue-hunt-ui";
 import styles from "./Page.module.css";
 
 type PageProps = {
   children: React.ReactNode;
-  title?: string;
 };
 
-export default function Home({ children, title }: PageProps) {
+export default function Home({ children }: PageProps) {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <h1>{title}</h1>
-      </main>
-      {children}
-    </div>
+    <Container>
+      <div className={styles.page}>{children}</div>
+    </Container>
   );
 }

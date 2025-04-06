@@ -5,6 +5,7 @@
   "type": "module",
   "workspaces": [
     "src/shared/components/*",
+    "src/shared/constants/*",
     "src/shared/utils/*"
   ],
   "scripts": {
@@ -15,7 +16,7 @@
     "lint:fix": "next lint --fix"
   },
   "dependencies": {
-    "chn-ui": "^0.1.2",
+    "clue-hunt-ui": "^0.1.0",
     "next": "15.0.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
