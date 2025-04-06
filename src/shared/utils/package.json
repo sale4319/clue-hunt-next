@@ -1,0 +1,10 @@
+{
+  "name": "@app/utils",
+  "version": "0.1.0",
+  "private": true,
+  "keywords": [
+    "utils",
+    "shareable"
+  ],
+  "main": "./index.ts"
+}

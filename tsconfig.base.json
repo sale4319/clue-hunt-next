@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "preserveSymlinks": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "composite": true,
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": false,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "typeRoots": ["node_modules/@types", "node_modules/@testing-library"]
+  },
+  "include": ["next-env.d.ts", "**/*.json"],
+  "exclude": ["node_modules", ".next"]
+}
