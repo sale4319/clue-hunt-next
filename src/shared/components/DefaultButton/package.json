@@ -1,0 +1,10 @@
+{
+  "name": "@app/default-button",
+  "version": "0.1.0",
+  "private": true,
+  "keywords": [
+    "component",
+    "shareable"
+  ],
+  "main": "./src/index.ts"
+}

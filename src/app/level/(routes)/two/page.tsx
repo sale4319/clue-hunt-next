@@ -1,7 +1,7 @@
 import "server-only";
-import { DefaultButton } from "@/shared/components/DefaultButton";
-import { getRoute } from "@/shared/utils";
-import { Page } from "@/shared/components/Page/";
+import { DefaultButton } from "@app/default-button";
+import { Page } from "@app/page-component";
+import { getRoute } from "@app/utils";
 
 export default function page() {
   return (

@@ -1,4 +1,4 @@
-import React from "react";
+import "server-only";
 
 import styles from "./MainHeader.module.css";
 

@@ -1,5 +1,6 @@
 'use client"';
 import Link from "next/link";
+
 import styles from "./DefaultButton.module.css";
 
 export interface ButtonProps {
