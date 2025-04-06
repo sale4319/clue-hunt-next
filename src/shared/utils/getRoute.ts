@@ -1,3 +1,3 @@
 export function getRoute(quiz: string, level: string): string {
-  return `/${quiz}/${level}`;
+  return `/clue-hunt-next${quiz}/${level}`;
 }
