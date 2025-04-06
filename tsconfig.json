@@ -7,7 +7,7 @@
       "@app/default-button": ["src/shared/components/default-button/src"],
       "@app/page-component:": ["src/shared/components/page-component/src"],
       "@app/header-component": ["src/shared/components/header-component/src"],
-      "@app/constants": ["src/shared/constants"],
+      "@app/quiz-set-contract": ["src/shared/contracts/quiz-sets-contract/src"],
       "@app/utils": ["src/shared/utils"]
     }
   },
@@ -29,7 +29,7 @@
       "path": "src/shared/components/header-component/tsconfig.next.json"
     },
     {
-      "path": "src/shared/constants/tsconfig.next.json"
+      "path": "src/shared/contracts/quiz-sets-contract/tsconfig.next.json"
     },
     {
       "path": "src/shared/utils/tsconfig.next.json"

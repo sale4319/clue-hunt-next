@@ -1,10 +1,10 @@
 {
-  "name": "@app/constants",
+  "name": "@app/quiz-sets-contract",
   "version": "0.1.0",
   "private": true,
   "keywords": [
     "utils",
     "shareable"
   ],
-  "main": "./index.ts"
+  "main": "./src/index.ts"
 }
