@@ -1,3 +1,3 @@
 export function getRoute(quiz: string, level: string): string {
-  return `/clue-hunt-next/${quiz}/${level}`;
+  return `${process.env.NEXT_PUBLIC_BASE_PATH}/${quiz}/${level}`;
 }
