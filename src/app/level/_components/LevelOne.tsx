@@ -1,20 +1,28 @@
 "use client";
 import { useState } from "react";
-import { Button } from "clue-hunt-ui";
+import { Button, SpacerElement, UnlockButton, Title } from "clue-hunt-ui";
 import { getRoute } from "@app/utils";
+import { LevelOneMessages } from "@app/messages-contract";
 
 export default function LevelOne() {
   const [isLocked, setIsLocked] = useState(true);
 
-  const handleState = () => {
+  const handleUnlock = () => {
     setIsLocked(!isLocked);
   };
   return (
     <>
-      <Button size="medium" label="Unlock" mode="pulse" onClick={handleState} />
+      <SpacerElement size="medium">
+        <UnlockButton
+          data-testid="unlockButton"
+          onClick={handleUnlock}
+          label={LevelOneMessages.UNLOCK}
+        />
+      </SpacerElement>
+      <Title label={LevelOneMessages.HINT} />
       <Button
         size="medium"
-        {...(!isLocked && { href: `${getRoute("quiz", "one")}` })}
+        href={getRoute("quiz", "one")}
         isLocked={isLocked}
         primary={isLocked}
       />

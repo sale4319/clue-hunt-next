@@ -1,6 +1,5 @@
 import "server-only";
 import type { Metadata } from "next";
-import { MainHeader } from "@app/header-component";
 
 import "./globals.css";
 import styles from "./layout.module.css";
@@ -25,9 +24,7 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <div className={styles.container}>
-          <MainHeader /> {children}
-        </div>
+        <div className={styles.container}>{children}</div>
       </body>
     </html>
   );

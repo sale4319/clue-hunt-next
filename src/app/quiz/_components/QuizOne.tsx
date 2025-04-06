@@ -14,7 +14,7 @@ export default function QuizOne() {
     <>
       <Button
         size="medium"
-        {...(!isLocked && { href: `${getRoute("level", "two")}` })}
+        href={getRoute("level", "two")}
         isLocked={isLocked}
         primary={isLocked}
       />
