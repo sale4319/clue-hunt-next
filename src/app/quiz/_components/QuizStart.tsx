@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Button, QuizForm } from "clue-hunt-ui";
 import { getRoute } from "@app/utils";
-import { questionSetOne } from "@app/constants";
+import { questionSetOne } from "@app/quiz-sets-contract";
 
 export default function QuizStart() {
   const [isLocked, setIsLocked] = useState(true);

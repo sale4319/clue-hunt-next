@@ -1,0 +1,11 @@
+{
+  "name": "@app/quiz-sets-contract",
+  "version": "0.1.0",
+  "private": true,
+  "keywords": [
+    "contract",
+    "shareable",
+    "scope:quizes"
+  ],
+  "main": "./src/index.ts"
+}
