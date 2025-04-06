@@ -848,16 +848,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chn-ui@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "chn-ui@npm:0.1.2"
-  peerDependencies:
-    react: ^19.0.0
-    react-dom: ^19.0.0
-  checksum: 10c0/b9d2040d80e5a9ae0536f835a9d84b3c9f136b952975316070b6be2f65a5903f312c73277393ae249992419125247c5f46e703ea0c1e97103d49614730a9279c
-  languageName: node
-  linkType: hard
-
 "client-only@npm:0.0.1":
   version: 0.0.1
   resolution: "client-only@npm:0.0.1"
@@ -872,7 +862,7 @@ __metadata:
     "@types/node": "npm:^20"
     "@types/react": "npm:^19"
     "@types/react-dom": "npm:^19"
-    chn-ui: "npm:^0.1.2"
+    clue-hunt-ui: "npm:^0.0.7"
     eslint: "npm:^8"
     eslint-config-next: "npm:15.0.3"
     next: "npm:15.0.3"
@@ -882,6 +872,16 @@ __metadata:
     typescript: "npm:^5"
   languageName: unknown
   linkType: soft
+
+"clue-hunt-ui@npm:^0.0.7":
+  version: 0.0.7
+  resolution: "clue-hunt-ui@npm:0.0.7"
+  peerDependencies:
+    react: ^18.2.0
+    react-dom: ^18.2.0
+  checksum: 10c0/d25bdd824e7b342a67ca046de247c13a0246dea74ce92bd60006461024f612e9048188b9a3f331599b50f7168c0cc7ca34f8da76c75ef542330b9beab8cadd1e
+  languageName: node
+  linkType: hard
 
 "color-convert@npm:^2.0.1":
   version: 2.0.1

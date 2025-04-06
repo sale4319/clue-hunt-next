@@ -1,11 +1,11 @@
 import "server-only";
 import { Page } from "@app/page-component";
-import Start from "./_components/Start";
+import LevelStart from "../../_components/LevelStart";
 
 export default function Home() {
   return (
     <Page title="Start">
-      <Start />
+      <LevelStart />
     </Page>
   );
 }

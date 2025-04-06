@@ -1,11 +1,11 @@
 import "server-only";
 import { Page } from "@app/page-component";
-import LevelOne from "../../_components/LevelOne";
+import QuizStart from "../../_components/QuizStart";
 
 export default function page() {
   return (
-    <Page title="Level one">
-      <LevelOne />
+    <Page>
+      <QuizStart />
     </Page>
   );
 }
