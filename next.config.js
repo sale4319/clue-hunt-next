@@ -1,6 +1,4 @@
-// next.config.cjs
-
-module.exports = {
+export default {
     reactStrictMode: true,
     swcMinify: true,
 };
