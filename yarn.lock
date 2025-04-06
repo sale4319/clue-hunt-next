@@ -5,21 +5,21 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
-"@app/default-button@workspace:src/shared/components/DefaultButton":
+"@app/default-button@workspace:src/shared/components/default-button":
   version: 0.0.0-use.local
-  resolution: "@app/default-button@workspace:src/shared/components/DefaultButton"
+  resolution: "@app/default-button@workspace:src/shared/components/default-button"
   languageName: unknown
   linkType: soft
 
-"@app/header-component@workspace:src/shared/components/MainHeader":
+"@app/header-component@workspace:src/shared/components/main-header":
   version: 0.0.0-use.local
-  resolution: "@app/header-component@workspace:src/shared/components/MainHeader"
+  resolution: "@app/header-component@workspace:src/shared/components/main-header"
   languageName: unknown
   linkType: soft
 
-"@app/page-component@workspace:src/shared/components/Page":
+"@app/page-component@workspace:src/shared/components/page":
   version: 0.0.0-use.local
-  resolution: "@app/page-component@workspace:src/shared/components/Page"
+  resolution: "@app/page-component@workspace:src/shared/components/page"
   languageName: unknown
   linkType: soft
 
@@ -862,7 +862,7 @@ __metadata:
     "@types/node": "npm:^20"
     "@types/react": "npm:^19"
     "@types/react-dom": "npm:^19"
-    clue-hunt-ui: "npm:^0.0.7"
+    clue-hunt-ui: "npm:^0.0.8"
     eslint: "npm:^8"
     eslint-config-next: "npm:15.0.3"
     next: "npm:15.0.3"
@@ -873,13 +873,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"clue-hunt-ui@npm:^0.0.7":
-  version: 0.0.7
-  resolution: "clue-hunt-ui@npm:0.0.7"
+"clue-hunt-ui@npm:^0.0.8":
+  version: 0.0.8
+  resolution: "clue-hunt-ui@npm:0.0.8"
   peerDependencies:
     react: ^18.2.0
     react-dom: ^18.2.0
-  checksum: 10c0/d25bdd824e7b342a67ca046de247c13a0246dea74ce92bd60006461024f612e9048188b9a3f331599b50f7168c0cc7ca34f8da76c75ef542330b9beab8cadd1e
+  checksum: 10c0/c2e62ea605a92d8557468c87fb35b719a48e15e9575a16dc5d367a217947fc70eb17b9eef5dd2d8f369e34a63b0410faca398d336b7e29b4a3ac7a4243a9c534
   languageName: node
   linkType: hard
 

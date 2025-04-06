@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { MainHeader } from "@app/header-component";
 
 import "./globals.css";
+import styles from "./layout.module.css";
 
 export const metadata: Metadata = {
   title: "Clue hunt",
@@ -20,9 +21,9 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.svg" />
       </head>
       <body>
-        <>
+        <div className={styles.container}>
           <MainHeader /> {children}
-        </>
+        </div>
       </body>
     </html>
   );
