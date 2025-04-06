@@ -11,13 +11,7 @@
       "@app/utils": ["src/shared/utils"]
     }
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "next-env.d.ts",
-    ".next/types/**/*.ts",
-    "next.config.js"
-  ],
+  "include": ["**/*.ts", "**/*.tsx", "next-env.d.ts", ".next/types/**/*.ts"],
   "references": [
     {
       "path": "src/shared/components/default-button/tsconfig.next.json"
