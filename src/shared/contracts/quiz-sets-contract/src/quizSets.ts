@@ -25,21 +25,21 @@ export const questionSetOne = [
     correctAnswerIndex: 2,
   },
   {
-    question: " JSX allows us to write _____.?",
+    question: "What is JSX in React?",
     answers: [
-      "jQuery in React",
-      "Angular Code in React",
-      "MySQL in React",
-      "HTML in React",
+      "A templating engine",
+      "A JavaScript extension that allows HTML-like syntax",
+      "A CSS preprocessor",
+      "A database query language",
     ],
-    correctAnswerIndex: 3,
+    correctAnswerIndex: 1,
   },
   {
     question: "What are Props?",
     answers: [
       "Props are arguments passed into React components",
       "Props are functions in the ReactJS",
-      "Props are used to returns multiple values from the function",
+      "Props are used to return multiple values from a component",
       "All of the above",
     ],
     correctAnswerIndex: 0,
@@ -78,17 +78,17 @@ export const questionSetTwo = [
     correctAnswerIndex: 0,
   },
   {
-    question: "In ReactJS, what is State?",
+    question: "What is React.Fragment used for?",
     answers: [
-      "It's a temporary storage of the elements",
-      "It's a state of the execution of the ReactJS application",
-      "It's an internal storage of the components",
-      "All of the above",
+      "To create new DOM elements",
+      "To group multiple elements without adding extra nodes to the DOM",
+      "To add inline styles",
+      "To memoize components",
     ],
-    correctAnswerIndex: 2,
+    correctAnswerIndex: 1,
   },
   {
-    question: "How many elements can a valid react component return?",
+    question: "How many top-level elements can a valid React component return?",
     answers: [
       "1 Element",
       "More than 1 element",
@@ -123,7 +123,7 @@ export const questionSetThree = [
   },
   {
     question:
-      "Which of the following keyword is used to create a class inheritance?",
+      "Which of the following keywords are used to create a class inheritance?",
     answers: ["Create", "Inherits", "Extends", "This"],
     correctAnswerIndex: 2,
   },
@@ -161,7 +161,7 @@ export const questionSetThree = [
       "It is a process to set the state",
       "The process through which React updates the DOM",
     ],
-    correctAnswerIndex: 2,
+    correctAnswerIndex: 3,
   },
 ];
 
@@ -173,7 +173,7 @@ export const questionSetFour = [
   },
   {
     question:
-      "Life cycle of components methods falls under following categories?",
+      "The lifecycle methods of components fall under which categories?",
     answers: [
       "Mounting, Unmounting",
       "Mounting, Updating",
@@ -183,7 +183,7 @@ export const questionSetFour = [
     correctAnswerIndex: 3,
   },
   {
-    question: "React.js covers only the view layer of the app.",
+    question: "React.js only covers the view layer of an application.",
     answers: ["Yes", "No", "Maybe"],
     correctAnswerIndex: 0,
   },
@@ -202,7 +202,7 @@ export const questionSetFour = [
     answers: [
       "UseState, Stateless",
       "Statefull, Stateless",
-      "Unstatefull Statefull",
+      "Unstatefull Stateful",
       "None of these",
     ],
     correctAnswerIndex: 1,
@@ -211,5 +211,123 @@ export const questionSetFour = [
     question: "Can we write a comment in SVG file?",
     answers: ["Yes", "No", "Maybe"],
     correctAnswerIndex: 0,
+  },
+];
+
+export const questionSetFive = [
+  {
+    question: "What is the default behavior of React on state update?",
+    answers: [
+      "It fully reloads the page",
+      "It re-renders the entire DOM",
+      "It re-renders only the affected components",
+      "It sends a request to the backend",
+    ],
+    correctAnswerIndex: 2,
+  },
+  {
+    question: "What is a key prop in React used for?",
+    answers: [
+      "To uniquely identify elements in a list",
+      "To encrypt data",
+      "To access state",
+      "To trigger re-renders",
+    ],
+    correctAnswerIndex: 0,
+  },
+  {
+    question:
+      "Which method is used to pass data from parent to child component?",
+    answers: ["Using Redux", "Using props", "Using context", "Using useRef"],
+    correctAnswerIndex: 1,
+  },
+  {
+    question:
+      "What is the purpose of useEffect with an empty dependency array?",
+    answers: [
+      "It runs on every render",
+      "It never runs",
+      "It runs only once after the initial render",
+      "It causes a memory leak",
+    ],
+    correctAnswerIndex: 2,
+  },
+  {
+    question: "How can you optimize performance in a React app?",
+    answers: [
+      "Using more components",
+      "Using class components only",
+      "Using useMemo, React.memo, and useCallback",
+      "Avoiding functional components",
+    ],
+    correctAnswerIndex: 2,
+  },
+  {
+    question: "Which statement about React keys is true?",
+    answers: [
+      "They should be random values",
+      "They must be globally unique",
+      "They help React identify which items changed",
+      "They are optional for lists",
+    ],
+    correctAnswerIndex: 2,
+  },
+];
+export const questionSetSix = [
+  {
+    question: "What is the main purpose of React's Context API?",
+    answers: [
+      "To manage routing in a React application",
+      "To handle HTTP requests",
+      "To share global data without prop drilling",
+      "To manage component lifecycle",
+    ],
+    correctAnswerIndex: 2,
+  },
+  {
+    question: "Which two parts make up the Context API?",
+    answers: [
+      "Provider and Consumer",
+      "Reducer and Dispatcher",
+      "Hook and Callback",
+      "State and Props",
+    ],
+    correctAnswerIndex: 0,
+  },
+  {
+    question: "Where should you place the Context Provider in your app?",
+    answers: [
+      "Outside the React app root",
+      "As deep as possible in the component tree",
+      "At any random location",
+      "High up in the component tree to wrap components that need access",
+    ],
+    correctAnswerIndex: 3,
+  },
+  {
+    question: "What are React Server Components designed to do?",
+    answers: [
+      "Handle client-side state more efficiently",
+      "Replace all server-side logic",
+      "Render components on the server and send serialized HTML/JS to the client",
+      "Enable browser-only rendering",
+    ],
+    correctAnswerIndex: 2,
+  },
+  {
+    question: "Which of the following is true about Server Components?",
+    answers: [
+      "They can use browser-only APIs like window or document",
+      "They can fetch data directly from the server",
+      "They replace the need for React Context",
+      "They must be rendered inside useEffect",
+    ],
+    correctAnswerIndex: 1,
+  },
+  {
+    question:
+      "What file extension is commonly used for React Server Components?",
+    answers: [".jsx", ".js", ".server.js", ".component.js"],
+    correctAnswerIndex: 2,
   },
 ];

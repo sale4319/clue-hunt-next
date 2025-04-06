@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "keywords": [
-    "utils",
-    "shareable"
+    "contract",
+    "shareable",
+    "scope:quizes"
   ],
   "main": "./src/index.ts"
 }
