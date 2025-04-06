@@ -23,10 +23,10 @@
       "path": "src/shared/components/default-button/tsconfig.next.json"
     },
     {
-      "path": "src/shared/components/page/tsconfig.next.json"
+      "path": "src/shared/components/page-component/tsconfig.next.json"
     },
     {
-      "path": "src/shared/components/main-header/tsconfig.next.json"
+      "path": "src/shared/components/header-component/tsconfig.next.json"
     },
     {
       "path": "src/shared/constants/tsconfig.next.json"

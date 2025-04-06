@@ -11,15 +11,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@app/header-component@workspace:src/shared/components/main-header":
+"@app/header-component@workspace:src/shared/components/header-component":
   version: 0.0.0-use.local
-  resolution: "@app/header-component@workspace:src/shared/components/main-header"
+  resolution: "@app/header-component@workspace:src/shared/components/header-component"
   languageName: unknown
   linkType: soft
 
-"@app/page-component@workspace:src/shared/components/page":
+"@app/page-component@workspace:src/shared/components/page-component":
   version: 0.0.0-use.local
-  resolution: "@app/page-component@workspace:src/shared/components/page"
+  resolution: "@app/page-component@workspace:src/shared/components/page-component"
   languageName: unknown
   linkType: soft
 
