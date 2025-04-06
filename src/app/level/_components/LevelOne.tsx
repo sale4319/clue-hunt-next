@@ -14,7 +14,7 @@ export default function LevelOne() {
       <Button size="medium" label="Unlock" mode="pulse" onClick={handleState} />
       <Button
         size="medium"
-        href={`${getRoute(isLocked, "quiz", "one")}`}
+        {...(!isLocked && { href: `${getRoute("quiz", "one")}` })}
         isLocked={isLocked}
         primary={isLocked}
       />

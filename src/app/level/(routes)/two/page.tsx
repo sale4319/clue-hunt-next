@@ -5,10 +5,10 @@ import { getRoute } from "@app/utils";
 
 export default function page() {
   return (
-    <Page title="Level two">
+    <Page>
       <Button
         size="medium"
-        href={`${getRoute(false, "level", "start")}`}
+        href={`${getRoute("level", "start")}`}
         mode="raise"
         label="Recycle"
       />

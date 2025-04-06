@@ -862,7 +862,7 @@ __metadata:
     "@types/node": "npm:^20"
     "@types/react": "npm:^19"
     "@types/react-dom": "npm:^19"
-    clue-hunt-ui: "npm:^0.0.8"
+    clue-hunt-ui: "npm:^0.1.0"
     eslint: "npm:^8"
     eslint-config-next: "npm:15.0.3"
     next: "npm:15.0.3"
@@ -873,13 +873,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"clue-hunt-ui@npm:^0.0.8":
-  version: 0.0.8
-  resolution: "clue-hunt-ui@npm:0.0.8"
+"clue-hunt-ui@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "clue-hunt-ui@npm:0.1.0"
   peerDependencies:
     react: ^18.2.0
     react-dom: ^18.2.0
-  checksum: 10c0/c2e62ea605a92d8557468c87fb35b719a48e15e9575a16dc5d367a217947fc70eb17b9eef5dd2d8f369e34a63b0410faca398d336b7e29b4a3ac7a4243a9c534
+  checksum: 10c0/5211c3012f4ef659fe9f68a88524898cb5aafb165bd2ad96912532cc56db35625fcb2a967b5cef1c71115c4876f43d25654d7d7c64e251831c5f8799e4d10c1d
   languageName: node
   linkType: hard
 

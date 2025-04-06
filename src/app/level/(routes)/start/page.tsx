@@ -4,7 +4,7 @@ import LevelStart from "../../_components/LevelStart";
 
 export default function Home() {
   return (
-    <Page title="Start">
+    <Page>
       <LevelStart />
     </Page>
   );

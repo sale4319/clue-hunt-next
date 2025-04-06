@@ -11,13 +11,13 @@ export default function QuizStart() {
   };
   return (
     <>
-      <QuizForm questions={questionSetOne} handleUnlock={handleState} />
       <Button
         size="medium"
-        href={`${getRoute(isLocked, "level", "one")}`}
+        {...(!isLocked && { href: `${getRoute("level", "one")}` })}
         isLocked={isLocked}
         primary={isLocked}
       />
+      <QuizForm questions={questionSetOne} handleUnlock={handleState} />
     </>
   );
 }

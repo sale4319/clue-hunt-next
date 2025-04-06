@@ -1,5 +1,3 @@
-export function getRoute(lock: boolean, quiz: string, level: string): string {
-  const nextRoute = `/${quiz}/${level}`;
-
-  return lock ? "" : nextRoute;
+export function getRoute(quiz: string, level: string): string {
+  return `/${quiz}/${level}`;
 }

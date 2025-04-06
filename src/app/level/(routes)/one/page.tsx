@@ -4,7 +4,7 @@ import LevelOne from "../../_components/LevelOne";
 
 export default function page() {
   return (
-    <Page title="Level one">
+    <Page>
       <LevelOne />
     </Page>
   );

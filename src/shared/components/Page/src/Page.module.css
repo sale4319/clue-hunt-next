@@ -4,24 +4,7 @@
   align-items: center;
   justify-items: center;
   max-height: 90svh;
-  padding: 80px;
-  gap: 50px;
-  font-family: "Nunito Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-.main {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-}
-
-@media (max-width: 600px) {
-  .page {
-    padding: 32px;
-    padding-bottom: 80px;
-  }
-
-  .main {
-    align-items: center;
-  }
+  padding: 18px;
+  gap: 18px;
+  font-family: "Audiowide", sans-serif;
 }

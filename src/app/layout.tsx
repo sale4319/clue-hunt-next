@@ -19,6 +19,10 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/favicon.svg" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Audiowide"
+        />
       </head>
       <body>
         <div className={styles.container}>

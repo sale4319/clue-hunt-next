@@ -4,7 +4,7 @@ import QuizOne from "../../_components/QuizOne";
 
 export default function page() {
   return (
-    <Page title="Level one">
+    <Page>
       <QuizOne />
     </Page>
   );
