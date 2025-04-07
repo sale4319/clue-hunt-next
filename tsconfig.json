@@ -4,7 +4,7 @@
     "outDir": "dist",
     "baseUrl": "./",
     "paths": {
-      "@app/dark-mode-button": ["src/shared/components/dark-mode-button/src"],
+      "@app/content-wrapper": ["src/shared/components/content-wrapper/src"],
       "@app/default-button": ["src/shared/components/default-button/src"],
       "@app/page-component:": ["src/shared/components/page-component/src"],
       "@app/header-component": ["src/shared/components/header-component/src"],
@@ -22,7 +22,7 @@
   ],
   "references": [
     {
-      "path": "src/shared/components/dark-mode-button/tsconfig.next.json"
+      "path": "src/shared/components/content-wrapper/tsconfig.next.json"
     },
     {
       "path": "src/shared/components/default-button/tsconfig.next.json"

@@ -9,8 +9,10 @@ import {
 } from "clue-hunt-ui";
 import { getRoute } from "@app/utils";
 import { LevelOneMessages } from "@app/messages-contract";
+import { useGameSettings } from "@app/context";
 
 export default function LevelOne() {
+  const { darkMode } = useGameSettings();
   const [isLocked, setIsLocked] = useState(true);
 
   const handleUnlock = () => {
@@ -25,7 +27,7 @@ export default function LevelOne() {
           label={LevelOneMessages.UNLOCK}
         />
       </SpacerElement>
-      <Title label={LevelOneMessages.HINT} />
+      <Title label={LevelOneMessages.HINT} theme={darkMode} />
       <Button
         size="medium"
         href={getRoute("quiz", "one")}
