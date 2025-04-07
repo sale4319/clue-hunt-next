@@ -1,8 +1,9 @@
 import "server-only";
 import type { Metadata } from "next";
+import { AppMenu } from "clue-hunt-ui";
 
-import "./globals.css";
 import styles from "./layout.module.css";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Clue hunt",
@@ -24,7 +25,10 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <div className={styles.container}>{children}</div>
+        <div className={styles.container}>
+          <AppMenu />
+          {children}
+        </div>
       </body>
     </html>
   );

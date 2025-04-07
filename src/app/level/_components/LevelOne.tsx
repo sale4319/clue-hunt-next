@@ -1,6 +1,12 @@
 "use client";
 import { useState } from "react";
-import { Button, SpacerElement, UnlockButton, Title } from "clue-hunt-ui";
+import {
+  Button,
+  SpacerElement,
+  UnlockButton,
+  Title,
+  SkipButton,
+} from "clue-hunt-ui";
 import { getRoute } from "@app/utils";
 import { LevelOneMessages } from "@app/messages-contract";
 
@@ -8,7 +14,7 @@ export default function LevelOne() {
   const [isLocked, setIsLocked] = useState(true);
 
   const handleUnlock = () => {
-    setIsLocked(!isLocked);
+    setIsLocked(false);
   };
   return (
     <>
@@ -26,6 +32,7 @@ export default function LevelOne() {
         isLocked={isLocked}
         primary={isLocked}
       />
+      <SkipButton onClick={handleUnlock} />
     </>
   );
 }

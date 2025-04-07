@@ -1,24 +1,38 @@
 "use client";
 import { useState } from "react";
 import { getRoute } from "@app/utils";
-import { Button } from "clue-hunt-ui";
-import { DefaultButton } from "@app/default-button";
+import { Button, QuestionIconToolTip, Title, SkipButton } from "clue-hunt-ui";
+import { LevelStartMessages, TooltipMessages } from "@app/messages-contract";
 
 export default function LevelStart() {
   const [isLocked, setIsLocked] = useState(true);
 
-  const handleState = () => {
-    setIsLocked(!isLocked);
+  const handleUnlock = () => {
+    setIsLocked(false);
   };
   return (
     <>
-      <Button size="medium" label="Unlock" mode="pulse" onClick={handleState} />
+      <Title titleSize="medium" label={LevelStartMessages.TITLE} />
+      <Title
+        titleSize="small"
+        color="#75F8E2"
+        label={LevelStartMessages.INSTRUCTION}
+      />
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Title titleSize="medium" label={LevelStartMessages.HINT} />
+        <QuestionIconToolTip
+          size="large"
+          onClick={handleUnlock}
+          content={TooltipMessages.START_HINT}
+        />
+      </div>
       <Button
         size="medium"
         href={getRoute("quiz", "start")}
         isLocked={isLocked}
         primary={isLocked}
       />
+      <SkipButton onClick={handleUnlock} />
     </>
   );
 }
