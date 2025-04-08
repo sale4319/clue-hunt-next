@@ -20,10 +20,16 @@ export const questionSetOne = [
     correctAnswerIndex: 1,
   },
   {
-    question: "JSX stands for _____.",
-    answers: ["JSON", "JSON XML", "JavaScript XML", "JavaScript and AngularJS"],
+    question: "What is the default behavior of React on state update?",
+    answers: [
+      "It fully reloads the page",
+      "It re-renders the entire DOM",
+      "It re-renders only the affected components",
+      "It sends a request to the backend",
+    ],
     correctAnswerIndex: 2,
   },
+
   {
     question: "What is JSX in React?",
     answers: [
@@ -216,13 +222,8 @@ export const questionSetFour = [
 
 export const questionSetFive = [
   {
-    question: "What is the default behavior of React on state update?",
-    answers: [
-      "It fully reloads the page",
-      "It re-renders the entire DOM",
-      "It re-renders only the affected components",
-      "It sends a request to the backend",
-    ],
+    question: "JSX stands for _____.",
+    answers: ["JSON", "JSON XML", "JavaScript XML", "JavaScript and AngularJS"],
     correctAnswerIndex: 2,
   },
   {

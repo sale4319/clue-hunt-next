@@ -4,10 +4,12 @@
     "outDir": "dist",
     "baseUrl": "./",
     "paths": {
+      "@app/content-wrapper": ["src/shared/components/content-wrapper/src"],
       "@app/default-button": ["src/shared/components/default-button/src"],
       "@app/page-component:": ["src/shared/components/page-component/src"],
       "@app/header-component": ["src/shared/components/header-component/src"],
       "@app/quiz-set-contract": ["src/shared/contracts/quiz-sets-contract/src"],
+      "@app/context": ["src/shared/context"],
       "@app/utils": ["src/shared/utils"]
     }
   },
@@ -20,6 +22,9 @@
   ],
   "references": [
     {
+      "path": "src/shared/components/content-wrapper/tsconfig.next.json"
+    },
+    {
       "path": "src/shared/components/default-button/tsconfig.next.json"
     },
     {
@@ -30,6 +35,9 @@
     },
     {
       "path": "src/shared/contracts/quiz-sets-contract/tsconfig.next.json"
+    },
+    {
+      "path": "src/shared/context/tsconfig.next.json"
     },
     {
       "path": "src/shared/utils/tsconfig.next.json"

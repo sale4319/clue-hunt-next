@@ -1,14 +1,10 @@
-import "server-only";
+"use client";
 
-import styles from "./MainHeader.module.css";
+import { AppMenu } from "clue-hunt-ui";
 
-export const MainHeader = () => (
-  <header>
-    <div className={styles.storybookHeader}>
-      <div>
-        <h1>Acme</h1>
-      </div>
-      <div></div>
-    </div>
-  </header>
-);
+import { useGameSettings } from "@app/context";
+
+export const MainHeader = () => {
+  const { darkMode, toggleDarkMode } = useGameSettings();
+  return <AppMenu darkMode={darkMode} toggleDarkMode={toggleDarkMode} />;
+};
