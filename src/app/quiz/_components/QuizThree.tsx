@@ -7,7 +7,7 @@ import { getRoute } from "@app/utils";
 import { questionSetFour } from "@app/quiz-sets-contract";
 
 export default function QuizThree() {
-  const { darkMode } = useGameSettings();
+  const { darkMode, skipMode } = useGameSettings();
   const [isLocked, setIsLocked] = useState(true);
 
   const handleUnlock = () => {
@@ -26,7 +26,7 @@ export default function QuizThree() {
         handleUnlock={handleUnlock}
         darkMode={darkMode}
       />
-      <SkipButton onClick={handleUnlock} />
+      {skipMode && <SkipButton onClick={handleUnlock} />}
     </>
   );
 }

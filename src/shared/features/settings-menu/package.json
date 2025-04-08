@@ -1,0 +1,14 @@
+{
+  "name": "@app/settings-menu",
+  "version": "0.1.0",
+  "private": true,
+  "keywords": [
+    "feature",
+    "shareable"
+  ],
+  "dependencies": {
+    "@app/context": "workspaces:*",
+    "clue-hunt-ui": "^0.3.9"
+  },
+  "main": "./src/index.ts"
+}
