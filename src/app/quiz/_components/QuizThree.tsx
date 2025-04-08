@@ -4,9 +4,9 @@ import { useState } from "react";
 import { Button, QuizForm, SkipButton } from "clue-hunt-ui";
 import { useGameSettings } from "@app/context";
 import { getRoute } from "@app/utils";
-import { questionSetTwo } from "@app/quiz-sets-contract";
+import { questionSetFour } from "@app/quiz-sets-contract";
 
-export default function QuizOne() {
+export default function QuizThree() {
   const { darkMode } = useGameSettings();
   const [isLocked, setIsLocked] = useState(true);
 
@@ -17,12 +17,12 @@ export default function QuizOne() {
     <>
       <Button
         size="medium"
-        href={getRoute("level", "two")}
+        href={getRoute("level", "four")}
         isLocked={isLocked}
         primary={isLocked}
       />
       <QuizForm
-        questions={questionSetTwo}
+        questions={questionSetFour}
         handleUnlock={handleUnlock}
         darkMode={darkMode}
       />

@@ -4,15 +4,15 @@ import { useState } from "react";
 import {
   Button,
   SpacerElement,
-  UnlockButton,
   Title,
   SkipButton,
+  DraggingPuzzle,
 } from "clue-hunt-ui";
 import { getRoute } from "@app/utils";
-import { LevelOneMessages } from "@app/messages-contract";
+import { LevelThreeMessages } from "@app/messages-contract";
 import { useGameSettings } from "@app/context";
 
-export default function LevelOne() {
+export default function LevelThree() {
   const { darkMode } = useGameSettings();
   const [isLocked, setIsLocked] = useState(true);
 
@@ -21,19 +21,21 @@ export default function LevelOne() {
   };
   return (
     <>
-      <SpacerElement size="medium">
-        <UnlockButton
-          data-testid="unlockButton"
-          onClick={handleUnlock}
-          label={LevelOneMessages.UNLOCK}
-        />
-      </SpacerElement>
-      <Title label={LevelOneMessages.HINT} theme={darkMode} />
+      <SpacerElement size="small" />
+      <Title
+        titleSize="medium"
+        label={LevelThreeMessages.HINT}
+        theme={darkMode}
+      />
       <Button
         size="medium"
-        href={getRoute("quiz", "one")}
+        href={getRoute("quiz", "three")}
         isLocked={isLocked}
         primary={isLocked}
+      />
+      <DraggingPuzzle
+        handleUnlockNavigation={handleUnlock}
+        darkMode={darkMode}
       />
       <SkipButton onClick={handleUnlock} />
     </>

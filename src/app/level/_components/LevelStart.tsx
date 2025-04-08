@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { getRoute } from "@app/utils";
 import { Button, QuestionIconToolTip, Title, SkipButton } from "clue-hunt-ui";
