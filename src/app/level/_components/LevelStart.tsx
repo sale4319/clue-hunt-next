@@ -3,16 +3,20 @@
 import { useState } from "react";
 import { getRoute } from "@app/utils";
 import { Button, QuestionIconToolTip, Title, SkipButton } from "clue-hunt-ui";
-import { LevelStartMessages, TooltipMessages } from "@app/messages-contract";
 import { useGameSettings } from "@app/context";
+import { LevelStartMessages, TooltipMessages } from "@app/messages-contract";
 
 export default function LevelStart() {
-  const { darkMode } = useGameSettings();
+  const { darkMode, skipMode, quizMode } = useGameSettings();
   const [isLocked, setIsLocked] = useState(true);
 
   const handleUnlock = () => {
     setIsLocked(false);
   };
+
+  const isQuizMode = quizMode ? "quiz" : "level";
+  const isQuizRoute = quizMode ? "start" : "one";
+
   return (
     <>
       <Title
@@ -39,11 +43,11 @@ export default function LevelStart() {
       </div>
       <Button
         size="medium"
-        href={getRoute("quiz", "start")}
+        href={getRoute(isQuizMode, isQuizRoute)}
         isLocked={isLocked}
         primary={isLocked}
       />
-      <SkipButton onClick={handleUnlock} />
+      {skipMode && <SkipButton onClick={handleUnlock} />}
     </>
   );
 }

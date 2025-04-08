@@ -9,16 +9,19 @@ import {
   DraggingPuzzle,
 } from "clue-hunt-ui";
 import { getRoute } from "@app/utils";
-import { LevelThreeMessages } from "@app/messages-contract";
 import { useGameSettings } from "@app/context";
+import { LevelThreeMessages } from "@app/messages-contract";
 
 export default function LevelThree() {
-  const { darkMode } = useGameSettings();
+  const { darkMode, skipMode, quizMode } = useGameSettings();
   const [isLocked, setIsLocked] = useState(true);
 
   const handleUnlock = () => {
     setIsLocked(false);
   };
+  const isQuizMode = quizMode ? "quiz" : "level";
+  const isQuizRoute = quizMode ? "three" : "four";
+
   return (
     <>
       <SpacerElement size="small" />
@@ -29,7 +32,7 @@ export default function LevelThree() {
       />
       <Button
         size="medium"
-        href={getRoute("quiz", "three")}
+        href={getRoute(isQuizMode, isQuizRoute)}
         isLocked={isLocked}
         primary={isLocked}
       />
@@ -37,7 +40,7 @@ export default function LevelThree() {
         handleUnlockNavigation={handleUnlock}
         darkMode={darkMode}
       />
-      <SkipButton onClick={handleUnlock} />
+      {skipMode && <SkipButton onClick={handleUnlock} />}
     </>
   );
 }

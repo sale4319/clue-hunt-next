@@ -9,16 +9,19 @@ import {
   SkipButton,
 } from "clue-hunt-ui";
 import { getRoute } from "@app/utils";
-import { LevelOneMessages } from "@app/messages-contract";
 import { useGameSettings } from "@app/context";
+import { LevelOneMessages } from "@app/messages-contract";
 
 export default function LevelOne() {
-  const { darkMode } = useGameSettings();
+  const { darkMode, skipMode, quizMode } = useGameSettings();
   const [isLocked, setIsLocked] = useState(true);
 
   const handleUnlock = () => {
     setIsLocked(false);
   };
+  const isQuizMode = quizMode ? "quiz" : "level";
+  const isQuizRoute = quizMode ? "one" : "two";
+
   return (
     <>
       <SpacerElement size="medium">
@@ -31,11 +34,11 @@ export default function LevelOne() {
       <Title label={LevelOneMessages.HINT} theme={darkMode} />
       <Button
         size="medium"
-        href={getRoute("quiz", "one")}
+        href={getRoute(isQuizMode, isQuizRoute)}
         isLocked={isLocked}
         primary={isLocked}
       />
-      <SkipButton onClick={handleUnlock} />
+      {skipMode && <SkipButton onClick={handleUnlock} />}
     </>
   );
 }

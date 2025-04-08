@@ -9,16 +9,20 @@ import {
   UnlockToolTip,
 } from "clue-hunt-ui";
 import { getRoute } from "@app/utils";
-import { LevelTwoMessages, TooltipMessages } from "@app/messages-contract";
 import { useGameSettings } from "@app/context";
+import { LevelTwoMessages, TooltipMessages } from "@app/messages-contract";
 
 export default function LevelTwo() {
-  const { darkMode } = useGameSettings();
+  const { darkMode, skipMode, quizMode } = useGameSettings();
   const [isLocked, setIsLocked] = useState(true);
 
   const handleUnlock = () => {
     setIsLocked(false);
   };
+
+  const isQuizMode = quizMode ? "quiz" : "level";
+  const isQuizRoute = quizMode ? "two" : "three";
+
   return (
     <>
       <SpacerElement size="medium">
@@ -31,11 +35,11 @@ export default function LevelTwo() {
       <Title label={LevelTwoMessages.HINT} theme={darkMode} />
       <Button
         size="medium"
-        href={getRoute("quiz", "two")}
+        href={getRoute(isQuizMode, isQuizRoute)}
         isLocked={isLocked}
         primary={isLocked}
       />
-      <SkipButton onClick={handleUnlock} />
+      {skipMode && <SkipButton onClick={handleUnlock} />}
     </>
   );
 }

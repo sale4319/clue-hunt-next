@@ -7,12 +7,13 @@ import { getRoute } from "@app/utils";
 import { questionSetOne } from "@app/quiz-sets-contract";
 
 export default function QuizStart() {
-  const { darkMode } = useGameSettings();
+  const { darkMode, skipMode } = useGameSettings();
   const [isLocked, setIsLocked] = useState(true);
 
   const handleUnlock = () => {
     setIsLocked(false);
   };
+
   return (
     <>
       <Button
@@ -26,7 +27,7 @@ export default function QuizStart() {
         handleUnlock={handleUnlock}
         darkMode={darkMode}
       />
-      <SkipButton onClick={handleUnlock} />
+      {skipMode && <SkipButton onClick={handleUnlock} />}
     </>
   );
 }
