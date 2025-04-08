@@ -3,7 +3,6 @@ import styles from "./ToggleSwitch.module.css";
 interface ToggleSwitchProps {
   toggle?: boolean;
   label?: string;
-  defaultChecked?: boolean;
   onChange?: () => void;
 }
 
@@ -11,8 +10,6 @@ export const ToggleSwitch = ({
   toggle,
   label,
   onChange,
-  defaultChecked,
-  ...props
 }: ToggleSwitchProps) => {
   return (
     <div className={styles.toggleContainer}>

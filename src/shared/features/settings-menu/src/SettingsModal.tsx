@@ -20,7 +20,9 @@ export const SettingsModal = ({ onRequestClose }: SettingsModalProps) => {
     function onKeyEsc(event: { keyCode: number }) {
       if (event.keyCode === 27) {
         // Close the modal when the Escape key is pressed
-        onRequestClose && onRequestClose();
+        if (onRequestClose) {
+          onRequestClose();
+        }
       }
     }
 
@@ -54,13 +56,11 @@ export const SettingsModal = ({ onRequestClose }: SettingsModalProps) => {
         />
         <ToggleSwitch
           onChange={handleQuizMode}
-          defaultChecked={quizMode}
           toggle={quizMode}
           label="Quiz mode"
         />
         <ToggleSwitch
           onChange={handleSkipMode}
-          defaultChecked={quizMode}
           toggle={skipMode}
           label="Skip mode"
         />
