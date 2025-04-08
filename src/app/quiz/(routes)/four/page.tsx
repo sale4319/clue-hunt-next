@@ -1,12 +1,12 @@
 import "server-only";
 
 import { Page } from "@app/page-component";
-import LevelTwo from "../../_components/LevelTwo";
+import QuizFour from "../../_components/QuizFour";
 
 export default function page() {
   return (
     <Page>
-      <LevelTwo />
+      <QuizFour />
     </Page>
   );
 }

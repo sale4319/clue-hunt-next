@@ -1,12 +1,12 @@
 import "server-only";
 
 import { Page } from "@app/page-component";
-import LevelTwo from "../../_components/LevelTwo";
+import LevelFour from "../../_components/LevelFour";
 
 export default function page() {
   return (
     <Page>
-      <LevelTwo />
+      <LevelFour />
     </Page>
   );
 }

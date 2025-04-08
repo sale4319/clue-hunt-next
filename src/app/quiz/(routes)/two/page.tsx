@@ -1,17 +1,12 @@
 import "server-only";
-import { DefaultButton } from "src/shared/components/default-button/src";
+
 import { Page } from "@app/page-component";
-import { getRoute } from "@app/utils";
+import QuizTwo from "../../_components/QuizTwo";
 
 export default function page() {
   return (
     <Page>
-      <DefaultButton
-        size="medium"
-        href={`${getRoute("level", "start")}`}
-        mode="raise"
-        label="Recycle"
-      />
+      <QuizTwo />
     </Page>
   );
 }
