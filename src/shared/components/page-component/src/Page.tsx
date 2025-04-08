@@ -1,6 +1,5 @@
 import "server-only";
-
-import { ContentWrapper } from "@app/content-wrapper";
+import { Container } from "clue-hunt-ui";
 import styles from "./Page.module.css";
 
 type PageProps = {
@@ -9,8 +8,8 @@ type PageProps = {
 
 export default function Home({ children }: PageProps) {
   return (
-    <ContentWrapper>
+    <Container>
       <div className={styles.page}>{children}</div>
-    </ContentWrapper>
+    </Container>
   );
 }

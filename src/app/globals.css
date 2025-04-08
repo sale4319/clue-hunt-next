@@ -1,12 +1,3 @@
-:root {
-  --black: #282c34;
-  --white: white;
-  --react-blue: #61dafb;
-  --react-darker-blue: #2bd1ff;
-  --react-darkest-blue: #0097c1;
-  overflow: hidden;
-}
-
 html,
 body {
   margin: 0;
@@ -14,16 +5,4 @@ body {
 
 body {
   margin: 0;
-  background: var(--background-color);
-  color: var(--text-color);
-}
-
-body.dark {
-  --background-color: var(--black);
-  --text-color: var(--white);
-}
-
-body.light {
-  --background-color: var(--white);
-  --text-color: var(--black);
 }
