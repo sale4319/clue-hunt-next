@@ -5,6 +5,12 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
+"@app/content-wrapper@workspace:src/shared/components/content-wrapper":
+  version: 0.0.0-use.local
+  resolution: "@app/content-wrapper@workspace:src/shared/components/content-wrapper"
+  languageName: unknown
+  linkType: soft
+
 "@app/default-button@workspace:src/shared/components/default-button":
   version: 0.0.0-use.local
   resolution: "@app/default-button@workspace:src/shared/components/default-button"
@@ -14,6 +20,12 @@ __metadata:
 "@app/header-component@workspace:src/shared/components/header-component":
   version: 0.0.0-use.local
   resolution: "@app/header-component@workspace:src/shared/components/header-component"
+  languageName: unknown
+  linkType: soft
+
+"@app/messages-contract@workspace:src/shared/contracts/messages-contract":
+  version: 0.0.0-use.local
+  resolution: "@app/messages-contract@workspace:src/shared/contracts/messages-contract"
   languageName: unknown
   linkType: soft
 
@@ -868,7 +880,7 @@ __metadata:
     "@types/node": "npm:^20"
     "@types/react": "npm:^19"
     "@types/react-dom": "npm:^19"
-    clue-hunt-ui: "npm:^0.1.0"
+    clue-hunt-ui: "npm:^0.3.5"
     eslint: "npm:^8"
     eslint-config-next: "npm:15.0.3"
     next: "npm:15.0.3"
@@ -879,13 +891,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"clue-hunt-ui@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "clue-hunt-ui@npm:0.1.0"
+"clue-hunt-ui@npm:^0.3.5":
+  version: 0.3.5
+  resolution: "clue-hunt-ui@npm:0.3.5"
   peerDependencies:
     react: ^18.2.0
     react-dom: ^18.2.0
-  checksum: 10c0/5211c3012f4ef659fe9f68a88524898cb5aafb165bd2ad96912532cc56db35625fcb2a967b5cef1c71115c4876f43d25654d7d7c64e251831c5f8799e4d10c1d
+  checksum: 10c0/2a7264b0e252318d5fc5e6d7e946ff5c67be479d0f62573519b11fd674ecc460dee44b69f749fca75a040e6507a953f8cfe9def7558896861e73993da33a2c05
   languageName: node
   linkType: hard
 
