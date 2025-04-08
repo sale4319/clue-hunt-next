@@ -1,25 +1,24 @@
 "use client";
 import { useState } from "react";
-import { Button, QuizForm, SkipButton } from "clue-hunt-ui";
+import { Button, QuizForm } from "clue-hunt-ui";
 import { getRoute } from "@app/utils";
 import { questionSetOne } from "@app/quiz-sets-contract";
 
 export default function QuizStart() {
   const [isLocked, setIsLocked] = useState(true);
 
-  const handleUnlock = () => {
-    setIsLocked(false);
+  const handleState = () => {
+    setIsLocked(!isLocked);
   };
   return (
     <>
       <Button
         size="medium"
-        href={getRoute("level", "one")}
+        {...(!isLocked && { href: `${getRoute("level", "one")}` })}
         isLocked={isLocked}
         primary={isLocked}
       />
-      <QuizForm questions={questionSetOne} handleUnlock={handleUnlock} />
-      <SkipButton onClick={handleUnlock} />
+      <QuizForm questions={questionSetOne} handleUnlock={handleState} />
     </>
   );
 }
