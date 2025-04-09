@@ -41,6 +41,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@clue-hunt-ui/dark-mode-button@workspace:src/shared/components/dark-mode-button":
+  version: 0.0.0-use.local
+  resolution: "@clue-hunt-ui/dark-mode-button@workspace:src/shared/components/dark-mode-button"
+  languageName: unknown
+  linkType: soft
+
 "@emnapi/runtime@npm:^1.2.0":
   version: 1.3.1
   resolution: "@emnapi/runtime@npm:1.3.1"
@@ -880,7 +886,7 @@ __metadata:
     "@types/node": "npm:^20"
     "@types/react": "npm:^19"
     "@types/react-dom": "npm:^19"
-    clue-hunt-ui: "npm:^0.4.0"
+    clue-hunt-ui: "npm:^0.4.1"
     eslint: "npm:^8"
     eslint-config-next: "npm:15.0.3"
     next: "npm:15.0.3"
@@ -891,13 +897,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"clue-hunt-ui@npm:^0.4.0":
-  version: 0.4.0
-  resolution: "clue-hunt-ui@npm:0.4.0"
+"clue-hunt-ui@npm:^0.4.1":
+  version: 0.4.1
+  resolution: "clue-hunt-ui@npm:0.4.1"
   peerDependencies:
     react: ^18.2.0
     react-dom: ^18.2.0
-  checksum: 10c0/c99c4a10adccb5e4f32ea7cf225c22010e2ad56358a337f64fc761cfa71cd09ae036b54580d238e7b4c1960fe72097f630700bc25b0961a477e1b8c36b374e76
+  checksum: 10c0/18b08c9e2246f0ef8211ccf873fc0b0f8eb082140ac89eb47133bc07c1a3faa3961ffeb572c6271da2d42601074fb10744fbef7fbdf2b55cd5b7be09715a290a
   languageName: node
   linkType: hard
 
