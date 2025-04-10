@@ -1,66 +1,46 @@
-'use client";';
-import { useEffect } from "react";
+import "server-only";
+
 import { Button, Title } from "clue-hunt-ui";
-import { useGameSettings } from "@app/context";
+
 import { ToggleSwitch } from "./ToggleSwitch";
 
 import { SettingsModalMessages } from "@app/messages-contract";
 
 import styles from "./SettingsModal.module.css";
+import { cookies } from "next/headers";
+import { toggleQuizCookie, toggleSkipCookie } from "@app/actions";
 
 type SettingsModalProps = {
   onRequestClose?: () => void;
 };
 
-export const SettingsModal = ({ onRequestClose }: SettingsModalProps) => {
-  const { quizMode, skipMode, setSkipMode, setQuizMode, darkMode } =
-    useGameSettings();
-  // Use useEffect to add an event listener to the document
-  useEffect(() => {
-    function onKeyEsc(event: { keyCode: number }) {
-      if (event.keyCode === 27) {
-        // Close the modal when the Escape key is pressed
-        if (onRequestClose) {
-          onRequestClose();
-        }
-      }
-    }
+export const SettingsModal = async ({ onRequestClose }: SettingsModalProps) => {
+  const theme = (await cookies()).get("theme")?.value;
+  const quizMode = (await cookies()).get("quiz")?.value === "true";
+  const skipMode = (await cookies()).get("skip")?.value === "true";
 
-    // Prevent scrolling
-    document.body.style.overflow = "hidden";
-    document.addEventListener("keydown", onKeyEsc);
-
-    // Clear things up when unmounting this component
-    return () => {
-      document.body.style.overflow = "visible";
-      document.removeEventListener("keydown", onKeyEsc);
-    };
-  });
-
-  const mode = darkMode ? styles.dark : styles.light;
-
-  const handleQuizMode = () => setQuizMode(!quizMode);
-  const handleSkipMode = () => setSkipMode(!skipMode);
   return (
     <div className={styles.modalBackdrop}>
-      <div className={[styles.modalContainer, mode].join(" ")}>
+      <div
+        className={[styles.modalContainer, styles[theme || "dark"]].join(" ")}
+      >
         <Title
           titleSize="medium"
           label={SettingsModalMessages.TITLE}
-          theme={darkMode}
+          theme={theme}
         />
         <Title
           titleSize="small"
           label={SettingsModalMessages.INFO}
-          theme={darkMode}
+          theme={theme}
         />
         <ToggleSwitch
-          onChange={handleQuizMode}
+          onChange={toggleQuizCookie}
           toggle={quizMode}
           label="Quiz mode"
         />
         <ToggleSwitch
-          onChange={handleSkipMode}
+          onChange={toggleSkipCookie}
           toggle={skipMode}
           label="Skip mode"
         />

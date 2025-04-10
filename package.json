@@ -17,7 +17,7 @@
     "lint:fix": "next lint --fix"
   },
   "dependencies": {
-    "clue-hunt-ui": "^0.4.0",
+    "clue-hunt-ui": "^0.4.8",
     "next": "15.0.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

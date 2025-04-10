@@ -1,7 +1,7 @@
 import "server-only";
 
 import { Page } from "@app/page-component";
-import LevelFour from "../../_components/LevelFour";
+import LevelFive from "../../_components/LevelFive";
 import { cookies } from "next/headers";
 
 export default async function page() {
@@ -10,7 +10,7 @@ export default async function page() {
   const skipMode = (await cookies()).get("skip")?.value === "true";
   return (
     <Page>
-      <LevelFour theme={theme} quizMode={quizMode} skipMode={skipMode} />
+      <LevelFive theme={theme} quizMode={quizMode} skipMode={skipMode} />
     </Page>
   );
 }

@@ -8,3 +8,31 @@
   gap: 18px;
   font-family: "Audiowide", sans-serif;
 }
+
+.settingsButton {
+  position: absolute;
+  top: 55px;
+  right: 35px;
+  margin-top: 0;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+}
+
+.settingsIcon {
+  background: transparent no-repeat center;
+  content: url("../../../assets/settings.svg");
+  background-size: 35px 35px;
+  width: 35px;
+  height: 35px;
+  border: none;
+  cursor: pointer;
+  transition: transform 200ms;
+}
+
+.settingsIcon:hover {
+  transition: transform 200ms;
+  transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition-duration: 400ms;
+  transform: scale(1.1, 1.1) translate3d(0, 0, 0);
+}

@@ -3,6 +3,7 @@ import "server-only";
 import type { Metadata } from "next";
 import { MainHeader } from "@app/header-component";
 import { GameSettingsProvider } from "@app/context";
+import { cookies } from "next/headers";
 
 import styles from "./layout.module.css";
 import "./globals.css";
@@ -17,6 +18,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const theme = (await cookies()).get("theme");
   return (
     <html lang="en">
       <head>
@@ -33,7 +35,7 @@ export default async function RootLayout({
       <GameSettingsProvider>
         <body>
           <div className={styles.container}>
-            <MainHeader />
+            <MainHeader theme={theme?.value} />
             {children}
           </div>
         </body>

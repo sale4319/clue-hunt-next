@@ -1,5 +1,5 @@
 {
-  "name": "@app/content-wrapper",
+  "name": "@app/dark-mode-button",
   "version": "0.1.0",
   "private": true,
   "keywords": [

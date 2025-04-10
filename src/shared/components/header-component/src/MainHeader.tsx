@@ -1,10 +1,14 @@
-"use client";
+import "server-only";
 
 import { AppMenu } from "clue-hunt-ui";
+import { DarkModeButton } from "@app/dark-mode-button";
 
-import { useGameSettings } from "@app/context";
+type ThemeType = { theme: string | undefined };
 
-export const MainHeader = () => {
-  const { darkMode, toggleDarkMode } = useGameSettings();
-  return <AppMenu darkMode={darkMode} toggleDarkMode={toggleDarkMode} />;
+export const MainHeader = ({ theme }: ThemeType) => {
+  return (
+    <AppMenu theme={theme}>
+      <DarkModeButton />
+    </AppMenu>
+  );
 };

@@ -5,9 +5,9 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
-"@app/content-wrapper@workspace:src/shared/components/content-wrapper":
+"@app/dark-mode-button@workspace:src/shared/components/dark-mode-button":
   version: 0.0.0-use.local
-  resolution: "@app/content-wrapper@workspace:src/shared/components/content-wrapper"
+  resolution: "@app/dark-mode-button@workspace:src/shared/components/dark-mode-button"
   languageName: unknown
   linkType: soft
 
@@ -880,7 +880,7 @@ __metadata:
     "@types/node": "npm:^20"
     "@types/react": "npm:^19"
     "@types/react-dom": "npm:^19"
-    clue-hunt-ui: "npm:^0.4.0"
+    clue-hunt-ui: "npm:^0.4.8"
     eslint: "npm:^8"
     eslint-config-next: "npm:15.0.3"
     next: "npm:15.0.3"
@@ -891,13 +891,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"clue-hunt-ui@npm:^0.4.0":
-  version: 0.4.0
-  resolution: "clue-hunt-ui@npm:0.4.0"
+"clue-hunt-ui@npm:^0.4.8":
+  version: 0.4.8
+  resolution: "clue-hunt-ui@npm:0.4.8"
   peerDependencies:
     react: ^18.2.0
     react-dom: ^18.2.0
-  checksum: 10c0/c99c4a10adccb5e4f32ea7cf225c22010e2ad56358a337f64fc761cfa71cd09ae036b54580d238e7b4c1960fe72097f630700bc25b0961a477e1b8c36b374e76
+  checksum: 10c0/38a815891c52b0dc27f59e999c11eb1fbe3e425db29a1ba71e0b05eb83a6c5f4329094155206f2295df42f56a1e7ddf57a2d10123262cecb3f82dc38b5cd0367
   languageName: node
   linkType: hard
 
