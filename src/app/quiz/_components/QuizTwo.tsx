@@ -2,12 +2,11 @@
 
 import { useState } from "react";
 import { Button, QuizForm, SkipButton } from "clue-hunt-ui";
-import { useGameSettings } from "@app/context";
 import { getRoute } from "@app/utils";
 import { questionSetThree } from "@app/quiz-sets-contract";
+import { SettingsType } from "./types";
 
-export default function QuizTwo() {
-  const { darkMode, skipMode } = useGameSettings();
+export default function QuizTwo({ theme, skipMode }: SettingsType) {
   const [isLocked, setIsLocked] = useState(true);
 
   const handleUnlock = () => {
@@ -24,7 +23,7 @@ export default function QuizTwo() {
       <QuizForm
         questions={questionSetThree}
         handleUnlock={handleUnlock}
-        darkMode={darkMode}
+        theme={theme}
       />
       {skipMode && <SkipButton onClick={handleUnlock} />}
     </>

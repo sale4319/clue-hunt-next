@@ -1,3 +1,5 @@
+import "server-only";
+
 import styles from "./ToggleSwitch.module.css";
 
 interface ToggleSwitchProps {

@@ -3,15 +3,15 @@
 import { useState } from "react";
 import { Button, QuestionForm, Title, SkipButton } from "clue-hunt-ui";
 import { getRoute } from "@app/utils";
-import { useGameSettings } from "@app/context";
+
 import {
   LevelFourMessages,
   QuestionFormMessages,
   TooltipMessages,
 } from "@app/messages-contract";
+import { SettingsType } from "./types";
 
-export default function LevelFour() {
-  const { darkMode, skipMode, quizMode } = useGameSettings();
+export default function LevelFour({ theme, quizMode, skipMode }: SettingsType) {
   const [isLocked, setIsLocked] = useState(true);
 
   const handleUnlock = () => {
@@ -23,11 +23,7 @@ export default function LevelFour() {
 
   return (
     <>
-      <Title
-        titleSize="small"
-        label={LevelFourMessages.HINT}
-        theme={darkMode}
-      />
+      <Title titleSize="small" label={LevelFourMessages.HINT} theme={theme} />
       <Button
         size="medium"
         href={getRoute(isQuizMode, isQuizRoute)}
@@ -44,7 +40,7 @@ export default function LevelFour() {
         secondQuestion={QuestionFormMessages.SECOND_Q_LABEL}
         secondHint={TooltipMessages.SECOND_Q_HINT}
         secondPlaceholder={QuestionFormMessages.SECOND_Q_PLACEHOLDER}
-        darkMode={darkMode}
+        darkMode={theme}
       />
       {skipMode && <SkipButton onClick={handleUnlock} />}
     </>

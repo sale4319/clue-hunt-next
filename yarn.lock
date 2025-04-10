@@ -11,6 +11,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@app/dark-mode-button@workspace:src/shared/components/dark-mode-button":
+  version: 0.0.0-use.local
+  resolution: "@app/dark-mode-button@workspace:src/shared/components/dark-mode-button"
+  languageName: unknown
+  linkType: soft
+
 "@app/default-button@workspace:src/shared/components/default-button":
   version: 0.0.0-use.local
   resolution: "@app/default-button@workspace:src/shared/components/default-button"
@@ -38,12 +44,6 @@ __metadata:
 "@app/quiz-sets-contract@workspace:src/shared/contracts/quiz-sets-contract":
   version: 0.0.0-use.local
   resolution: "@app/quiz-sets-contract@workspace:src/shared/contracts/quiz-sets-contract"
-  languageName: unknown
-  linkType: soft
-
-"@clue-hunt-ui/dark-mode-button@workspace:src/shared/components/dark-mode-button":
-  version: 0.0.0-use.local
-  resolution: "@clue-hunt-ui/dark-mode-button@workspace:src/shared/components/dark-mode-button"
   languageName: unknown
   linkType: soft
 
@@ -886,7 +886,7 @@ __metadata:
     "@types/node": "npm:^20"
     "@types/react": "npm:^19"
     "@types/react-dom": "npm:^19"
-    clue-hunt-ui: "npm:^0.4.1"
+    clue-hunt-ui: "npm:^0.4.4"
     eslint: "npm:^8"
     eslint-config-next: "npm:15.0.3"
     next: "npm:15.0.3"
@@ -897,13 +897,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"clue-hunt-ui@npm:^0.4.1":
-  version: 0.4.1
-  resolution: "clue-hunt-ui@npm:0.4.1"
+"clue-hunt-ui@npm:^0.4.4":
+  version: 0.4.4
+  resolution: "clue-hunt-ui@npm:0.4.4"
   peerDependencies:
     react: ^18.2.0
     react-dom: ^18.2.0
-  checksum: 10c0/18b08c9e2246f0ef8211ccf873fc0b0f8eb082140ac89eb47133bc07c1a3faa3961ffeb572c6271da2d42601074fb10744fbef7fbdf2b55cd5b7be09715a290a
+  checksum: 10c0/34b25583c1b544d91ea268a568a9245b78401d8ab2387ec1759a6a5b9f4d18293a4bffc6ef531f9c87758ba266cabc7438cfcee4d24f6126f49445f108aa0216
   languageName: node
   linkType: hard
 

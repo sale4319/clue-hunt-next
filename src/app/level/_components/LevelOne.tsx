@@ -11,11 +11,11 @@ import { getRoute } from "@app/utils";
 
 import { LevelOneMessages } from "@app/messages-contract";
 import { cookies } from "next/headers";
-import { deleteLockCookie, toggleLockCookie } from "@app/actions";
+import { deleteLockCookie, getLockCookie } from "@app/actions";
 
 export default async function LevelOne() {
   const theme = (await cookies()).get("theme");
-  const isLocked = (await cookies()).get("lock")?.value === "true";
+  const isLocked = (await cookies()).get("lock")?.value === undefined;
   const quizMode = (await cookies()).get("quiz")?.value === "true";
   const skipMode = (await cookies()).get("skip")?.value === "true";
   const isQuizMode = quizMode ? "quiz" : "level";
@@ -26,7 +26,7 @@ export default async function LevelOne() {
       <SpacerElement size="medium">
         <UnlockButton
           data-testid="unlockButton"
-          onClick={toggleLockCookie}
+          onClick={getLockCookie}
           label={LevelOneMessages.UNLOCK}
         />
       </SpacerElement>
@@ -36,8 +36,9 @@ export default async function LevelOne() {
         href={getRoute(isQuizMode, isQuizRoute)}
         isLocked={isLocked}
         primary={isLocked}
+        onClick={deleteLockCookie}
       />
-      {skipMode && <SkipButton onClick={toggleLockCookie} />}
+      {skipMode && <SkipButton onClick={getLockCookie} />}
     </>
   );
 }
