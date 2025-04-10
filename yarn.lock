@@ -17,12 +17,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@app/header-component@workspace:src/shared/components/header-component":
-  version: 0.0.0-use.local
-  resolution: "@app/header-component@workspace:src/shared/components/header-component"
-  languageName: unknown
-  linkType: soft
-
 "@app/messages-contract@workspace:src/shared/contracts/messages-contract":
   version: 0.0.0-use.local
   resolution: "@app/messages-contract@workspace:src/shared/contracts/messages-contract"
