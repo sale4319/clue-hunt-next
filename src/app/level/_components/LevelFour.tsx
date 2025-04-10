@@ -1,14 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Button, QuestionForm, Title, SkipButton } from "clue-hunt-ui";
+import { Button, Title, SkipButton, ShiftingCircles } from "clue-hunt-ui";
 import { getRoute } from "@app/utils";
-
-import {
-  LevelFourMessages,
-  QuestionFormMessages,
-  TooltipMessages,
-} from "@app/messages-contract";
+import { LevelFourMessages } from "@app/messages-contract";
 import { SettingsType } from "./types";
 
 export default function LevelFour({ theme, quizMode, skipMode }: SettingsType) {
@@ -19,29 +14,20 @@ export default function LevelFour({ theme, quizMode, skipMode }: SettingsType) {
   };
 
   const isQuizMode = quizMode ? "quiz" : "level";
-  const isQuizRoute = quizMode ? "four" : "start";
+  const isQuizRoute = quizMode ? "five" : "five";
 
   return (
     <>
-      <Title titleSize="small" label={LevelFourMessages.HINT} theme={theme} />
+      <Title titleSize="medium" label={LevelFourMessages.HINT} theme={theme} />
       <Button
         size="medium"
         href={getRoute(isQuizMode, isQuizRoute)}
         isLocked={isLocked}
         primary={isLocked}
       />
-      <QuestionForm
-        questionIconSize="small"
-        handleUnlock={handleUnlock}
-        successMessage={QuestionFormMessages.WOW}
-        firstQuestion={QuestionFormMessages.FIRST_Q_LABEL}
-        firstHint={TooltipMessages.FIRST_Q_HINT}
-        firstPlaceholder={QuestionFormMessages.FIRST_Q_PLACEHOLDER}
-        secondQuestion={QuestionFormMessages.SECOND_Q_LABEL}
-        secondHint={TooltipMessages.SECOND_Q_HINT}
-        secondPlaceholder={QuestionFormMessages.SECOND_Q_PLACEHOLDER}
-        darkMode={theme}
-      />
+
+      <ShiftingCircles handleUnlockNavigation={handleUnlock} theme={theme} />
+
       {skipMode && <SkipButton onClick={handleUnlock} />}
     </>
   );

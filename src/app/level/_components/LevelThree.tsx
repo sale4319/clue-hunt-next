@@ -35,7 +35,7 @@ export default function LevelThree({
         isLocked={isLocked}
         primary={isLocked}
       />
-      <DraggingPuzzle handleUnlockNavigation={handleUnlock} darkMode={theme} />
+      <DraggingPuzzle handleUnlockNavigation={handleUnlock} theme={theme} />
       {skipMode && <SkipButton onClick={handleUnlock} />}
     </>
   );

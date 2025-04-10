@@ -20,5 +20,9 @@ export const LevelThreeMessages = {
 };
 
 export const LevelFourMessages = {
+  HINT: "When we have to come up with some combinations there is always logic to it, even when you do not notice it at first.",
+};
+
+export const LevelFiveMessages = {
   HINT: "You must answer questions below correctly to pass. First question you will have to guess, second one you will have to find or decrypt...",
 };
