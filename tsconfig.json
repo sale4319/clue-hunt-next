@@ -8,7 +8,6 @@
       "@app/dark-mode-button": ["src/shared/components/dark-mode-button/src"],
       "@app/default-button": ["src/shared/components/default-button/src"],
       "@app/page-component:": ["src/shared/components/page-component/src"],
-      "@app/header-component": ["src/shared/components/header-component/src"],
       "@app/quiz-set-contract": ["src/shared/contracts/quiz-sets-contract/src"],
       "@app/messages-contract": ["src/shared/contracts/messages-contract/src"],
       "@app/settings-menu": ["src/shared/features/settings-menu/src"],
@@ -35,9 +34,6 @@
     },
     {
       "path": "src/shared/components/page-component/tsconfig.next.json"
-    },
-    {
-      "path": "src/shared/components/header-component/tsconfig.next.json"
     },
     {
       "path": "src/shared/contracts/quiz-sets-contract/tsconfig.next.json"

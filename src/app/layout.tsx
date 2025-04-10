@@ -1,11 +1,8 @@
-/* eslint-disable @next/next/no-page-custom-font */
-
 import "server-only";
 
 import type { Metadata } from "next";
-import { MainHeader } from "@app/header-component";
+
 import { GameSettingsProvider } from "@app/context";
-import { cookies } from "next/headers";
 
 import styles from "./layout.module.css";
 import "./globals.css";
@@ -15,12 +12,11 @@ export const metadata: Metadata = {
   description: "Experimental game with next.js",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const theme = (await cookies()).get("theme");
   return (
     <html lang="en">
       <head>
@@ -36,10 +32,7 @@ export default async function RootLayout({
       </head>
       <GameSettingsProvider>
         <body>
-          <div className={styles.container}>
-            <MainHeader theme={theme?.value} />
-            {children}
-          </div>
+          <div className={styles.container}>{children}</div>
         </body>
       </GameSettingsProvider>
     </html>
