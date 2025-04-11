@@ -1,7 +1,6 @@
 "use client";
 
 import { createContext, ReactNode, useContext, useState } from "react";
-import { useLocalStorage } from "../utils/useLocalStorage";
 
 type GameSettingsType = {
   quizMode: boolean;
@@ -29,9 +28,9 @@ const defaultValues: GameSettingsType = {
 const GameSettingsContext = createContext<GameSettingsType>(defaultValues);
 
 export const GameSettingsProvider = ({ children }: { children: ReactNode }) => {
-  const [quizMode, setQuizMode] = useLocalStorage("quizMode", true);
+  const [quizMode, setQuizMode] = useState(true);
   const [darkMode, setDarkMode] = useState(true);
-  const [skipMode, setSkipMode] = useLocalStorage("skipMode", true);
+  const [skipMode, setSkipMode] = useState(true);
 
   const toggleQuizMode = () => {
     setQuizMode(!quizMode);
