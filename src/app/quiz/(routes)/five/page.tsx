@@ -2,7 +2,7 @@ import "server-only";
 
 import { cookies } from "next/headers";
 import { Page } from "@app/page-component";
-import QuizFive from "../../_components/QuizFour";
+import QuizFive from "../../_components/QuizFive";
 
 export default async function page() {
   const theme = (await cookies()).get("theme")?.value;
