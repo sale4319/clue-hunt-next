@@ -12,7 +12,7 @@ const renderer = ({ hours, minutes, seconds }: CountdownRenderProps) => (
   </span>
 );
 
-let getLocalStorageValue = (s: string) => localStorage.getItem(s);
+const getLocalStorageValue = (s: string) => localStorage.getItem(s);
 
 export const CountdownTimer = () => {
   const [data, setData] = useState(
@@ -40,7 +40,7 @@ export const CountdownTimer = () => {
       <Countdown
         date={data.date + data.delay}
         renderer={renderer}
-        onStart={(_delta) => {
+        onStart={() => {
           if (localStorage.getItem("end_date") == null)
             localStorage.setItem(
               "end_date",
