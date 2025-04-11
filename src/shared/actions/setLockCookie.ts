@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 
-export async function getLockCookie() {
+export async function setLockCookie() {
   "use server";
   (await cookies()).set("lock", "true");
 }

@@ -1,47 +1,39 @@
 "use client";
 
-import { useState } from "react";
-import { Button, QuestionForm, Title, SkipButton } from "clue-hunt-ui";
-import { getRoute } from "@app/utils";
+import { Button, Title, SkipButton, SpacerElement } from "clue-hunt-ui";
+import { getRoute, useFeatureToggle } from "@app/utils";
 
-import {
-  LevelFiveMessages,
-  QuestionFormMessages,
-  TooltipMessages,
-} from "@app/messages-contract";
+import { LevelFiveMessages } from "@app/messages-contract";
 import { SettingsType } from "./types";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function LevelFive({ theme, quizMode, skipMode }: SettingsType) {
-  const [isLocked, setIsLocked] = useState(true);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const isNewFeatureEnabled = useFeatureToggle("LEVEL_FIVE_UNLOCK");
 
   const handleUnlock = () => {
-    setIsLocked(false);
+    const params = new URLSearchParams(searchParams?.toString());
+    params.set("LEVEL_FIVE_UNLOCK", "true");
+
+    router.push(`?${params.toString()}`);
   };
 
   const isQuizMode = quizMode ? "quiz" : "level";
-  const isQuizRoute = quizMode ? "four" : "start";
+  const isQuizRoute = quizMode ? "five" : "six";
 
   return (
     <>
-      <Title titleSize="small" label={LevelFiveMessages.HINT} theme={theme} />
-      <Button
-        size="medium"
-        href={getRoute(isQuizMode, isQuizRoute)}
-        isLocked={isLocked}
-        primary={isLocked}
-      />
-      <QuestionForm
-        questionIconSize="small"
-        handleUnlock={handleUnlock}
-        successMessage={QuestionFormMessages.WOW}
-        firstQuestion={QuestionFormMessages.FIRST_Q_LABEL}
-        firstHint={TooltipMessages.FIRST_Q_HINT}
-        firstPlaceholder={QuestionFormMessages.FIRST_Q_PLACEHOLDER}
-        secondQuestion={QuestionFormMessages.SECOND_Q_LABEL}
-        secondHint={TooltipMessages.SECOND_Q_HINT}
-        secondPlaceholder={QuestionFormMessages.SECOND_Q_PLACEHOLDER}
-        theme={theme}
-      />
+      <SpacerElement size="large" />
+      <Title label={LevelFiveMessages.HINT} theme={theme} />
+      {isNewFeatureEnabled && (
+        <Button
+          size="medium"
+          href={getRoute(isQuizMode, isQuizRoute)}
+          isLocked={false}
+          primary={false}
+        />
+      )}
       {skipMode && <SkipButton onClick={handleUnlock} />}
     </>
   );

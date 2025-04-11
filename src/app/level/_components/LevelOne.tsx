@@ -11,7 +11,7 @@ import { getRoute } from "@app/utils";
 
 import { LevelOneMessages } from "@app/messages-contract";
 import { cookies } from "next/headers";
-import { deleteLockCookie, getLockCookie } from "@app/actions";
+import { deleteLockCookie, setLockCookie } from "@app/actions";
 
 export default async function LevelOne() {
   const theme = (await cookies()).get("theme");
@@ -26,7 +26,7 @@ export default async function LevelOne() {
       <SpacerElement size="medium">
         <UnlockButton
           data-testid="unlockButton"
-          onClick={getLockCookie}
+          onClick={setLockCookie}
           label={LevelOneMessages.UNLOCK}
         />
       </SpacerElement>
@@ -38,7 +38,7 @@ export default async function LevelOne() {
         primary={isLocked}
         onClick={deleteLockCookie}
       />
-      {skipMode && <SkipButton onClick={getLockCookie} />}
+      {skipMode && <SkipButton onClick={setLockCookie} />}
     </>
   );
 }

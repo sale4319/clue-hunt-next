@@ -24,5 +24,9 @@ export const LevelFourMessages = {
 };
 
 export const LevelFiveMessages = {
+  HINT: "If I gave you this key: LEVEL_FIVE_UNLOCK how would you use it to unlock this page?",
+};
+
+export const LevelSixMessages = {
   HINT: "You must answer questions below correctly to pass. First question you will have to guess, second one you will have to find or decrypt...",
 };

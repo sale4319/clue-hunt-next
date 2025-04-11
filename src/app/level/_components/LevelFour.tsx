@@ -14,7 +14,7 @@ export default function LevelFour({ theme, quizMode, skipMode }: SettingsType) {
   };
 
   const isQuizMode = quizMode ? "quiz" : "level";
-  const isQuizRoute = quizMode ? "five" : "five";
+  const isQuizRoute = quizMode ? "four" : "five";
 
   return (
     <>

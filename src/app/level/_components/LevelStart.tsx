@@ -5,6 +5,7 @@ import { getRoute } from "@app/utils";
 import { Button, QuestionIconToolTip, Title, SkipButton } from "clue-hunt-ui";
 import { LevelStartMessages, TooltipMessages } from "@app/messages-contract";
 import type { SettingsType } from "./types";
+import { CountdownTimer } from "@app/countdown-timer";
 
 export default function LevelStart({
   theme,
@@ -32,6 +33,7 @@ export default function LevelStart({
         color="#75F8E2"
         label={LevelStartMessages.INSTRUCTION}
       />
+      <CountdownTimer />
       <div style={{ display: "flex", alignItems: "center" }}>
         <Title
           titleSize="medium"
