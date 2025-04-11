@@ -1,5 +1,5 @@
 {
-  "name": "@app/settings-menu",
+  "name": "@app/countdown-timer",
   "version": "0.1.0",
   "private": true,
   "keywords": [
@@ -7,9 +7,8 @@
     "shareable"
   ],
   "dependencies": {
-    "@app/actions": "workspaces:*",
-    "@app/messages-contract": "0.1.0",
-    "clue-hunt-ui": "^0.4.8"
+    "clue-hunt-ui": "^0.3.9",
+    "react-countdown": "^2.3.6"
   },
   "main": "./src/index.ts"
 }
