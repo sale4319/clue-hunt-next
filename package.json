@@ -1,7 +1,6 @@
 {
   "name": "clue-hunt-next",
   "version": "0.1.0",
-  "homepage": "https://sale4319.github.io/clue-hunt-next",
   "private": true,
   "type": "module",
   "workspaces": [
