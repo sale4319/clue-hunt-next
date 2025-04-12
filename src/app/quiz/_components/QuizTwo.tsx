@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button, QuizForm, SkipButton } from "clue-hunt-ui";
 import { getRoute } from "@app/utils";
-import { questionSetThree } from "@app/quiz-sets-contract";
+import { questionSetTwo } from "@app/quiz-sets-contract";
 import { SettingsType } from "./types";
 
 export default function QuizTwo({ theme, skipMode }: SettingsType) {
@@ -21,7 +21,7 @@ export default function QuizTwo({ theme, skipMode }: SettingsType) {
         primary={isLocked}
       />
       <QuizForm
-        questions={questionSetThree}
+        questions={questionSetTwo}
         handleUnlock={handleUnlock}
         theme={theme}
       />

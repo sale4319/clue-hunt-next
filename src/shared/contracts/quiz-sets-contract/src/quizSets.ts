@@ -1,4 +1,4 @@
-export const questionSetOne = [
+export const questionSetStart = [
   {
     question: "React is a _________.",
     answers: [
@@ -54,6 +54,65 @@ export const questionSetOne = [
     question: "Which method is used to generate lists?",
     answers: ["map()", "generate()", "new()", "maps()"],
     correctAnswerIndex: 0,
+  },
+];
+
+export const questionSetOne = [
+  {
+    question: "What is the main purpose of React's Context API?",
+    answers: [
+      "To manage routing in a React application",
+      "To handle HTTP requests",
+      "To share global data without prop drilling",
+      "To manage component lifecycle",
+    ],
+    correctAnswerIndex: 2,
+  },
+  {
+    question: "Which two parts make up the Context API?",
+    answers: [
+      "Provider and Consumer",
+      "Reducer and Dispatcher",
+      "Hook and Callback",
+      "State and Props",
+    ],
+    correctAnswerIndex: 0,
+  },
+  {
+    question: "Where should you place the Context Provider in your app?",
+    answers: [
+      "Outside the React app root",
+      "As deep as possible in the component tree",
+      "At any random location",
+      "High up in the component tree to wrap components that need access",
+    ],
+    correctAnswerIndex: 3,
+  },
+  {
+    question: "What are React Server Components designed to do?",
+    answers: [
+      "Handle client-side state more efficiently",
+      "Replace all server-side logic",
+      "Render components on the server and send serialized HTML/JS to the client",
+      "Enable browser-only rendering",
+    ],
+    correctAnswerIndex: 2,
+  },
+  {
+    question: "Which of the following is true about Server Components?",
+    answers: [
+      "They can use browser-only APIs like window or document",
+      "They can fetch data directly from the server",
+      "They replace the need for React Context",
+      "They must be rendered inside useEffect",
+    ],
+    correctAnswerIndex: 1,
+  },
+  {
+    question:
+      "What file extension is commonly used for React Server Components?",
+    answers: [".jsx", ".js", ".server.js", ".component.js"],
+    correctAnswerIndex: 2,
   },
 ];
 
@@ -274,61 +333,56 @@ export const questionSetFive = [
     correctAnswerIndex: 2,
   },
 ];
+
 export const questionSetSix = [
   {
-    question: "What is the main purpose of React's Context API?",
+    question: "What is the primary purpose of Next.js?",
     answers: [
-      "To manage routing in a React application",
-      "To handle HTTP requests",
-      "To share global data without prop drilling",
-      "To manage component lifecycle",
+      "Styling React apps",
+      "Providing a backend framework for React",
+      "Building server-rendered React applications",
+      "Replacing React with a new frontend library",
     ],
     correctAnswerIndex: 2,
   },
   {
-    question: "Which two parts make up the Context API?",
-    answers: [
-      "Provider and Consumer",
-      "Reducer and Dispatcher",
-      "Hook and Callback",
-      "State and Props",
-    ],
-    correctAnswerIndex: 0,
+    question: "Which folder is used for routing in a Next.js application?",
+    answers: ["routes/", "pages/", "views/", "components/"],
+    correctAnswerIndex: 1,
   },
   {
-    question: "Where should you place the Context Provider in your app?",
+    question: "How do you create a dynamic route in Next.js?",
     answers: [
-      "Outside the React app root",
-      "As deep as possible in the component tree",
-      "At any random location",
-      "High up in the component tree to wrap components that need access",
-    ],
-    correctAnswerIndex: 3,
-  },
-  {
-    question: "What are React Server Components designed to do?",
-    answers: [
-      "Handle client-side state more efficiently",
-      "Replace all server-side logic",
-      "Render components on the server and send serialized HTML/JS to the client",
-      "Enable browser-only rendering",
+      "By using a wildcard in the URL",
+      "By using the Router API",
+      "By creating a file with square brackets (e.g. [id].js)",
+      "By calling dynamic() inside the component",
     ],
     correctAnswerIndex: 2,
   },
   {
-    question: "Which of the following is true about Server Components?",
+    question: "What does getServerSideProps() do in Next.js?",
     answers: [
-      "They can use browser-only APIs like window or document",
-      "They can fetch data directly from the server",
-      "They replace the need for React Context",
-      "They must be rendered inside useEffect",
+      "Fetches data only on the client-side",
+      "Generates static pages at build time",
+      "Fetches data at request time for server-side rendering",
+      "Prevents data fetching entirely",
+    ],
+    correctAnswerIndex: 2,
+  },
+  {
+    question: "What is the default rendering mode in Next.js pages?",
+    answers: [
+      "Client-side rendering (CSR)",
+      "Static Site Generation (SSG)",
+      "Server-side rendering (SSR)",
+      "Incremental Static Regeneration (ISR)",
     ],
     correctAnswerIndex: 1,
   },
   {
-    question:
-      "What file extension is commonly used for React Server Components?",
-    answers: [".jsx", ".js", ".server.js", ".component.js"],
-    correctAnswerIndex: 2,
+    question: "Which command is used to build a production-ready Next.js app?",
+    answers: ["next dev", "next serve", "next start", "next build"],
+    correctAnswerIndex: 3,
   },
 ];
