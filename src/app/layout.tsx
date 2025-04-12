@@ -13,8 +13,9 @@ export const metadata: Metadata = {
   description: "Experimental game with next.js",
 };
 
-export const audiowide = Audiowide({
-  weight: "400",
+export const fontFamily = Audiowide({
+  weight: ["400"],
+  preload: true,
   subsets: ["latin"],
 });
 
@@ -29,7 +30,7 @@ export default function RootLayout({
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
       </head>
       <GameSettingsProvider>
-        <body className={`${audiowide.className} antialiased`}>
+        <body className={`${fontFamily.className} antialiased`}>
           <div className={styles.container}>{children}</div>
         </body>
       </GameSettingsProvider>

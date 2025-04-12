@@ -7,8 +7,6 @@
     "shareable"
   ],
   "dependencies": {
-    "@app/actions": "workspaces:*",
-    "@app/messages-contract": "0.1.0",
     "clue-hunt-ui": "^0.4.8"
   },
   "main": "./src/index.ts"
