@@ -1,6 +1,7 @@
 import "server-only";
 
 import type { Metadata } from "next";
+import { Audiowide } from "next/font/google";
 
 import { GameSettingsProvider } from "@app/context";
 
@@ -12,6 +13,11 @@ export const metadata: Metadata = {
   description: "Experimental game with next.js",
 };
 
+export const audiowide = Audiowide({
+  weight: "400",
+  subsets: ["latin"],
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -21,13 +27,9 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Audiowide&display=optional"
-        />
       </head>
       <GameSettingsProvider>
-        <body>
+        <body className={`${audiowide.className} antialiased`}>
           <div className={styles.container}>{children}</div>
         </body>
       </GameSettingsProvider>
