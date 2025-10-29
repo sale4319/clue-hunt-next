@@ -15,18 +15,14 @@ type PageProps = {
 export default function Home({ children }: PageProps) {
   const { settings } = useSettings();
 
-  if (!settings) {
-    return <div>Loading...</div>;
-  }
-
   return (
-    <Container theme={settings.theme}>
+    <Container theme={settings?.theme}>
       <div className={styles.page}>
-        <AppMenu theme={settings.theme}>
+        <AppMenu theme={settings?.theme}>
           <DarkModeButton />
         </AppMenu>
         {children}
-        {settings.settingsOpen && <SettingsModal />}
+        {settings?.settingsOpen && <SettingsModal />}
         <SettingsButton className={styles.settingsButton}>
           <i className={styles.settingsIcon} />
         </SettingsButton>

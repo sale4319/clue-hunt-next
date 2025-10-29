@@ -10,6 +10,7 @@ import styles from "./SettingsModal.module.css";
 import { getClientSessionId } from "src/shared/lib/clientSession";
 import { settingsApi } from "src/shared/lib/api/settings";
 import { useSettings } from "@app/context";
+import { LogoutButton } from "./LogoutButton/LogoutButton";
 
 export const SettingsModal = () => {
   const { settings, refreshSettings } = useSettings();
@@ -46,11 +47,8 @@ export const SettingsModal = () => {
           label={SettingsModalMessages.TITLE}
           theme={settings.theme}
         />
-        <Title
-          titleSize="small"
-          label={SettingsModalMessages.INFO}
-          theme={settings.theme}
-        />
+        <LogoutButton />
+
         <ToggleSwitch
           onChange={handleToggleQuiz}
           toggle={settings.quizMode}
@@ -61,6 +59,7 @@ export const SettingsModal = () => {
           toggle={settings.skipMode}
           label="Skip mode"
         />
+
         <Button
           size={"medium"}
           onClick={handleClose}
