@@ -3,20 +3,19 @@ import { UserSettingsService } from "src/shared/lib/mongodb/services";
 
 export async function GET(request: NextRequest) {
   try {
-    const sessionId = request.nextUrl.searchParams.get("sessionId");
+    // Get userId from auth cookie
+    const authCookie = request.cookies.get("clue_hunt_auth");
 
-    if (!sessionId) {
-      return NextResponse.json(
-        { error: "Session ID is required" },
-        { status: 400 }
-      );
+    if (!authCookie?.value) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
 
-    const settings = await UserSettingsService.getSettings(sessionId);
+    const userId = authCookie.value;
+    const settings = await UserSettingsService.getSettings(userId);
 
     // Convert to plain object to avoid serialization issues
     return NextResponse.json({
-      sessionId: settings.sessionId,
+      userId: settings.userId,
       theme: settings.theme,
       quizMode: settings.quizMode,
       skipMode: settings.skipMode,

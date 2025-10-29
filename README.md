@@ -90,15 +90,15 @@ src/
 │   ├── contracts/               # Type definitions and contracts
 │   ├── lib/
 │   │   ├── api/                # Client-side API library
-│   │   ├── mongodb/            # Database connection and models
-│   │   └── clientSession.ts   # Session management
+│   │   └── mongodb/            # Database connection and models
 │   └── utils/                   # Utility functions
 ```
 
 ## Key Features
 
+- **User Authentication**: Secure login and registration system
 - **Persistent Settings**: User preferences saved in MongoDB
-- **Session-based**: Each user gets a unique session ID
+- **User-based**: Settings tied to authenticated user accounts
 - **Dark/Light Theme**: Toggle between themes with instant updates
 - **Settings Modal**: Configure quiz mode, skip mode, and locks
 - **Responsive Design**: Works on desktop and mobile devices

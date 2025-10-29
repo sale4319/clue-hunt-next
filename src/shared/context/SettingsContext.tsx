@@ -7,7 +7,6 @@ import {
   useState,
   ReactNode,
 } from "react";
-import { getClientSessionId } from "../lib/clientSession";
 import { settingsApi, UserSettings } from "../lib/api/settings";
 
 type SettingsContextType = {
@@ -28,8 +27,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
 
   const refreshSettings = async () => {
     try {
-      const sessionId = getClientSessionId();
-      const userSettings = await settingsApi.getSettings(sessionId);
+      const userSettings = await settingsApi.getSettings();
       setSettings(userSettings);
       setIsLoading(false);
     } catch (error) {
@@ -39,10 +37,6 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     refreshSettings();
-
-    // Poll for updates every second
-    const interval = setInterval(refreshSettings, 1000);
-    return () => clearInterval(interval);
   }, []);
 
   return (

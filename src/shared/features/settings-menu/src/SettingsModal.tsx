@@ -7,7 +7,6 @@ import { ToggleSwitch } from "./ToggleSwitch";
 import { SettingsModalMessages } from "@app/messages-contract";
 
 import styles from "./SettingsModal.module.css";
-import { getClientSessionId } from "src/shared/lib/clientSession";
 import { settingsApi } from "src/shared/lib/api/settings";
 import { useSettings } from "@app/context";
 import { LogoutButton } from "./LogoutButton/LogoutButton";
@@ -16,20 +15,17 @@ export const SettingsModal = () => {
   const { settings, refreshSettings } = useSettings();
 
   const handleClose = async () => {
-    const sessionId = getClientSessionId();
-    await settingsApi.toggleSettingsModal(sessionId);
+    await settingsApi.toggleSettingsModal();
     await refreshSettings();
   };
 
   const handleToggleQuiz = async () => {
-    const sessionId = getClientSessionId();
-    await settingsApi.toggleQuizMode(sessionId);
+    await settingsApi.toggleQuizMode();
     await refreshSettings();
   };
 
   const handleToggleSkip = async () => {
-    const sessionId = getClientSessionId();
-    await settingsApi.toggleSkipMode(sessionId);
+    await settingsApi.toggleSkipMode();
     await refreshSettings();
   };
 

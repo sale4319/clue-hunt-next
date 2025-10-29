@@ -9,7 +9,6 @@ import {
 } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { authApi, AuthUser } from "../lib/api/auth";
-import { getClientSessionId } from "../lib/clientSession";
 import { settingsApi } from "../lib/api/settings";
 
 interface AuthContextType {
@@ -82,11 +81,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     try {
-      const sessionId = getClientSessionId();
-      const currentSettings = await settingsApi.getSettings(sessionId);
+      const currentSettings = await settingsApi.getSettings();
 
       if (currentSettings.settingsOpen) {
-        await settingsApi.toggleSettingsModal(sessionId);
+        await settingsApi.toggleSettingsModal();
       }
     } catch (error) {
       console.error("Failed to close settings modal during logout:", error);

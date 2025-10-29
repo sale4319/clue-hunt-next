@@ -10,7 +10,6 @@ import {
 import { getRoute } from "@app/utils";
 
 import { LevelOneMessages } from "@app/messages-contract";
-import { getClientSessionId } from "src/shared/lib/clientSession";
 import { settingsApi } from "src/shared/lib/api/settings";
 import { useSettings } from "@app/context";
 
@@ -24,14 +23,12 @@ export default function LevelOne() {
   const isQuizRoute = quizMode ? "one" : "two";
 
   const handleSetLock = async () => {
-    const sessionId = getClientSessionId();
-    await settingsApi.setLock(sessionId, true);
+    await settingsApi.setLock(true);
     await refreshSettings();
   };
 
   const handleDeleteLock = async () => {
-    const sessionId = getClientSessionId();
-    await settingsApi.setLock(sessionId, false);
+    await settingsApi.setLock(false);
     await refreshSettings();
   };
 

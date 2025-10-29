@@ -3,14 +3,14 @@ import { UserSettingsService } from "src/shared/lib/mongodb/services";
 
 export async function POST(request: NextRequest) {
   try {
-    const { sessionId, isLocked } = await request.json();
+    // Get userId from auth cookie
+    const authCookie = request.cookies.get("clue_hunt_auth");
 
-    if (!sessionId) {
-      return NextResponse.json(
-        { error: "Session ID is required" },
-        { status: 400 }
-      );
+    if (!authCookie?.value) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
+
+    const { isLocked } = await request.json();
 
     if (typeof isLocked !== "boolean") {
       return NextResponse.json(
@@ -19,7 +19,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    await UserSettingsService.setLock(sessionId, isLocked);
+    const userId = authCookie.value;
+    await UserSettingsService.setLock(userId, isLocked);
 
     return NextResponse.json({ success: true });
   } catch (error) {

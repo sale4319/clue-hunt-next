@@ -1,7 +1,7 @@
 import { Schema, model, models } from "mongoose";
 
 export interface IUserSettings {
-  sessionId: string;
+  userId: string; // Changed from sessionId to userId
   theme: "light" | "dark";
   quizMode: boolean;
   skipMode: boolean;
@@ -13,7 +13,7 @@ export interface IUserSettings {
 
 const UserSettingsSchema = new Schema<IUserSettings>(
   {
-    sessionId: {
+    userId: {
       type: String,
       required: true,
       unique: true,
