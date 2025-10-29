@@ -21,26 +21,6 @@ export const settingsApi = {
     return response.json();
   },
 
-  async toggleTheme(): Promise<void> {
-    const response = await fetch("/api/settings/theme", {
-      method: "POST",
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to toggle theme");
-    }
-  },
-
-  async deleteTheme(): Promise<void> {
-    const response = await fetch(`/api/settings/theme`, {
-      method: "DELETE",
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to delete theme");
-    }
-  },
-
   async toggleSkipMode(): Promise<void> {
     const response = await fetch("/api/settings/skip-mode", {
       method: "POST",
