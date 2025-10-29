@@ -4,9 +4,10 @@ import { useState } from "react";
 import { Button, QuizForm, SkipButton } from "clue-hunt-ui";
 import { getRoute } from "@app/utils";
 import { questionSetSix } from "@app/quiz-sets-contract";
-import { SettingsType } from "./types";
+import { useSettings } from "@app/context";
 
-export default function QuizSix({ theme, skipMode }: SettingsType) {
+export default function QuizSix() {
+  const { settings } = useSettings();
   const [isLocked, setIsLocked] = useState(true);
 
   const handleUnlock = () => {
@@ -23,9 +24,9 @@ export default function QuizSix({ theme, skipMode }: SettingsType) {
       <QuizForm
         questions={questionSetSix}
         handleUnlock={handleUnlock}
-        theme={theme}
+        theme={settings?.theme}
       />
-      {skipMode && <SkipButton onClick={handleUnlock} />}
+      {settings?.skipMode && <SkipButton onClick={handleUnlock} />}
     </>
   );
 }

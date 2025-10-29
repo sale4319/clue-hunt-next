@@ -3,7 +3,7 @@ import "server-only";
 import type { Metadata } from "next";
 import { Audiowide } from "next/font/google";
 
-import { GameSettingsProvider } from "@app/context";
+import { SettingsProvider } from "@app/context";
 
 import styles from "./layout.module.css";
 import "./globals.css";
@@ -29,11 +29,12 @@ export default function RootLayout({
       <head>
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
       </head>
-      <GameSettingsProvider>
+
+      <SettingsProvider>
         <body className={`${fontFamily.className} antialiased`}>
           <div className={styles.container}>{children}</div>
         </body>
-      </GameSettingsProvider>
+      </SettingsProvider>
     </html>
   );
 }

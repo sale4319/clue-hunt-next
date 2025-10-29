@@ -9,21 +9,26 @@ import {
   QuestionFormMessages,
   TooltipMessages,
 } from "@app/messages-contract";
-import { SettingsType } from "./types";
+import { useSettings } from "@app/context";
 
-export default function LevelSix({ theme, quizMode, skipMode }: SettingsType) {
+export default function LevelSix() {
+  const { settings } = useSettings();
   const [isLocked, setIsLocked] = useState(true);
 
   const handleUnlock = () => {
     setIsLocked(false);
   };
 
-  const isQuizMode = quizMode ? "quiz" : "level";
-  const isQuizRoute = quizMode ? "six" : "start";
+  const isQuizMode = settings?.quizMode ? "quiz" : "level";
+  const isQuizRoute = settings?.quizMode ? "six" : "start";
 
   return (
     <>
-      <Title titleSize="small" label={LevelSixMessages.HINT} theme={theme} />
+      <Title
+        titleSize="small"
+        label={LevelSixMessages.HINT}
+        theme={settings?.theme}
+      />
       <Button
         size="medium"
         href={getRoute(isQuizMode, isQuizRoute)}
@@ -40,9 +45,9 @@ export default function LevelSix({ theme, quizMode, skipMode }: SettingsType) {
         secondQuestion={QuestionFormMessages.SECOND_Q_LABEL}
         secondHint={TooltipMessages.SECOND_Q_HINT}
         secondPlaceholder={QuestionFormMessages.SECOND_Q_PLACEHOLDER}
-        theme={theme}
+        theme={settings?.theme}
       />
-      {skipMode && <SkipButton onClick={handleUnlock} />}
+      {settings?.skipMode && <SkipButton onClick={handleUnlock} />}
     </>
   );
 }

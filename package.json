@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "clue-hunt-ui": "^0.4.8",
+    "mongoose": "^8.19.2",
     "next": "15.0.3",
     "react": "^19.0.0",
     "react-countdown": "^2.3.6",

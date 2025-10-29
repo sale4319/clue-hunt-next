@@ -5,9 +5,10 @@ import { Button, QuizForm, SkipButton } from "clue-hunt-ui";
 
 import { getRoute } from "@app/utils";
 import { questionSetThree } from "@app/quiz-sets-contract";
-import { SettingsType } from "./types";
+import { useSettings } from "@app/context";
 
-export default function QuizThree({ theme, skipMode }: SettingsType) {
+export default function QuizThree() {
+  const { settings } = useSettings();
   const [isLocked, setIsLocked] = useState(true);
 
   const handleUnlock = () => {
@@ -24,9 +25,9 @@ export default function QuizThree({ theme, skipMode }: SettingsType) {
       <QuizForm
         questions={questionSetThree}
         handleUnlock={handleUnlock}
-        theme={theme}
+        theme={settings?.theme}
       />
-      {skipMode && <SkipButton onClick={handleUnlock} />}
+      {settings?.skipMode && <SkipButton onClick={handleUnlock} />}
     </>
   );
 }
