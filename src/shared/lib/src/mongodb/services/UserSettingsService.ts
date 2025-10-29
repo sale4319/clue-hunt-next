@@ -164,4 +164,19 @@ export class UserSettingsService {
       { upsert: true }
     );
   }
+
+  /**
+   * Delete user settings
+   */
+  static async deleteUserSettings(userId: string): Promise<boolean> {
+    await connectToDatabase();
+
+    try {
+      const result = await UserSettings.deleteOne({ userId });
+      return result.deletedCount > 0;
+    } catch (error) {
+      console.error("Error deleting user settings:", error);
+      return false;
+    }
+  }
 }

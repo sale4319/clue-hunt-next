@@ -20,6 +20,7 @@ interface AuthContextType {
   login: (username: string, password: string) => Promise<void>;
   register: (username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  deleteAccount: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -29,6 +30,7 @@ const AuthContext = createContext<AuthContextType>({
   login: async () => {},
   register: async () => {},
   logout: async () => {},
+  deleteAccount: async () => {},
 });
 
 const PUBLIC_PATHS = ["/login"];
@@ -80,11 +82,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = async () => {
+    if (!isPublicPath) {
+      localStorage.setItem("redirectAfterLogin", pathname);
+    }
+
     clearSettings();
     await authApi.logout();
     setUser(null);
 
     // Full page reload to clear all state
+    window.location.href = "/login";
+  };
+
+  const deleteAccount = async () => {
+    clearSettings();
+    await authApi.deleteAccount();
+    setUser(null);
+
+    // Full page reload and redirect to login
     window.location.href = "/login";
   };
 
@@ -97,6 +112,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         login,
         register,
         logout,
+        deleteAccount,
       }}
     >
       {children}

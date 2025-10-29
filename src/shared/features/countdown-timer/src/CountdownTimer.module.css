@@ -1,5 +1,69 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
 .timeCounter {
   font-size: 100px;
   color: #61dafb;
   line-height: 120px;
+}
+
+.difficultyButtons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.difficultyButtons button {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.easyButton {
+  background-color: #4caf50;
+  color: white;
+  border-color: #45a049;
+}
+
+.easyButton:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+
+.normalButton {
+  background-color: #ff9800;
+  color: white;
+  border-color: #e68900;
+}
+
+.normalButton:hover {
+  background-color: #e68900;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(255, 152, 0, 0.3);
+}
+
+.hardButton {
+  background-color: #f44336;
+  color: white;
+  border-color: #da190b;
+}
+
+.hardButton:hover {
+  background-color: #da190b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(244, 67, 54, 0.3);
+}
+
+.difficultyButtons button:active {
+  transform: translateY(0);
 }
