@@ -1,10 +1,11 @@
 # MongoDB Atlas Setup Guide
 
-This application now uses MongoDB Atlas for persistent storage of user settings instead of cookies.
+This application uses MongoDB Atlas for persistent storage of user settings.
 
 ## Prerequisites
 
 - MongoDB Atlas account (free tier available at https://www.mongodb.com/cloud/atlas)
+- Node.js 16.9 or higher
 
 ## Setup Instructions
 
@@ -59,7 +60,7 @@ This application now uses MongoDB Atlas for persistent storage of user settings 
 ### 6. Run the Application
 
 ```bash
-npm run dev
+yarn dev
 ```
 
 The application will automatically:
@@ -67,6 +68,23 @@ The application will automatically:
 - Connect to MongoDB on startup
 - Create the database and collections as needed
 - Store user settings per session
+
+## Architecture Overview
+
+### Session Management
+
+- **Client-side**: Session IDs are generated and stored in `localStorage`
+- **Key**: `clue_hunt_session_id`
+- **Persistence**: Session IDs persist across browser sessions
+- **Server-side**: No cookies required - session ID sent with API requests
+
+### Data Flow
+
+1. User visits the app → Session ID created in localStorage
+2. Settings fetched from MongoDB using session ID
+3. Settings managed via React Context (SettingsProvider)
+4. Updates sent to API routes → saved to MongoDB
+5. Context polls for changes every 1 second for reactivity
 
 ## Database Structure
 
@@ -78,7 +96,7 @@ Stores user preferences and game state:
 
 ```typescript
 {
-  sessionId: string; // Unique session identifier
+  sessionId: string; // Unique session identifier (from localStorage)
   theme: "light" | "dark"; // Theme preference
   quizMode: boolean; // Quiz mode enabled/disabled
   skipMode: boolean; // Skip mode enabled/disabled
@@ -89,14 +107,113 @@ Stores user preferences and game state:
 }
 ```
 
+### Indexes
+
+- `sessionId`: Unique index for fast lookups
+- `createdAt`: For potential cleanup of old sessions
+
+## API Endpoints
+
+All endpoints accept `sessionId` as a query parameter:
+
+- `GET /api/settings?sessionId={id}` - Fetch user settings
+- `POST /api/settings/theme?sessionId={id}` - Toggle theme
+- `DELETE /api/settings/theme?sessionId={id}` - Delete theme setting
+- `POST /api/settings/skip-mode?sessionId={id}` - Toggle skip mode
+- `POST /api/settings/quiz-mode?sessionId={id}` - Toggle quiz mode
+- `POST /api/settings/modal?sessionId={id}` - Toggle settings modal
+- `POST /api/settings/lock?sessionId={id}` - Set lock state
+
 ## Migration from Cookies
 
-The application has been migrated from cookie-based storage to MongoDB persistence:
+The application was migrated from cookie-based storage to a hybrid approach:
 
-- **Before**: Settings stored in browser cookies
-- **After**: Settings stored in MongoDB Atlas, tied to session ID
+- **Before**: All settings stored in browser cookies via server actions
+- **After**:
+  - Session ID stored in localStorage (client-side)
+  - Settings stored in MongoDB Atlas (server-side)
+  - API route handlers instead of server actions
+  - Global React Context for state management
 
-Each user gets a unique session ID automatically created by Next.js middleware on their first visit. This session ID is stored in a cookie (`clue_hunt_session_id`) that persists for 1 year and is used to retrieve their settings from the database.
+### Benefits
+
+✅ **No cookie limitations**: No size restrictions or HTTP header overhead  
+✅ **Persistent storage**: Settings survive browser sessions  
+✅ **Centralized state**: React Context provides global access  
+✅ **RESTful API**: Clean separation of concerns  
+✅ **Type-safe**: Full TypeScript support throughout
+
+## Development Notes
+
+### Connection Pooling
+
+MongoDB connections are cached globally to prevent connection exhaustion:
+
+```typescript
+// src/shared/lib/mongodb/connection.ts
+let cached = global.mongoose;
+```
+
+### Client-side API Library
+
+Type-safe API client in `src/shared/lib/api/settings.ts`:
+
+```typescript
+import { settingsApi } from "src/shared/lib/api/settings";
+
+// Fetch settings
+const settings = await settingsApi.getSettings(sessionId);
+
+// Toggle theme
+await settingsApi.toggleTheme(sessionId);
+```
+
+### React Context Usage
+
+Components access settings via the `useSettings()` hook:
+
+```typescript
+import { useSettings } from "@app/context";
+
+function MyComponent() {
+  const { settings, isLoading, refreshSettings } = useSettings();
+
+  if (!settings) return <div>Loading...</div>;
+
+  return <div>Theme: {settings.theme}</div>;
+}
+```
+
+## Troubleshooting
+
+### Connection Issues
+
+If you see connection errors:
+
+1. Check your `.env.local` file has the correct `MONGODB_URI`
+2. Verify your IP address is whitelisted in MongoDB Atlas
+3. Ensure database user credentials are correct
+4. Check MongoDB Atlas cluster is running
+
+### Session Issues
+
+If settings aren't persisting:
+
+1. Check browser console for localStorage errors
+2. Verify sessionId is being generated (check localStorage in DevTools)
+3. Check Network tab for API request/response errors
+
+### TypeScript Errors
+
+If you encounter type errors:
+
+1. Run `yarn tsc --noEmit` to check for errors
+2. Ensure `dist` directory is excluded in `tsconfig.json`
+3. Clear `.next` and `dist` directories and rebuild
+
+---
+
+For more information about the overall project, see [README.md](./README.md).
 
 ### Session Management
 
