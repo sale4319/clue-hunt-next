@@ -3,14 +3,15 @@
 import { useState } from "react";
 import {
   Button,
+  DraggingPuzzle,
+  SkipButton,
   SpacerElement,
   Title,
-  SkipButton,
-  DraggingPuzzle,
 } from "clue-hunt-ui";
-import { getRoute } from "@app/utils";
-import { LevelThreeMessages } from "@app/messages-contract";
+
 import { useSettings } from "@app/context";
+import { LevelThreeMessages } from "@app/messages-contract";
+import { getRoute } from "@app/utils";
 
 export default function LevelThree() {
   const { settings } = useSettings();

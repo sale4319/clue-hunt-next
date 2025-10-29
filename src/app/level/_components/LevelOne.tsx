@@ -2,17 +2,16 @@
 
 import {
   Button,
-  SpacerElement,
-  UnlockButton,
-  Title,
   SkipButton,
+  SpacerElement,
+  Title,
+  UnlockButton,
 } from "clue-hunt-ui";
-import { getRoute } from "@app/utils";
-
-import { LevelOneMessages } from "@app/messages-contract";
-import { getClientSessionId } from "src/shared/lib/clientSession";
 import { settingsApi } from "src/shared/lib/api/settings";
+
 import { useSettings } from "@app/context";
+import { LevelOneMessages } from "@app/messages-contract";
+import { getRoute } from "@app/utils";
 
 export default function LevelOne() {
   const { settings, refreshSettings } = useSettings();
@@ -24,14 +23,12 @@ export default function LevelOne() {
   const isQuizRoute = quizMode ? "one" : "two";
 
   const handleSetLock = async () => {
-    const sessionId = getClientSessionId();
-    await settingsApi.setLock(sessionId, true);
+    await settingsApi.setLock(true);
     await refreshSettings();
   };
 
   const handleDeleteLock = async () => {
-    const sessionId = getClientSessionId();
-    await settingsApi.setLock(sessionId, false);
+    await settingsApi.setLock(false);
     await refreshSettings();
   };
 

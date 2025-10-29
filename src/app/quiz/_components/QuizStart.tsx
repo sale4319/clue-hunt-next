@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { Button, QuizForm, SkipButton } from "clue-hunt-ui";
-import { getRoute } from "@app/utils";
-import { questionSetStart } from "@app/quiz-sets-contract";
+
 import { useSettings } from "@app/context";
+import { questionSetStart } from "@app/quiz-sets-contract";
+import { getRoute } from "@app/utils";
 
 export default function QuizStart() {
   const { settings } = useSettings();

@@ -3,16 +3,15 @@ import { UserSettingsService } from "src/shared/lib/mongodb/services";
 
 export async function POST(request: NextRequest) {
   try {
-    const { sessionId } = await request.json();
+    // Get userId from auth cookie
+    const authCookie = request.cookies.get("clue_hunt_auth");
 
-    if (!sessionId) {
-      return NextResponse.json(
-        { error: "Session ID is required" },
-        { status: 400 }
-      );
+    if (!authCookie?.value) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
 
-    await UserSettingsService.toggleTheme(sessionId);
+    const userId = authCookie.value;
+    await UserSettingsService.toggleTheme(userId);
 
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -26,16 +25,15 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const sessionId = request.nextUrl.searchParams.get("sessionId");
+    // Get userId from auth cookie
+    const authCookie = request.cookies.get("clue_hunt_auth");
 
-    if (!sessionId) {
-      return NextResponse.json(
-        { error: "Session ID is required" },
-        { status: 400 }
-      );
+    if (!authCookie?.value) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
 
-    await UserSettingsService.deleteTheme(sessionId);
+    const userId = authCookie.value;
+    await UserSettingsService.deleteTheme(userId);
 
     return NextResponse.json({ success: true });
   } catch (error) {

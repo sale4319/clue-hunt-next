@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect,useState } from "react";
 import Countdown, { CountdownRenderProps } from "react-countdown";
+
 import styles from "./CountdownTimer.module.css";
 
 const twoDigits = (num: number) => String(num).padStart(2, "0");

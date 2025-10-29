@@ -1,12 +1,12 @@
 "use client";
 
 import { AppMenu, Container } from "clue-hunt-ui";
-import { SettingsModal, SettingsButton } from "@app/settings-menu";
 
-import { useSettings } from "@app/context";
+import { useAuth,useSettings } from "@app/context";
+import { DarkModeButton } from "@app/dark-mode-button";
+import { SettingsButton,SettingsModal } from "@app/settings-menu";
 
 import styles from "./Page.module.css";
-import { DarkModeButton } from "@app/dark-mode-button";
 
 type PageProps = {
   children: React.ReactNode;
@@ -14,22 +14,23 @@ type PageProps = {
 
 export default function Home({ children }: PageProps) {
   const { settings } = useSettings();
-
-  if (!settings) {
-    return <div>Loading...</div>;
-  }
+  const { isAuthenticated } = useAuth();
 
   return (
-    <Container theme={settings.theme}>
+    <Container theme={settings?.theme}>
       <div className={styles.page}>
-        <AppMenu theme={settings.theme}>
-          <DarkModeButton />
-        </AppMenu>
+        {isAuthenticated && (
+          <AppMenu theme={settings?.theme}>
+            <DarkModeButton />
+          </AppMenu>
+        )}
         {children}
-        {settings.settingsOpen && <SettingsModal />}
-        <SettingsButton className={styles.settingsButton}>
-          <i className={styles.settingsIcon} />
-        </SettingsButton>
+        {settings?.settingsOpen && <SettingsModal />}
+        {isAuthenticated && (
+          <SettingsButton className={styles.settingsButton}>
+            <i className={styles.settingsIcon} />
+          </SettingsButton>
+        )}
       </div>
     </Container>
   );

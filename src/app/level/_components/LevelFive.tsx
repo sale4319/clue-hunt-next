@@ -1,11 +1,11 @@
 "use client";
 
-import { Button, Title, SkipButton, SpacerElement } from "clue-hunt-ui";
-import { getRoute, useFeatureToggle } from "@app/utils";
-
-import { LevelFiveMessages } from "@app/messages-contract";
-import { useSettings } from "@app/context";
+import { Button, SkipButton, SpacerElement,Title } from "clue-hunt-ui";
 import { useRouter, useSearchParams } from "next/navigation";
+
+import { useSettings } from "@app/context";
+import { LevelFiveMessages } from "@app/messages-contract";
+import { getRoute, useFeatureToggle } from "@app/utils";
 
 export default function LevelFive() {
   const { settings } = useSettings();

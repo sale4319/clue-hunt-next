@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Title, SkipButton, ShiftingCircles } from "clue-hunt-ui";
-import { getRoute } from "@app/utils";
-import { LevelFourMessages } from "@app/messages-contract";
+import { Button, ShiftingCircles,SkipButton, Title } from "clue-hunt-ui";
+
 import { useSettings } from "@app/context";
+import { LevelFourMessages } from "@app/messages-contract";
+import { getRoute } from "@app/utils";
 
 export default function LevelFour() {
   const { settings } = useSettings();

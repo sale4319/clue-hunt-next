@@ -1,34 +1,31 @@
 "use client";
 
 import { Button, Title } from "clue-hunt-ui";
+import { settingsApi } from "src/shared/lib/api/settings";
 
-import { ToggleSwitch } from "./ToggleSwitch";
-
+import { useSettings } from "@app/context";
 import { SettingsModalMessages } from "@app/messages-contract";
 
+import { LogoutButton } from "./LogoutButton/LogoutButton";
+import { ToggleSwitch } from "./ToggleSwitch";
+
 import styles from "./SettingsModal.module.css";
-import { getClientSessionId } from "src/shared/lib/clientSession";
-import { settingsApi } from "src/shared/lib/api/settings";
-import { useSettings } from "@app/context";
 
 export const SettingsModal = () => {
   const { settings, refreshSettings } = useSettings();
 
   const handleClose = async () => {
-    const sessionId = getClientSessionId();
-    await settingsApi.toggleSettingsModal(sessionId);
+    await settingsApi.toggleSettingsModal();
     await refreshSettings();
   };
 
   const handleToggleQuiz = async () => {
-    const sessionId = getClientSessionId();
-    await settingsApi.toggleQuizMode(sessionId);
+    await settingsApi.toggleQuizMode();
     await refreshSettings();
   };
 
   const handleToggleSkip = async () => {
-    const sessionId = getClientSessionId();
-    await settingsApi.toggleSkipMode(sessionId);
+    await settingsApi.toggleSkipMode();
     await refreshSettings();
   };
 
@@ -46,11 +43,8 @@ export const SettingsModal = () => {
           label={SettingsModalMessages.TITLE}
           theme={settings.theme}
         />
-        <Title
-          titleSize="small"
-          label={SettingsModalMessages.INFO}
-          theme={settings.theme}
-        />
+        <LogoutButton />
+
         <ToggleSwitch
           onChange={handleToggleQuiz}
           toggle={settings.quizMode}
@@ -61,6 +55,7 @@ export const SettingsModal = () => {
           toggle={settings.skipMode}
           label="Skip mode"
         />
+
         <Button
           size={"medium"}
           onClick={handleClose}

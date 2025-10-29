@@ -1,1 +1,1 @@
-export { UserSettings, type IUserSettings } from "./UserSettings";
+export { type IUserSettings,UserSettings } from "./UserSettings";

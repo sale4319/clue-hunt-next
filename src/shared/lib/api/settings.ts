@@ -1,5 +1,5 @@
 export interface UserSettings {
-  sessionId: string;
+  userId: string;
   theme: string;
   quizMode: boolean;
   skipMode: boolean;
@@ -10,10 +10,8 @@ export interface UserSettings {
 }
 
 export const settingsApi = {
-  async getSettings(sessionId: string): Promise<UserSettings> {
-    const response = await fetch(
-      `/api/settings?sessionId=${encodeURIComponent(sessionId)}`
-    );
+  async getSettings(): Promise<UserSettings> {
+    const response = await fetch(`/api/settings`);
 
     if (!response.ok) {
       throw new Error("Failed to fetch settings");
@@ -22,13 +20,9 @@ export const settingsApi = {
     return response.json();
   },
 
-  async toggleTheme(sessionId: string): Promise<void> {
+  async toggleTheme(): Promise<void> {
     const response = await fetch("/api/settings/theme", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ sessionId }),
     });
 
     if (!response.ok) {
@@ -36,26 +30,19 @@ export const settingsApi = {
     }
   },
 
-  async deleteTheme(sessionId: string): Promise<void> {
-    const response = await fetch(
-      `/api/settings/theme?sessionId=${encodeURIComponent(sessionId)}`,
-      {
-        method: "DELETE",
-      }
-    );
+  async deleteTheme(): Promise<void> {
+    const response = await fetch(`/api/settings/theme`, {
+      method: "DELETE",
+    });
 
     if (!response.ok) {
       throw new Error("Failed to delete theme");
     }
   },
 
-  async toggleSkipMode(sessionId: string): Promise<void> {
+  async toggleSkipMode(): Promise<void> {
     const response = await fetch("/api/settings/skip-mode", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ sessionId }),
     });
 
     if (!response.ok) {
@@ -63,13 +50,9 @@ export const settingsApi = {
     }
   },
 
-  async toggleQuizMode(sessionId: string): Promise<void> {
+  async toggleQuizMode(): Promise<void> {
     const response = await fetch("/api/settings/quiz-mode", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ sessionId }),
     });
 
     if (!response.ok) {
@@ -77,13 +60,9 @@ export const settingsApi = {
     }
   },
 
-  async toggleSettingsModal(sessionId: string): Promise<boolean> {
+  async toggleSettingsModal(): Promise<boolean> {
     const response = await fetch("/api/settings/modal", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ sessionId }),
     });
 
     if (!response.ok) {
@@ -94,13 +73,13 @@ export const settingsApi = {
     return data.settingsOpen;
   },
 
-  async setLock(sessionId: string, isLocked: boolean): Promise<void> {
+  async setLock(isLocked: boolean): Promise<void> {
     const response = await fetch("/api/settings/lock", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ sessionId, isLocked }),
+      body: JSON.stringify({ isLocked }),
     });
 
     if (!response.ok) {

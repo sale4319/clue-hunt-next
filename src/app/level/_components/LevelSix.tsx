@@ -1,15 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { Button, QuestionForm, Title, SkipButton } from "clue-hunt-ui";
-import { getRoute } from "@app/utils";
+import { Button, QuestionForm, SkipButton,Title } from "clue-hunt-ui";
 
+import { useSettings } from "@app/context";
 import {
   LevelSixMessages,
   QuestionFormMessages,
   TooltipMessages,
 } from "@app/messages-contract";
-import { useSettings } from "@app/context";
+import { getRoute } from "@app/utils";
 
 export default function LevelSix() {
   const { settings } = useSettings();

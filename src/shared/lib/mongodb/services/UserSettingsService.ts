@@ -1,21 +1,21 @@
 import "server-only";
 
 import { connectToDatabase } from "../connection";
-import { UserSettings, type IUserSettings } from "../models";
+import { type IUserSettings,UserSettings } from "../models";
 
 export class UserSettingsService {
   /**
-   * Get user settings by session ID, creates default settings if not found
+   * Get user settings by user ID, creates default settings if not found
    */
-  static async getSettings(sessionId: string): Promise<IUserSettings> {
+  static async getSettings(userId: string): Promise<IUserSettings> {
     await connectToDatabase();
 
-    let settings = await UserSettings.findOne({ sessionId });
+    let settings = await UserSettings.findOne({ userId });
 
     if (!settings) {
-      console.log("Creating new settings for session:", sessionId);
+      console.log("Creating new settings for user:", userId);
       settings = await UserSettings.create({
-        sessionId,
+        userId,
         theme: "dark",
         quizMode: true,
         skipMode: true,
@@ -31,14 +31,14 @@ export class UserSettingsService {
   /**
    * Update theme setting
    */
-  static async toggleTheme(sessionId: string): Promise<"light" | "dark"> {
+  static async toggleTheme(userId: string): Promise<"light" | "dark"> {
     await connectToDatabase();
 
-    const settings = await this.getSettings(sessionId);
+    const settings = await this.getSettings(userId);
     const newTheme = settings.theme === "light" ? "dark" : "light";
 
     await UserSettings.findOneAndUpdate(
-      { sessionId },
+      { userId },
       { theme: newTheme },
       { upsert: true, new: true }
     );
@@ -49,11 +49,11 @@ export class UserSettingsService {
   /**
    * Delete/reset theme to default
    */
-  static async deleteTheme(sessionId: string): Promise<void> {
+  static async deleteTheme(userId: string): Promise<void> {
     await connectToDatabase();
 
     await UserSettings.findOneAndUpdate(
-      { sessionId },
+      { userId },
       { theme: "dark" },
       { upsert: true }
     );
@@ -62,14 +62,14 @@ export class UserSettingsService {
   /**
    * Toggle quiz mode
    */
-  static async toggleQuizMode(sessionId: string): Promise<boolean> {
+  static async toggleQuizMode(userId: string): Promise<boolean> {
     await connectToDatabase();
 
-    const settings = await this.getSettings(sessionId);
+    const settings = await this.getSettings(userId);
     const newQuizMode = !settings.quizMode;
 
     await UserSettings.findOneAndUpdate(
-      { sessionId },
+      { userId },
       { quizMode: newQuizMode },
       { upsert: true, new: true }
     );
@@ -80,14 +80,14 @@ export class UserSettingsService {
   /**
    * Toggle skip mode
    */
-  static async toggleSkipMode(sessionId: string): Promise<boolean> {
+  static async toggleSkipMode(userId: string): Promise<boolean> {
     await connectToDatabase();
 
-    const settings = await this.getSettings(sessionId);
+    const settings = await this.getSettings(userId);
     const newSkipMode = !settings.skipMode;
 
     await UserSettings.findOneAndUpdate(
-      { sessionId },
+      { userId },
       { skipMode: newSkipMode },
       { upsert: true, new: true }
     );
@@ -98,11 +98,11 @@ export class UserSettingsService {
   /**
    * Set lock state
    */
-  static async setLock(sessionId: string, isLocked: boolean): Promise<void> {
+  static async setLock(userId: string, isLocked: boolean): Promise<void> {
     await connectToDatabase();
 
     await UserSettings.findOneAndUpdate(
-      { sessionId },
+      { userId },
       { isLocked },
       { upsert: true }
     );
@@ -111,14 +111,14 @@ export class UserSettingsService {
   /**
    * Toggle settings modal open state
    */
-  static async toggleSettingsOpen(sessionId: string): Promise<boolean> {
+  static async toggleSettingsOpen(userId: string): Promise<boolean> {
     await connectToDatabase();
 
-    const settings = await this.getSettings(sessionId);
+    const settings = await this.getSettings(userId);
     const newSettingsOpen = !settings.settingsOpen;
 
     await UserSettings.findOneAndUpdate(
-      { sessionId },
+      { userId },
       { settingsOpen: newSettingsOpen },
       { upsert: true, new: true }
     );
