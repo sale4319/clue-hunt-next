@@ -1,5 +1,9 @@
-import { User, IUser } from "../models/User";
 import { connectToDatabase } from "../connection";
+import { IUser,User } from "../models/User";
+
+type CreateUserResult =
+  | { success: true; user: IUser }
+  | { success: false; error: "USERNAME_EXISTS" | "UNKNOWN_ERROR" };
 
 export class AuthService {
   /**
@@ -8,14 +12,14 @@ export class AuthService {
   static async createUser(
     username: string,
     password: string
-  ): Promise<IUser | null> {
+  ): Promise<CreateUserResult> {
     await connectToDatabase();
 
     try {
       // Check if user already exists
       const existingUser = await User.findOne({ username });
       if (existingUser) {
-        throw new Error("Username already exists");
+        return { success: false, error: "USERNAME_EXISTS" };
       }
 
       // In production, hash the password with bcrypt
@@ -25,10 +29,10 @@ export class AuthService {
         password,
       });
 
-      return user.toObject();
+      return { success: true, user: user.toObject() };
     } catch (error) {
       console.error("Error creating user:", error);
-      throw error;
+      return { success: false, error: "UNKNOWN_ERROR" };
     }
   }
 

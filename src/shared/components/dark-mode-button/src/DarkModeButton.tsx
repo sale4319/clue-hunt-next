@@ -1,8 +1,10 @@
 "use client";
 
-import "./DarkModeButton.css";
 import { settingsApi } from "src/shared/lib/api/settings";
+
 import { useSettings } from "@app/context";
+
+import "./DarkModeButton.css";
 
 export const DarkModeButton = () => {
   const { refreshSettings } = useSettings();

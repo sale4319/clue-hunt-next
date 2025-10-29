@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { AuthService } from "src/shared/lib/mongodb/services/AuthService";
+import { UserSettingsService } from "src/shared/lib/mongodb/services/UserSettingsService";
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,6 +21,12 @@ export async function POST(request: NextRequest) {
         { error: "Invalid username or password" },
         { status: 401 }
       );
+    }
+
+    // Ensure settings modal is closed on login
+    const settings = await UserSettingsService.getSettings(username);
+    if (settings.settingsOpen) {
+      await UserSettingsService.toggleSettingsOpen(username);
     }
 
     // Create response with user data (excluding password)

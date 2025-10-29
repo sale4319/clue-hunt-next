@@ -2,23 +2,26 @@
 
 import {
   createContext,
+  ReactNode,
   useContext,
   useEffect,
   useState,
-  ReactNode,
 } from "react";
+
 import { settingsApi, UserSettings } from "../lib/api/settings";
 
 type SettingsContextType = {
   settings: UserSettings | null;
   isLoading: boolean;
   refreshSettings: () => Promise<void>;
+  clearSettings: () => void;
 };
 
 const SettingsContext = createContext<SettingsContextType>({
   settings: null,
   isLoading: true,
   refreshSettings: async () => {},
+  clearSettings: () => {},
 });
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
@@ -30,9 +33,14 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       const userSettings = await settingsApi.getSettings();
       setSettings(userSettings);
       setIsLoading(false);
-    } catch (error) {
-      console.error("Failed to refresh settings:", error);
+    } catch {
+      setIsLoading(false);
     }
+  };
+
+  const clearSettings = () => {
+    setSettings(null);
+    setIsLoading(true);
   };
 
   useEffect(() => {
@@ -40,7 +48,9 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <SettingsContext.Provider value={{ settings, isLoading, refreshSettings }}>
+    <SettingsContext.Provider
+      value={{ settings, isLoading, refreshSettings, clearSettings }}
+    >
       {children}
     </SettingsContext.Provider>
   );

@@ -3,10 +3,10 @@ import "server-only";
 import type { Metadata } from "next";
 import { Audiowide } from "next/font/google";
 
-import { SettingsProvider, AuthProvider } from "@app/context";
+import { AuthProvider,SettingsProvider } from "@app/context";
 
-import styles from "./layout.module.css";
 import "./globals.css";
+import styles from "./layout.module.css";
 
 export const metadata: Metadata = {
   title: "Clue hunt",

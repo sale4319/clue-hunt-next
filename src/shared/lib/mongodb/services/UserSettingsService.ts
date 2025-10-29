@@ -1,7 +1,7 @@
 import "server-only";
 
 import { connectToDatabase } from "../connection";
-import { UserSettings, type IUserSettings } from "../models";
+import { type IUserSettings,UserSettings } from "../models";
 
 export class UserSettingsService {
   /**

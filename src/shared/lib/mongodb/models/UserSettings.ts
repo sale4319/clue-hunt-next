@@ -1,4 +1,4 @@
-import { Schema, model, models } from "mongoose";
+import { model, models,Schema } from "mongoose";
 
 export interface IUserSettings {
   userId: string; // Changed from sessionId to userId

@@ -1,19 +1,9 @@
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 20px;
-}
-
 .card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  background: transparent;
   padding: 40px;
   width: 100%;
   max-width: 400px;
+  border: 2px solid #75f8e2;
 }
 
 .title {
@@ -21,7 +11,7 @@
   font-weight: bold;
   text-align: center;
   margin-bottom: 30px;
-  color: #333;
+  color: white;
 }
 
 .form {
@@ -39,13 +29,12 @@
 .label {
   font-size: 14px;
   font-weight: 600;
-  color: #555;
+  color: white;
 }
 
 .input {
   padding: 12px 16px;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
+  border: 2px solid #75f8e2;
   font-size: 16px;
   transition: all 0.3s ease;
 }
@@ -53,14 +42,12 @@
 .input:focus {
   outline: none;
   border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .error {
   padding: 12px;
-  background: #fee;
-  border: 1px solid #fcc;
-  border-radius: 8px;
+  background: transparent;
+  border: 2px solid #c33;
   color: #c33;
   font-size: 14px;
   text-align: center;
@@ -68,10 +55,9 @@
 
 .submitButton {
   padding: 14px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #667eea 0%, #75f8e2 100%);
   color: white;
   border: none;
-  border-radius: 8px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
@@ -80,7 +66,7 @@
 
 .submitButton:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 12px #667eea66;
 }
 
 .submitButton:disabled {
@@ -96,7 +82,7 @@
 .toggleButton {
   background: none;
   border: none;
-  color: #667eea;
+  color: #75f8e2;
   font-size: 14px;
   cursor: pointer;
   text-decoration: underline;
@@ -105,5 +91,5 @@
 }
 
 .toggleButton:hover {
-  color: #764ba2;
+  color: #667eea;
 }

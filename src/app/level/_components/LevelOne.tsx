@@ -2,16 +2,16 @@
 
 import {
   Button,
-  SpacerElement,
-  UnlockButton,
-  Title,
   SkipButton,
+  SpacerElement,
+  Title,
+  UnlockButton,
 } from "clue-hunt-ui";
-import { getRoute } from "@app/utils";
-
-import { LevelOneMessages } from "@app/messages-contract";
 import { settingsApi } from "src/shared/lib/api/settings";
+
 import { useSettings } from "@app/context";
+import { LevelOneMessages } from "@app/messages-contract";
+import { getRoute } from "@app/utils";
 
 export default function LevelOne() {
   const { settings, refreshSettings } = useSettings();

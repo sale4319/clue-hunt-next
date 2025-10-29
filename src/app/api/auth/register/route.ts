@@ -27,9 +27,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const user = await AuthService.createUser(username, password);
+    const result = await AuthService.createUser(username, password);
 
-    if (!user) {
+    if (!result.success) {
+      if (result.error === "USERNAME_EXISTS") {
+        return NextResponse.json(
+          { error: "Username already exists" },
+          { status: 409 }
+        );
+      }
       return NextResponse.json(
         { error: "Failed to create user" },
         { status: 500 }
@@ -40,8 +46,8 @@ export async function POST(request: NextRequest) {
     const response = NextResponse.json({
       success: true,
       user: {
-        username: user.username,
-        createdAt: user.createdAt,
+        username: result.user.username,
+        createdAt: result.user.createdAt,
       },
     });
 
@@ -56,15 +62,7 @@ export async function POST(request: NextRequest) {
 
     return response;
   } catch (error) {
-    console.error("Registration error:", error);
-
-    if (error instanceof Error && error.message === "Username already exists") {
-      return NextResponse.json(
-        { error: "Username already exists" },
-        { status: 409 }
-      );
-    }
-
+    console.error("Unexpected registration error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

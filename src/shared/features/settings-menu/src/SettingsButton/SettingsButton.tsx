@@ -1,6 +1,7 @@
 "use client";
 
 import { settingsApi } from "src/shared/lib/api/settings";
+
 import { useSettings } from "@app/context";
 
 type SettingsButtonProps = {

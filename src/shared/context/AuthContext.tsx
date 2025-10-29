@@ -2,14 +2,15 @@
 
 import {
   createContext,
+  ReactNode,
   useContext,
   useEffect,
   useState,
-  ReactNode,
 } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+
 import { authApi, AuthUser } from "../lib/api/auth";
-import { settingsApi } from "../lib/api/settings";
+import { useSettings } from "./SettingsContext";
 
 interface AuthContextType {
   user: AuthUser | null;
@@ -36,12 +37,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
+  const { clearSettings } = useSettings();
 
   const isPublicPath = PUBLIC_PATHS.includes(pathname);
-
-  useEffect(() => {
-    checkAuth();
-  }, [pathname]);
 
   const checkAuth = async () => {
     try {
@@ -63,6 +61,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  useEffect(() => {
+    checkAuth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
+
   const login = async (username: string, password: string) => {
     const response = await authApi.login(username, password);
     setUser(response.user);
@@ -80,16 +83,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = async () => {
-    try {
-      const currentSettings = await settingsApi.getSettings();
-
-      if (currentSettings.settingsOpen) {
-        await settingsApi.toggleSettingsModal();
-      }
-    } catch (error) {
-      console.error("Failed to close settings modal during logout:", error);
-    }
-
+    clearSettings();
     await authApi.logout();
     setUser(null);
 

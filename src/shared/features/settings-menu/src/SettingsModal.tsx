@@ -1,15 +1,15 @@
 "use client";
 
 import { Button, Title } from "clue-hunt-ui";
+import { settingsApi } from "src/shared/lib/api/settings";
 
-import { ToggleSwitch } from "./ToggleSwitch";
-
+import { useSettings } from "@app/context";
 import { SettingsModalMessages } from "@app/messages-contract";
 
-import styles from "./SettingsModal.module.css";
-import { settingsApi } from "src/shared/lib/api/settings";
-import { useSettings } from "@app/context";
 import { LogoutButton } from "./LogoutButton/LogoutButton";
+import { ToggleSwitch } from "./ToggleSwitch";
+
+import styles from "./SettingsModal.module.css";
 
 export const SettingsModal = () => {
   const { settings, refreshSettings } = useSettings();

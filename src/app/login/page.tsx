@@ -3,6 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authApi } from "src/shared/lib/api/auth";
+
+import { LoginMessages } from "@app/messages-contract";
+import { Page } from "@app/page-component:";
+
 import styles from "./login.module.css";
 
 export default function LoginPage() {
@@ -35,14 +39,16 @@ export default function LoginPage() {
   };
 
   return (
-    <div className={styles.container}>
+    <Page>
       <div className={styles.card}>
-        <h1 className={styles.title}>{isLogin ? "Login" : "Register"}</h1>
+        <h1 className={styles.title}>
+          {isLogin ? LoginMessages.TITLE_LOGIN : LoginMessages.TITLE_REGISTER}
+        </h1>
 
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.inputGroup}>
             <label htmlFor="username" className={styles.label}>
-              Username
+              {LoginMessages.USERNAME}
             </label>
             <input
               id="username"
@@ -60,7 +66,7 @@ export default function LoginPage() {
 
           <div className={styles.inputGroup}>
             <label htmlFor="password" className={styles.label}>
-              Password
+              {LoginMessages.PASSWORD}
             </label>
             <input
               id="password"
@@ -95,12 +101,10 @@ export default function LoginPage() {
             }}
             className={styles.toggleButton}
           >
-            {isLogin
-              ? "Don't have an account? Register"
-              : "Already have an account? Login"}
+            {isLogin ? LoginMessages.NO_ACCOUNT : LoginMessages.HAVE_ACCOUNT}
           </button>
         </div>
       </div>
-    </div>
+    </Page>
   );
 }

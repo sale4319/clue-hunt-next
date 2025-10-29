@@ -32,6 +32,9 @@
     "@types/react-dom": "^19",
     "eslint": "^8",
     "eslint-config-next": "15.0.3",
+    "eslint-plugin-package-json": "^0.59.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-unused-imports": "^4.3.0",
     "typescript": "^5"
   }
 }

@@ -3,14 +3,15 @@
 import { useState } from "react";
 import {
   Button,
+  SkipButton,
   SpacerElement,
   Title,
-  SkipButton,
   UnlockToolTip,
 } from "clue-hunt-ui";
-import { getRoute } from "@app/utils";
-import { LevelTwoMessages, TooltipMessages } from "@app/messages-contract";
+
 import { useSettings } from "@app/context";
+import { LevelTwoMessages, TooltipMessages } from "@app/messages-contract";
+import { getRoute } from "@app/utils";
 
 export default function LevelTwo() {
   const { settings } = useSettings();

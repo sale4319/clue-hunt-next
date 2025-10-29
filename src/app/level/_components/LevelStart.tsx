@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { getRoute } from "@app/utils";
-import { Button, QuestionIconToolTip, Title, SkipButton } from "clue-hunt-ui";
-import { LevelStartMessages, TooltipMessages } from "@app/messages-contract";
-import { CountdownTimer } from "@app/countdown-timer";
+import { Button, QuestionIconToolTip, SkipButton,Title } from "clue-hunt-ui";
+
 import { useSettings } from "@app/context";
+import { CountdownTimer } from "@app/countdown-timer";
+import { LevelStartMessages, TooltipMessages } from "@app/messages-contract";
+import { getRoute } from "@app/utils";
 
 export default function LevelStart() {
   const { settings } = useSettings();

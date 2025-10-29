@@ -1,8 +1,10 @@
 "use client";
 
-import { useAuth } from "@app/context";
-import styles from "./LogoutButton.module.css";
 import { Button } from "clue-hunt-ui";
+
+import { useAuth } from "@app/context";
+
+import styles from "./LogoutButton.module.css";
 
 export function LogoutButton() {
   const { user, logout } = useAuth();
