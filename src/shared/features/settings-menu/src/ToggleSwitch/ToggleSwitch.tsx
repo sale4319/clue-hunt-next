@@ -1,4 +1,4 @@
-import "server-only";
+"use client";
 
 import styles from "./ToggleSwitch.module.css";
 

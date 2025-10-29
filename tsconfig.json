@@ -4,7 +4,6 @@
     "outDir": "dist",
     "baseUrl": "./",
     "paths": {
-      "@app/actions": ["src/shared/actions"],
       "@app/dark-mode-button": ["src/shared/components/dark-mode-button/src"],
       "@app/default-button": ["src/shared/components/default-button/src"],
       "@app/page-component:": ["src/shared/components/page-component/src"],
@@ -23,10 +22,12 @@
     ".next/types/**/*.ts",
     "next.config.js"
   ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    ".next"
+  ],
   "references": [
-    {
-      "path": "src/shared/actions/tsconfig.next.json"
-    },
     {
       "path": "src/shared/components/dark-mode-button/tsconfig.next.json"
     },

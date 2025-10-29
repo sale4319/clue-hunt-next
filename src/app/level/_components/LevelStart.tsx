@@ -4,29 +4,26 @@ import { useState } from "react";
 import { getRoute } from "@app/utils";
 import { Button, QuestionIconToolTip, Title, SkipButton } from "clue-hunt-ui";
 import { LevelStartMessages, TooltipMessages } from "@app/messages-contract";
-import type { SettingsType } from "./types";
 import { CountdownTimer } from "@app/countdown-timer";
+import { useSettings } from "@app/context";
 
-export default function LevelStart({
-  theme,
-  quizMode,
-  skipMode,
-}: SettingsType) {
+export default function LevelStart() {
+  const { settings } = useSettings();
   const [isLocked, setIsLocked] = useState(true);
 
   const handleUnlock = () => {
     setIsLocked(false);
   };
 
-  const isQuizMode = quizMode ? "quiz" : "level";
-  const isQuizRoute = quizMode ? "start" : "one";
+  const isQuizMode = settings?.quizMode ? "quiz" : "level";
+  const isQuizRoute = settings?.quizMode ? "start" : "one";
 
   return (
     <>
       <Title
         titleSize="medium"
         label={LevelStartMessages.TITLE}
-        theme={theme}
+        theme={settings?.theme}
       />
       <Title
         titleSize="small"
@@ -38,7 +35,7 @@ export default function LevelStart({
         <Title
           titleSize="medium"
           label={LevelStartMessages.HINT}
-          theme={theme}
+          theme={settings?.theme}
         />
         <QuestionIconToolTip
           size="large"
@@ -52,7 +49,7 @@ export default function LevelStart({
         isLocked={isLocked}
         primary={isLocked}
       />
-      {skipMode && <SkipButton onClick={handleUnlock} />}
+      {settings?.skipMode && <SkipButton onClick={handleUnlock} />}
     </>
   );
 }

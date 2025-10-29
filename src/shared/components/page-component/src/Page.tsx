@@ -1,9 +1,9 @@
-import "server-only";
+"use client";
 
-import { cookies } from "next/headers";
 import { AppMenu, Container } from "clue-hunt-ui";
-import { SettingsModal } from "@app/settings-menu";
-import { setSettingsCookie } from "@app/actions";
+import { SettingsModal, SettingsButton } from "@app/settings-menu";
+
+import { useSettings } from "@app/context";
 
 import styles from "./Page.module.css";
 import { DarkModeButton } from "@app/dark-mode-button";
@@ -12,25 +12,24 @@ type PageProps = {
   children: React.ReactNode;
 };
 
-export default async function Home({ children }: PageProps) {
-  const theme = (await cookies()).get("theme")?.value;
-  const isModalOpen = (await cookies()).get("settings")?.value === "true";
+export default function Home({ children }: PageProps) {
+  const { settings } = useSettings();
+
+  if (!settings) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <Container theme={theme}>
+    <Container theme={settings.theme}>
       <div className={styles.page}>
-        <AppMenu theme={theme}>
+        <AppMenu theme={settings.theme}>
           <DarkModeButton />
         </AppMenu>
         {children}
-        {isModalOpen && <SettingsModal onRequestClose={setSettingsCookie} />}
-        <button
-          className={styles.settingsButton}
-          onClick={setSettingsCookie}
-          type="button"
-        >
+        {settings.settingsOpen && <SettingsModal />}
+        <SettingsButton className={styles.settingsButton}>
           <i className={styles.settingsIcon} />
-        </button>
+        </SettingsButton>
       </div>
     </Container>
   );

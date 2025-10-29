@@ -4,10 +4,11 @@ import { Button, Title, SkipButton, SpacerElement } from "clue-hunt-ui";
 import { getRoute, useFeatureToggle } from "@app/utils";
 
 import { LevelFiveMessages } from "@app/messages-contract";
-import { SettingsType } from "./types";
+import { useSettings } from "@app/context";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function LevelFive({ theme, quizMode, skipMode }: SettingsType) {
+export default function LevelFive() {
+  const { settings } = useSettings();
   const router = useRouter();
   const searchParams = useSearchParams();
   const isNewFeatureEnabled = useFeatureToggle("LEVEL_FIVE_UNLOCK");
@@ -19,13 +20,13 @@ export default function LevelFive({ theme, quizMode, skipMode }: SettingsType) {
     router.push(`?${params.toString()}`);
   };
 
-  const isQuizMode = quizMode ? "quiz" : "level";
-  const isQuizRoute = quizMode ? "five" : "six";
+  const isQuizMode = settings?.quizMode ? "quiz" : "level";
+  const isQuizRoute = settings?.quizMode ? "five" : "six";
 
   return (
     <>
       <SpacerElement size="large" />
-      <Title label={LevelFiveMessages.HINT} theme={theme} />
+      <Title label={LevelFiveMessages.HINT} theme={settings?.theme} />
       {isNewFeatureEnabled && (
         <Button
           size="medium"
@@ -34,7 +35,7 @@ export default function LevelFive({ theme, quizMode, skipMode }: SettingsType) {
           primary={false}
         />
       )}
-      {skipMode && <SkipButton onClick={handleUnlock} />}
+      {settings?.skipMode && <SkipButton onClick={handleUnlock} />}
     </>
   );
 }

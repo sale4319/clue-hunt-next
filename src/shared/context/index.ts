@@ -1,1 +1,1 @@
-export { GameSettingsProvider, useGameSettings } from "./GameSettingsContext";
+export { SettingsProvider, useSettings } from "./SettingsContext";

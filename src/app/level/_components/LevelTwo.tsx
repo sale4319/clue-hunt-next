@@ -10,17 +10,18 @@ import {
 } from "clue-hunt-ui";
 import { getRoute } from "@app/utils";
 import { LevelTwoMessages, TooltipMessages } from "@app/messages-contract";
-import { SettingsType } from "./types";
+import { useSettings } from "@app/context";
 
-export default function LevelTwo({ theme, quizMode, skipMode }: SettingsType) {
+export default function LevelTwo() {
+  const { settings } = useSettings();
   const [isLocked, setIsLocked] = useState(true);
 
   const handleUnlock = () => {
     setIsLocked(false);
   };
 
-  const isQuizMode = quizMode ? "quiz" : "level";
-  const isQuizRoute = quizMode ? "two" : "three";
+  const isQuizMode = settings?.quizMode ? "quiz" : "level";
+  const isQuizRoute = settings?.quizMode ? "two" : "three";
 
   return (
     <>
@@ -31,14 +32,14 @@ export default function LevelTwo({ theme, quizMode, skipMode }: SettingsType) {
           data-testid="unlockButton"
         />
       </SpacerElement>
-      <Title label={LevelTwoMessages.HINT} theme={theme} />
+      <Title label={LevelTwoMessages.HINT} theme={settings?.theme} />
       <Button
         size="medium"
         href={getRoute(isQuizMode, isQuizRoute)}
         isLocked={isLocked}
         primary={isLocked}
       />
-      {skipMode && <SkipButton onClick={handleUnlock} />}
+      {settings?.skipMode && <SkipButton onClick={handleUnlock} />}
     </>
   );
 }
