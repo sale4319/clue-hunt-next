@@ -2,7 +2,6 @@ import "server-only";
 
 import type { Metadata } from "next";
 import { Audiowide } from "next/font/google";
-import { cookies } from "next/headers";
 
 import { AuthProvider, SettingsProvider } from "@app/context/client";
 import { getServerSettings } from "@app/context/server";
@@ -26,16 +25,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Get theme from user-specific cookie
-  const cookieStore = await cookies();
-  const authCookie = cookieStore.get("clue_hunt_auth");
-  const userId = authCookie?.value;
-  const themeCookie = userId
-    ? cookieStore.get(`clue_hunt_theme_${userId}`)
-    : null;
-  const theme = (themeCookie?.value as "light" | "dark") || "dark";
-
-  // Get initial settings from server (includes theme from cookie)
   const initialSettings = await getServerSettings();
 
   return (
@@ -46,7 +35,7 @@ export default async function RootLayout({
 
       <SettingsProvider initialSettings={initialSettings}>
         <AuthProvider>
-          <body className={`${fontFamily.className} ${theme} antialiased`}>
+          <body className={`${fontFamily.className} antialiased`}>
             <div className={styles.container}>{children}</div>
           </body>
         </AuthProvider>
