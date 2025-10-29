@@ -5,6 +5,7 @@ export interface UserSettings {
   skipMode: boolean;
   isLocked: boolean;
   settingsOpen: boolean;
+  timerEndDate: number | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -84,6 +85,30 @@ export const settingsApi = {
 
     if (!response.ok) {
       throw new Error("Failed to set lock");
+    }
+  },
+
+  async setTimerEndDate(endDate: number): Promise<void> {
+    const response = await fetch("/api/settings/timer", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ endDate }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to set timer");
+    }
+  },
+
+  async clearTimerEndDate(): Promise<void> {
+    const response = await fetch("/api/settings/timer", {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to clear timer");
     }
   },
 };

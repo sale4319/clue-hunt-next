@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { UserSettingsService } from "src/shared/lib/mongodb/services";
+
+import { UserSettingsService } from "@app/lib/server";
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,14 +14,20 @@ export async function GET(request: NextRequest) {
     const userId = authCookie.value;
     const settings = await UserSettingsService.getSettings(userId);
 
+    // Get theme from cookie (primary source)
+    const themeCookie = request.cookies.get(`clue_hunt_theme_${userId}`);
+    const themeFromCookie =
+      (themeCookie?.value as "light" | "dark") || settings.theme;
+
     // Convert to plain object to avoid serialization issues
     return NextResponse.json({
       userId: settings.userId,
-      theme: settings.theme,
+      theme: themeFromCookie,
       quizMode: settings.quizMode,
       skipMode: settings.skipMode,
       isLocked: settings.isLocked,
       settingsOpen: settings.settingsOpen,
+      timerEndDate: settings.timerEndDate,
       createdAt: settings.createdAt.toISOString(),
       updatedAt: settings.updatedAt.toISOString(),
     });

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { UserSettingsService } from "src/shared/lib/mongodb/services";
+
+import { UserSettingsService } from "@app/lib/server";
 
 export async function POST(request: NextRequest) {
   try {

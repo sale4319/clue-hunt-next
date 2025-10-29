@@ -2,7 +2,7 @@
 
 import { Button } from "clue-hunt-ui";
 
-import { useAuth } from "@app/context";
+import { useAuth } from "@app/context/client";
 
 import styles from "./LogoutButton.module.css";
 

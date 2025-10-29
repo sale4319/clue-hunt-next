@@ -7,9 +7,9 @@ import {
   Title,
   UnlockButton,
 } from "clue-hunt-ui";
-import { settingsApi } from "src/shared/lib/api/settings";
 
-import { useSettings } from "@app/context";
+import { useSettings } from "@app/context/client";
+import { settingsApi } from "@app/lib/client";
 import { LevelOneMessages } from "@app/messages-contract";
 import { getRoute } from "@app/utils";
 

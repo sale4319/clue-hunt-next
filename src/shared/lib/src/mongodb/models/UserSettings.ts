@@ -1,12 +1,13 @@
-import { model, models,Schema } from "mongoose";
+import { model, models, Schema } from "mongoose";
 
 export interface IUserSettings {
-  userId: string; // Changed from sessionId to userId
+  userId: string;
   theme: "light" | "dark";
   quizMode: boolean;
   skipMode: boolean;
   isLocked: boolean;
   settingsOpen: boolean;
+  timerEndDate: number | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -39,6 +40,10 @@ const UserSettingsSchema = new Schema<IUserSettings>(
     settingsOpen: {
       type: Boolean,
       default: false,
+    },
+    timerEndDate: {
+      type: Number,
+      default: null,
     },
   },
   {

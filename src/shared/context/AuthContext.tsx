@@ -9,7 +9,8 @@ import {
 } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
-import { authApi, AuthUser } from "../lib/api/auth";
+import { authApi, AuthUser } from "@app/lib/client";
+
 import { useSettings } from "./SettingsContext";
 
 interface AuthContextType {
@@ -69,16 +70,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (username: string, password: string) => {
     const response = await authApi.login(username, password);
     setUser(response.user);
-
-    await new Promise((resolve) => setTimeout(resolve, 100));
     router.push("/");
   };
 
   const register = async (username: string, password: string) => {
     const response = await authApi.register(username, password);
     setUser(response.user);
-
-    await new Promise((resolve) => setTimeout(resolve, 100));
     router.push("/");
   };
 
@@ -87,7 +84,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await authApi.logout();
     setUser(null);
 
-    router.push("/login");
+    // Full page reload to clear all state
+    window.location.href = "/login";
   };
 
   return (

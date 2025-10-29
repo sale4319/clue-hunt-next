@@ -1,11 +1,14 @@
 {
-  "name": "@app/context",
+  "name": "@app/lib",
   "version": "0.1.0",
   "private": true,
   "keywords": [
-    "context",
+    "feature",
     "shareable"
   ],
+  "dependencies": {
+    "mongoose": "^8.19.2"
+  },
   "exports": {
     "/client": {
       "types": "./index.client.ts",

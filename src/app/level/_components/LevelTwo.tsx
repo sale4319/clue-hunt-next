@@ -9,7 +9,7 @@ import {
   UnlockToolTip,
 } from "clue-hunt-ui";
 
-import { useSettings } from "@app/context";
+import { useSettings } from "@app/context/client";
 import { LevelTwoMessages, TooltipMessages } from "@app/messages-contract";
 import { getRoute } from "@app/utils";
 

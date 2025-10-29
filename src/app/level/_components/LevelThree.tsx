@@ -9,7 +9,7 @@ import {
   Title,
 } from "clue-hunt-ui";
 
-import { useSettings } from "@app/context";
+import { useSettings } from "@app/context/client";
 import { LevelThreeMessages } from "@app/messages-contract";
 import { getRoute } from "@app/utils";
 

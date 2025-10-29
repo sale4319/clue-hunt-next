@@ -1,7 +1,7 @@
 import "server-only";
 
 import { connectToDatabase } from "../connection";
-import { type IUserSettings,UserSettings } from "../models";
+import { type IUserSettings, UserSettings } from "../models";
 
 export class UserSettingsService {
   /**
@@ -13,7 +13,6 @@ export class UserSettingsService {
     let settings = await UserSettings.findOne({ userId });
 
     if (!settings) {
-      console.log("Creating new settings for user:", userId);
       settings = await UserSettings.create({
         userId,
         theme: "dark",
@@ -21,10 +20,24 @@ export class UserSettingsService {
         skipMode: true,
         isLocked: false,
         settingsOpen: false,
+        timerEndDate: null,
       });
+    } else if (settings.timerEndDate === undefined) {
+      // Migration: Add timerEndDate field to existing documents
+      settings = await UserSettings.findOneAndUpdate(
+        { userId },
+        { $set: { timerEndDate: null } },
+        { new: true }
+      );
     }
 
-    const settingsObj = settings.toObject();
+    const settingsObj = settings!.toObject();
+
+    // Ensure timerEndDate is always present in the response
+    if (settingsObj.timerEndDate === undefined) {
+      settingsObj.timerEndDate = null;
+    }
+
     return settingsObj;
   }
 
@@ -124,5 +137,31 @@ export class UserSettingsService {
     );
 
     return newSettingsOpen;
+  }
+
+  /**
+   * Set timer end date
+   */
+  static async setTimerEndDate(userId: string, endDate: number): Promise<void> {
+    await connectToDatabase();
+
+    await UserSettings.findOneAndUpdate(
+      { userId },
+      { timerEndDate: endDate },
+      { upsert: true }
+    );
+  }
+
+  /**
+   * Clear timer end date
+   */
+  static async clearTimerEndDate(userId: string): Promise<void> {
+    await connectToDatabase();
+
+    await UserSettings.findOneAndUpdate(
+      { userId },
+      { timerEndDate: null },
+      { upsert: true }
+    );
   }
 }

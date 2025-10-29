@@ -11,8 +11,11 @@
       "@app/messages-contract": ["src/shared/contracts/messages-contract/src"],
       "@app/settings-menu": ["src/shared/features/settings-menu/src"],
       "@app/countdown-timer": ["src/shared/features/countdown-timer/src"],
-      "@app/context": ["src/shared/context"],
-      "@app/utils": ["src/shared/utils"]
+      "@app/context/client": ["src/shared/context/index.client.ts"],
+      "@app/context/server": ["src/shared/context/index.server.ts"],
+      "@app/utils": ["src/shared/utils"],
+      "@app/lib/client": ["src/shared/lib/src/index.client.ts"],
+      "@app/lib/server": ["src/shared/lib/src/index.server.ts"]
     }
   },
   "include": [

@@ -80,15 +80,28 @@ The application will automatically:
 
 ### Data Flow
 
-1. User visits the app → Session ID created in localStorage
-2. Settings fetched from MongoDB using session ID
+1. User logs in → Authentication cookie created
+2. Settings fetched from MongoDB using userId (from auth cookie)
 3. Settings managed via React Context (SettingsProvider)
 4. Updates sent to API routes → saved to MongoDB
-5. Context polls for changes every 1 second for reactivity
+5. Context refreshes on pathname changes for reactivity
 
 ## Database Structure
 
 ### Collections
+
+#### `users`
+
+Stores user authentication data:
+
+```typescript
+{
+  username: string; // Unique username (also used as userId)
+  password: string; // Hashed password (bcrypt)
+  createdAt: Date; // Auto-generated
+  updatedAt: Date; // Auto-generated
+}
+```
 
 #### `usersettings`
 
@@ -96,12 +109,13 @@ Stores user preferences and game state:
 
 ```typescript
 {
-  sessionId: string; // Unique session identifier (from localStorage)
+  userId: string; // Username from authentication (unique)
   theme: "light" | "dark"; // Theme preference
   quizMode: boolean; // Quiz mode enabled/disabled
   skipMode: boolean; // Skip mode enabled/disabled
   isLocked: boolean; // Lock state
   settingsOpen: boolean; // Settings modal state
+  timerEndDate: number | null; // 24-hour countdown timer end timestamp
   createdAt: Date; // Auto-generated
   updatedAt: Date; // Auto-generated
 }
@@ -109,36 +123,51 @@ Stores user preferences and game state:
 
 ### Indexes
 
-- `sessionId`: Unique index for fast lookups
-- `createdAt`: For potential cleanup of old sessions
+- `username`: Unique index on users collection
+- `userId`: Unique index on usersettings collection
+- `createdAt`: For potential cleanup of old accounts
 
 ## API Endpoints
 
-All endpoints accept `sessionId` as a query parameter:
+All endpoints use `clue_hunt_auth` cookie for authentication:
 
-- `GET /api/settings?sessionId={id}` - Fetch user settings
-- `POST /api/settings/theme?sessionId={id}` - Toggle theme
-- `DELETE /api/settings/theme?sessionId={id}` - Delete theme setting
-- `POST /api/settings/skip-mode?sessionId={id}` - Toggle skip mode
-- `POST /api/settings/quiz-mode?sessionId={id}` - Toggle quiz mode
-- `POST /api/settings/modal?sessionId={id}` - Toggle settings modal
-- `POST /api/settings/lock?sessionId={id}` - Set lock state
+### Authentication
 
-## Migration from Cookies
+- `POST /api/auth/login` - Login with username/password
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/logout` - Logout current user
+- `GET /api/auth/me` - Get current user info
 
-The application was migrated from cookie-based storage to a hybrid approach:
+### Settings
 
-- **Before**: All settings stored in browser cookies via server actions
-- **After**:
-  - Session ID stored in localStorage (client-side)
-  - Settings stored in MongoDB Atlas (server-side)
-  - API route handlers instead of server actions
-  - Global React Context for state management
+- `GET /api/settings` - Fetch user settings
+- `POST /api/settings/theme` - Toggle theme
+- `DELETE /api/settings/theme` - Delete theme setting
+- `POST /api/settings/skip-mode` - Toggle skip mode
+- `POST /api/settings/quiz-mode` - Toggle quiz mode
+- `POST /api/settings/modal` - Toggle settings modal
+- `POST /api/settings/lock` - Set lock state
+- `POST /api/settings/timer` - Set countdown timer end date
+- `DELETE /api/settings/timer` - Clear countdown timer
+
+## Migration History
+
+The application has evolved through several storage architectures:
+
+- **v1**: All settings stored in browser cookies via server actions
+- **v2**: Hybrid approach with sessionId in localStorage + MongoDB
+- **v3 (Current)**: User authentication with userId-based settings + MongoDB
+  - Added user authentication (login/register)
+  - Replaced sessionId with userId from auth
+  - Added countdown timer feature with MongoDB persistence
+  - Settings refresh on pathname changes instead of polling
 
 ### Benefits
 
+✅ **User authentication**: Secure login system with hashed passwords  
+✅ **Cross-device sync**: Settings tied to user account, not browser  
+✅ **Persistent timers**: 24-hour countdown survives page reloads  
 ✅ **No cookie limitations**: No size restrictions or HTTP header overhead  
-✅ **Persistent storage**: Settings survive browser sessions  
 ✅ **Centralized state**: React Context provides global access  
 ✅ **RESTful API**: Clean separation of concerns  
 ✅ **Type-safe**: Full TypeScript support throughout
@@ -156,31 +185,62 @@ let cached = global.mongoose;
 
 ### Client-side API Library
 
-Type-safe API client in `src/shared/lib/api/settings.ts`:
+Type-safe API clients in `src/shared/lib/api/`:
 
 ```typescript
+import { authApi } from "src/shared/lib/api/auth";
 import { settingsApi } from "src/shared/lib/api/settings";
 
-// Fetch settings
-const settings = await settingsApi.getSettings(sessionId);
+// Authentication
+await authApi.login(username, password);
+await authApi.register(username, password);
+await authApi.logout();
+const user = await authApi.getCurrentUser();
 
-// Toggle theme
-await settingsApi.toggleTheme(sessionId);
+// Settings (uses auth cookie automatically)
+const settings = await settingsApi.getSettings();
+await settingsApi.toggleTheme();
+await settingsApi.setTimerEndDate(endTimestamp);
 ```
 
 ### React Context Usage
 
-Components access settings via the `useSettings()` hook:
+Components access auth and settings via hooks:
+
+```typescript
+import { useAuth } from "@app/context";
+import { useSettings } from "@app/context";
+
+function MyComponent() {
+  const { user, isAuthenticated, login, logout } = useAuth();
+  const { settings, isLoading, refreshSettings } = useSettings();
+
+  if (isLoading) return <div>Loading...</div>;
+  if (!isAuthenticated) return <div>Please log in</div>;
+
+  return (
+    <div>
+      <p>User: {user?.username}</p>
+      <p>Theme: {settings?.theme}</p>
+      <button onClick={logout}>Logout</button>
+    </div>
+  );
+}
+```
+
+### Countdown Timer Feature
+
+The 24-hour countdown timer is stored in MongoDB and persists across sessions:
 
 ```typescript
 import { useSettings } from "@app/context";
 
-function MyComponent() {
-  const { settings, isLoading, refreshSettings } = useSettings();
+function TimerComponent() {
+  const { settings } = useSettings();
 
-  if (!settings) return <div>Loading...</div>;
-
-  return <div>Theme: {settings.theme}</div>;
+  // settings.timerEndDate contains the end timestamp
+  // Timer automatically saves to MongoDB when created or expired
+  // Timer loads from MongoDB on login/page reload
 }
 ```
 
@@ -195,19 +255,29 @@ If you see connection errors:
 3. Ensure database user credentials are correct
 4. Check MongoDB Atlas cluster is running
 
-### Session Issues
+### Authentication Issues
 
-If settings aren't persisting:
+If login fails or settings don't load:
 
-1. Check browser console for localStorage errors
-2. Verify sessionId is being generated (check localStorage in DevTools)
-3. Check Network tab for API request/response errors
+1. Verify the `clue_hunt_auth` cookie is being set (check browser DevTools)
+2. Check API routes are returning proper responses
+3. Ensure AuthProvider wraps your app components
+4. Verify MongoDB connection is established
+
+### Timer Not Persisting
+
+If countdown timer resets on reload:
+
+1. Check `timerEndDate` field exists in usersettings collection
+2. Verify `/api/settings` includes timerEndDate in response
+3. Check settings are refreshing after login (pathname change)
+4. Ensure timer is saving via `/api/settings/timer` endpoint
 
 ### TypeScript Errors
 
 If you encounter type errors:
 
-1. Run `yarn tsc --noEmit` to check for errors
+1. Run `npm run type-check` or `yarn tsc --noEmit` to check for errors
 2. Ensure `dist` directory is excluded in `tsconfig.json`
 3. Clear `.next` and `dist` directories and rebuild
 

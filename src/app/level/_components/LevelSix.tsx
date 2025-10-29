@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Button, QuestionForm, SkipButton,Title } from "clue-hunt-ui";
+import { Button, QuestionForm, SkipButton, Title } from "clue-hunt-ui";
 
-import { useSettings } from "@app/context";
+import { useSettings } from "@app/context/client";
 import {
   LevelSixMessages,
   QuestionFormMessages,
