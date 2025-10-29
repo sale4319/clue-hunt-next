@@ -1,110 +1,13 @@
-"use client";
+import "server-only";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { authApi } from "src/shared/lib/api/auth";
-
-import { LoginMessages } from "@app/messages-contract";
 import { Page } from "@app/page-component:";
 
-import styles from "./login.module.css";
+import LoginPage from "./_components/Login";
 
-export default function LoginPage() {
-  const [isLogin, setIsLogin] = useState(true);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-
-    try {
-      if (isLogin) {
-        await authApi.login(username, password);
-      } else {
-        await authApi.register(username, password);
-      }
-
-      router.push("/");
-      router.refresh();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+export default function page() {
   return (
     <Page>
-      <div className={styles.card}>
-        <h1 className={styles.title}>
-          {isLogin ? LoginMessages.TITLE_LOGIN : LoginMessages.TITLE_REGISTER}
-        </h1>
-
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.inputGroup}>
-            <label htmlFor="username" className={styles.label}>
-              {LoginMessages.USERNAME}
-            </label>
-            <input
-              id="username"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className={styles.input}
-              placeholder="Enter username"
-              required
-              minLength={3}
-              maxLength={50}
-              autoComplete="username"
-            />
-          </div>
-
-          <div className={styles.inputGroup}>
-            <label htmlFor="password" className={styles.label}>
-              {LoginMessages.PASSWORD}
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className={styles.input}
-              placeholder="Enter password"
-              required
-              minLength={6}
-              autoComplete={isLogin ? "current-password" : "new-password"}
-            />
-          </div>
-
-          {error && <div className={styles.error}>{error}</div>}
-
-          <button
-            type="submit"
-            className={styles.submitButton}
-            disabled={loading}
-          >
-            {loading ? "Loading..." : isLogin ? "Login" : "Register"}
-          </button>
-        </form>
-
-        <div className={styles.toggleContainer}>
-          <button
-            type="button"
-            onClick={() => {
-              setIsLogin(!isLogin);
-              setError("");
-            }}
-            className={styles.toggleButton}
-          >
-            {isLogin ? LoginMessages.NO_ACCOUNT : LoginMessages.HAVE_ACCOUNT}
-          </button>
-        </div>
-      </div>
+      <LoginPage />
     </Page>
   );
 }
