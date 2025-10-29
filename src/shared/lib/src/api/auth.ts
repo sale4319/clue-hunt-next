@@ -89,4 +89,17 @@ export const authApi = {
       return null;
     }
   },
+
+  /**
+   * Delete current user account
+   */
+  async deleteAccount(): Promise<void> {
+    const response = await fetch("/api/auth/delete", {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete account");
+    }
+  },
 };

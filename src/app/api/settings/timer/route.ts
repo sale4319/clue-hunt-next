@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { UserSettingsService } from "src/shared/lib/mongodb/services";
+
+import { UserSettingsService } from "@app/lib/server";
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,16 +11,22 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
 
+    const { endDate } = await request.json();
+
+    if (typeof endDate !== "number") {
+      return NextResponse.json(
+        { error: "endDate must be a number" },
+        { status: 400 }
+      );
+    }
+
     const userId = authCookie.value;
-    await UserSettingsService.toggleTheme(userId);
+    await UserSettingsService.setTimerEndDate(userId, endDate);
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error toggling theme:", error);
-    return NextResponse.json(
-      { error: "Failed to toggle theme" },
-      { status: 500 }
-    );
+    console.error("Error setting timer:", error);
+    return NextResponse.json({ error: "Failed to set timer" }, { status: 500 });
   }
 }
 
@@ -33,13 +40,13 @@ export async function DELETE(request: NextRequest) {
     }
 
     const userId = authCookie.value;
-    await UserSettingsService.deleteTheme(userId);
+    await UserSettingsService.clearTimerEndDate(userId);
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error deleting theme:", error);
+    console.error("Error clearing timer:", error);
     return NextResponse.json(
-      { error: "Failed to delete theme" },
+      { error: "Failed to clear timer" },
       { status: 500 }
     );
   }

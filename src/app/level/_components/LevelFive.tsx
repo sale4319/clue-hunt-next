@@ -1,9 +1,9 @@
 "use client";
 
-import { Button, SkipButton, SpacerElement,Title } from "clue-hunt-ui";
+import { Button, SkipButton, SpacerElement, Title } from "clue-hunt-ui";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { useSettings } from "@app/context";
+import { useSettings } from "@app/context/client";
 import { LevelFiveMessages } from "@app/messages-contract";
 import { getRoute, useFeatureToggle } from "@app/utils";
 

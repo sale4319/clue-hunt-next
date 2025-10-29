@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Button, QuestionIconToolTip, SkipButton,Title } from "clue-hunt-ui";
+import { Button, QuestionIconToolTip, SkipButton, Title } from "clue-hunt-ui";
 
-import { useSettings } from "@app/context";
+import { useSettings } from "@app/context/client";
 import { CountdownTimer } from "@app/countdown-timer";
 import { LevelStartMessages, TooltipMessages } from "@app/messages-contract";
 import { getRoute } from "@app/utils";

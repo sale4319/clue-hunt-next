@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Button, ShiftingCircles,SkipButton, Title } from "clue-hunt-ui";
+import { Button, ShiftingCircles, SkipButton, Title } from "clue-hunt-ui";
 
-import { useSettings } from "@app/context";
+import { useSettings } from "@app/context/client";
 import { LevelFourMessages } from "@app/messages-contract";
 import { getRoute } from "@app/utils";
 

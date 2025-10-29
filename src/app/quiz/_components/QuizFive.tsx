@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button, QuizForm, SkipButton } from "clue-hunt-ui";
 
-import { useSettings } from "@app/context";
+import { useSettings } from "@app/context/client";
 import { questionSetFive } from "@app/quiz-sets-contract";
 import { getRoute } from "@app/utils";
 

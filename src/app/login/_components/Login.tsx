@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { authApi } from "src/shared/lib/api/auth";
 
+import { authApi } from "@app/lib/client";
 import { LoginMessages } from "@app/messages-contract";
 
 import styles from "./Login.module.css";
@@ -14,7 +13,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,8 +26,12 @@ export default function LoginPage() {
         await authApi.register(username, password);
       }
 
-      router.push("/");
-      router.refresh();
+      // Get redirect path from localStorage, default to home
+      const redirectPath = localStorage.getItem("redirectAfterLogin") || "/";
+      localStorage.removeItem("redirectAfterLogin");
+
+      // Full page reload to ensure all state is fresh
+      window.location.href = redirectPath;
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {

@@ -1,18 +1,22 @@
 "use client";
 
-import { settingsApi } from "src/shared/lib/api/settings";
+import { useRouter } from "next/navigation";
 
-import { useSettings } from "@app/context";
+import { useSettings } from "@app/context/client";
+
+import { toggleTheme } from "../../../actions/toggleTheme";
 
 import "./DarkModeButton.css";
 
 export const DarkModeButton = () => {
+  const router = useRouter();
   const { refreshSettings } = useSettings();
 
-  const handleClick = async () => {
-    await settingsApi.toggleTheme();
+  const handleToggle = async () => {
+    await toggleTheme();
     await refreshSettings();
+    router.refresh();
   };
 
-  return <button id={"darkMode"} onClick={handleClick} />;
+  return <button id={"darkMode"} onClick={handleToggle} />;
 };

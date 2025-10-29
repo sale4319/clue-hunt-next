@@ -3,7 +3,8 @@ import "server-only";
 import type { Metadata } from "next";
 import { Audiowide } from "next/font/google";
 
-import { AuthProvider,SettingsProvider } from "@app/context";
+import { AuthProvider, SettingsProvider } from "@app/context/client";
+import { getServerSettings } from "@app/context/server";
 
 import "./globals.css";
 import styles from "./layout.module.css";
@@ -19,18 +20,20 @@ export const fontFamily = Audiowide({
   subsets: ["latin"],
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const initialSettings = await getServerSettings();
+
   return (
     <html lang="en">
       <head>
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
       </head>
 
-      <SettingsProvider>
+      <SettingsProvider initialSettings={initialSettings}>
         <AuthProvider>
           <body className={`${fontFamily.className} antialiased`}>
             <div className={styles.container}>{children}</div>

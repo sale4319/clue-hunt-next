@@ -9,7 +9,8 @@ import {
 } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
-import { authApi, AuthUser } from "../lib/api/auth";
+import { authApi, AuthUser } from "@app/lib/client";
+
 import { useSettings } from "./SettingsContext";
 
 interface AuthContextType {
@@ -19,6 +20,7 @@ interface AuthContextType {
   login: (username: string, password: string) => Promise<void>;
   register: (username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  deleteAccount: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -28,6 +30,7 @@ const AuthContext = createContext<AuthContextType>({
   login: async () => {},
   register: async () => {},
   logout: async () => {},
+  deleteAccount: async () => {},
 });
 
 const PUBLIC_PATHS = ["/login"];
@@ -69,25 +72,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (username: string, password: string) => {
     const response = await authApi.login(username, password);
     setUser(response.user);
-
-    await new Promise((resolve) => setTimeout(resolve, 100));
     router.push("/");
   };
 
   const register = async (username: string, password: string) => {
     const response = await authApi.register(username, password);
     setUser(response.user);
-
-    await new Promise((resolve) => setTimeout(resolve, 100));
     router.push("/");
   };
 
   const logout = async () => {
+    if (!isPublicPath) {
+      localStorage.setItem("redirectAfterLogin", pathname);
+    }
+
     clearSettings();
     await authApi.logout();
     setUser(null);
 
-    router.push("/login");
+    // Full page reload to clear all state
+    window.location.href = "/login";
+  };
+
+  const deleteAccount = async () => {
+    clearSettings();
+    await authApi.deleteAccount();
+    setUser(null);
+
+    // Full page reload and redirect to login
+    window.location.href = "/login";
   };
 
   return (
@@ -99,6 +112,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         login,
         register,
         logout,
+        deleteAccount,
       }}
     >
       {children}

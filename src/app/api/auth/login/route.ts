@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { AuthService } from "src/shared/lib/mongodb/services/AuthService";
-import { UserSettingsService } from "src/shared/lib/mongodb/services/UserSettingsService";
+
+import { AuthService, UserSettingsService } from "@app/lib/server";
 
 export async function POST(request: NextRequest) {
   try {
@@ -46,6 +46,30 @@ export async function POST(request: NextRequest) {
       maxAge: 60 * 60 * 24 * 7, // 7 days
       path: "/",
     });
+
+    // Check if theme cookie already exists in the request
+    const existingTheme = request.cookies.get(`clue_hunt_theme_${username}`);
+
+    // If theme cookie doesn't exist, set it to dark as default
+    // If it exists, don't override it (preserve user's preference)
+    if (!existingTheme) {
+      response.cookies.set(`clue_hunt_theme_${username}`, "dark", {
+        httpOnly: false,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 365, // 1 year
+        path: "/",
+      });
+    } else {
+      // Re-set the existing theme cookie to ensure it's fresh
+      response.cookies.set(`clue_hunt_theme_${username}`, existingTheme.value, {
+        httpOnly: false,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 365, // 1 year
+        path: "/",
+      });
+    }
 
     return response;
   } catch (error) {

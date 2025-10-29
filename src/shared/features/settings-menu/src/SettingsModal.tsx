@@ -1,9 +1,9 @@
 "use client";
 
 import { Button, Title } from "clue-hunt-ui";
-import { settingsApi } from "src/shared/lib/api/settings";
 
-import { useSettings } from "@app/context";
+import { useSettings } from "@app/context/client";
+import { settingsApi } from "@app/lib/client";
 import { SettingsModalMessages } from "@app/messages-contract";
 
 import { LogoutButton } from "./LogoutButton/LogoutButton";
@@ -29,7 +29,7 @@ export const SettingsModal = () => {
     await refreshSettings();
   };
 
-  if (!settings) {
+  if (!settings || !settings.settingsOpen) {
     return null;
   }
 

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { AuthService } from "src/shared/lib/mongodb/services/AuthService";
+
+import { AuthService } from "@app/lib/server";
 
 export async function GET(request: NextRequest) {
   try {

@@ -7,8 +7,9 @@ import {
   useEffect,
   useState,
 } from "react";
+import { usePathname } from "next/navigation";
 
-import { settingsApi, UserSettings } from "../lib/api/settings";
+import { settingsApi, type UserSettings } from "@app/lib/client";
 
 type SettingsContextType = {
   settings: UserSettings | null;
@@ -24,16 +25,40 @@ const SettingsContext = createContext<SettingsContextType>({
   clearSettings: () => {},
 });
 
-export function SettingsProvider({ children }: { children: ReactNode }) {
-  const [settings, setSettings] = useState<UserSettings | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+type SettingsProviderProps = {
+  children: ReactNode;
+  initialSettings?: UserSettings | null;
+};
+
+export function SettingsProvider({
+  children,
+  initialSettings,
+}: SettingsProviderProps) {
+  const [settings, setSettings] = useState<UserSettings | null>(
+    initialSettings || null
+  );
+  const [isLoading, setIsLoading] = useState(!initialSettings);
+  const pathname = usePathname();
+
+  // Debug: Log initial settings to see if theme is included
+  useEffect(() => {
+    if (initialSettings) {
+      console.log("SettingsProvider - Initial settings:", initialSettings);
+      console.log(
+        "SettingsProvider - Theme from initial:",
+        initialSettings.theme
+      );
+    }
+  }, [initialSettings]);
 
   const refreshSettings = async () => {
+    setIsLoading(true);
     try {
       const userSettings = await settingsApi.getSettings();
       setSettings(userSettings);
       setIsLoading(false);
     } catch {
+      setSettings(null);
       setIsLoading(false);
     }
   };
@@ -44,8 +69,17 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    refreshSettings();
-  }, []);
+    // If we have initial settings, don't fetch on mount
+    if (initialSettings) {
+      return;
+    }
+
+    // Only refresh settings when not on login page
+    if (pathname !== "/login") {
+      refreshSettings();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname, initialSettings]);
 
   return (
     <SettingsContext.Provider
@@ -56,6 +90,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   );
 }
 
+// Client-side hook for accessing settings in client components
 export function useSettings() {
   return useContext(SettingsContext);
 }

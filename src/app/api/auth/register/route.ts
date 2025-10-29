@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { AuthService } from "src/shared/lib/mongodb/services/AuthService";
+
+import { AuthService } from "@app/lib/server";
 
 export async function POST(request: NextRequest) {
   try {
@@ -57,6 +58,15 @@ export async function POST(request: NextRequest) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       maxAge: 60 * 60 * 24 * 7, // 7 days
+      path: "/",
+    });
+
+    // Set theme cookie to default (dark) for new users
+    response.cookies.set(`clue_hunt_theme_${username}`, "dark", {
+      httpOnly: false, // Allow client-side access
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 365, // 1 year
       path: "/",
     });
 
