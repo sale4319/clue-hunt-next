@@ -55,10 +55,10 @@ export async function POST(request: NextRequest) {
     });
 
     return response;
-  } catch (error: any) {
+  } catch (error) {
     console.error("Registration error:", error);
 
-    if (error.message === "Username already exists") {
+    if (error instanceof Error && error.message === "Username already exists") {
       return NextResponse.json(
         { error: "Username already exists" },
         { status: 409 }
