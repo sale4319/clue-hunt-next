@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Countdown, { CountdownRenderProps } from "react-countdown";
+import { useIsClient } from "src/shared/hooks/useIsClient";
 
 import { useSettings } from "@app/context/client";
 import { useAuth } from "@app/context/client";
@@ -10,7 +11,6 @@ import { settingsApi } from "@app/lib/client";
 import { CountdownLoader } from "./CountdownLoader/CountdownLodaer";
 
 import styles from "./CountdownTimer.module.css";
-import { useIsClient } from "src/shared/hooks/useIsClient";
 
 const twoDigits = (num: number) => String(num).padStart(2, "0");
 
