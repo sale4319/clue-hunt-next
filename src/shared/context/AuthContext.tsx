@@ -34,10 +34,12 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 const PUBLIC_PATHS = ["/login"];
+const INACTIVITY_TIMEOUT = 60 * 60 * 1000; // 1 hour in milliseconds
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [lastActivity, setLastActivity] = useState<number>(Date.now());
   const router = useRouter();
   const pathname = usePathname();
   const { clearSettings } = useSettings();
@@ -69,15 +71,57 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
+  useEffect(() => {
+    if (!user || isPublicPath) {
+      return;
+    }
+
+    const handleActivity = () => {
+      setLastActivity(Date.now());
+    };
+
+    const events = ["mousedown", "keydown", "scroll", "touchstart", "click"];
+    events.forEach((event) => {
+      window.addEventListener(event, handleActivity);
+    });
+
+    return () => {
+      events.forEach((event) => {
+        window.removeEventListener(event, handleActivity);
+      });
+    };
+  }, [user, isPublicPath]);
+
+  useEffect(() => {
+    if (!user || isPublicPath) {
+      return;
+    }
+
+    const checkInactivity = setInterval(() => {
+      const now = Date.now();
+      const timeSinceLastActivity = now - lastActivity;
+
+      if (timeSinceLastActivity >= INACTIVITY_TIMEOUT) {
+        console.log("User inactive for 1 hour, logging out...");
+        logout();
+      }
+    }, 60000);
+
+    return () => clearInterval(checkInactivity);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, isPublicPath, lastActivity]);
+
   const login = async (username: string, password: string) => {
     const response = await authApi.login(username, password);
     setUser(response.user);
+    setLastActivity(Date.now());
     router.push("/");
   };
 
   const register = async (username: string, password: string) => {
     const response = await authApi.register(username, password);
     setUser(response.user);
+    setLastActivity(Date.now());
     router.push("/");
   };
 
@@ -90,7 +134,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await authApi.logout();
     setUser(null);
 
-    // Full page reload to clear all state
     window.location.href = "/login";
   };
 
@@ -99,7 +142,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await authApi.deleteAccount();
     setUser(null);
 
-    // Full page reload and redirect to login
     window.location.href = "/login";
   };
 

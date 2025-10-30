@@ -47,7 +47,7 @@ export const CountdownTimer = () => {
       const delta = savedDate - currentTime;
 
       if (delta <= 0) {
-        setEndDate(null);
+        handleComplete();
       } else {
         setEndDate(savedDate);
       }
