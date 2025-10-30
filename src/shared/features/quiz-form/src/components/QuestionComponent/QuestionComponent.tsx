@@ -10,52 +10,26 @@ type Question = {
 
 type QuestionProps = {
   question: Question;
-  questionIndex: number;
-  savedAnswerIndex?: number;
-  onAnswer: (selectedIndex: number, isCorrect: boolean) => void;
+  setAnswerStatus: (isCorrect: boolean) => void;
 };
 
 export const QuestionComponent = ({
   question,
-  questionIndex,
-  savedAnswerIndex,
-  onAnswer,
+  setAnswerStatus,
 }: QuestionProps) => {
   const [selectedAnswerIndex, setSelectedAnswerIndex] = useState<number | null>(
-    savedAnswerIndex !== undefined ? savedAnswerIndex : null
-  );
-  const [hasAnswered, setHasAnswered] = useState(
-    savedAnswerIndex !== undefined
+    null
   );
 
-  // Reset state when question changes
   useEffect(() => {
-    setSelectedAnswerIndex(
-      savedAnswerIndex !== undefined ? savedAnswerIndex : null
-    );
-    setHasAnswered(savedAnswerIndex !== undefined);
-  }, [questionIndex, savedAnswerIndex]);
-
-  // Only call onAnswer for NEW answers (not loaded from saved state)
-  useEffect(() => {
-    if (
-      selectedAnswerIndex !== null &&
-      !hasAnswered &&
-      savedAnswerIndex === undefined
-    ) {
-      onAnswer(
-        selectedAnswerIndex,
-        selectedAnswerIndex === question.correctAnswerIndex
-      );
-      setHasAnswered(true);
+    if (selectedAnswerIndex !== null) {
+      setAnswerStatus(selectedAnswerIndex === question.correctAnswerIndex);
     }
-  }, [
-    selectedAnswerIndex,
-    question.correctAnswerIndex,
-    onAnswer,
-    savedAnswerIndex,
-    hasAnswered,
-  ]);
+  }, [selectedAnswerIndex, question.correctAnswerIndex, setAnswerStatus]);
+
+  useEffect(() => {
+    setSelectedAnswerIndex(null);
+  }, [question]);
 
   const getAnswerClasses = useCallback(
     (index: number): string => {

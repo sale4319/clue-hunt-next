@@ -4,8 +4,6 @@ export interface QuizProgress {
   currentQuestionIndex: number;
   correctAnswers: number;
   totalQuestions: number;
-  wrongAnswers: number[];
-  answers: Record<number, number>;
   isCompleted: boolean;
   createdAt: string;
   updatedAt: string;
@@ -34,8 +32,6 @@ export const quizApi = {
       currentQuestionIndex?: number;
       correctAnswers?: number;
       totalQuestions?: number;
-      wrongAnswers?: number[];
-      answers?: Record<number, number>;
       isCompleted?: boolean;
     }
   ): Promise<QuizProgress> {

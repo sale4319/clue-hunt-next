@@ -33,8 +33,6 @@ const QuizForm: React.FC<QuizProps> = ({
   const [questionIndex, setQuestionIndex] = useState<number | null>(null);
   const [answerStatus, setAnswerStatus] = useState<boolean | null>(null);
   const [correctAnswerCount, setCorrectAnswerCount] = useState<number>(0);
-  const [wrongAnswers, setWrongAnswers] = useState<number[]>([]);
-  const [answers, setAnswers] = useState<Record<number, number>>({});
   const [quizComplete, setQuizComplete] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -52,13 +50,9 @@ const QuizForm: React.FC<QuizProps> = ({
           setQuizComplete(true);
           setCorrectAnswerCount(progress.correctAnswers);
           setQuestionIndex(progress.currentQuestionIndex);
-          setWrongAnswers(progress.wrongAnswers || []);
-          setAnswers(progress.answers || {});
         } else if (progress.currentQuestionIndex > 0) {
           setQuestionIndex(progress.currentQuestionIndex);
           setCorrectAnswerCount(progress.correctAnswers);
-          setWrongAnswers(progress.wrongAnswers || []);
-          setAnswers(progress.answers || {});
         }
       } catch (error) {
         console.error("Failed to load quiz progress:", error);
@@ -74,29 +68,11 @@ const QuizForm: React.FC<QuizProps> = ({
     setAnswerStatus(null);
   }, [questionIndex]);
 
-  const handleAnswer = useCallback(
-    (selectedIndex: number, isCorrect: boolean) => {
-      if (questionIndex !== null) {
-        setAnswers((prev) => ({ ...prev, [questionIndex]: selectedIndex }));
-        setAnswerStatus(isCorrect);
-      }
-    },
-    [questionIndex]
-  );
-
   useEffect(() => {
-    if (answerStatus === true) {
+    if (answerStatus) {
       setCorrectAnswerCount((count) => count + 1);
-    } else if (answerStatus === false && questionIndex !== null) {
-      // Track wrong answer
-      setWrongAnswers((prev) => {
-        if (!prev.includes(questionIndex)) {
-          return [...prev, questionIndex];
-        }
-        return prev;
-      });
     }
-  }, [answerStatus, questionIndex]);
+  }, [answerStatus]);
 
   // Save progress when answer is given
   useEffect(() => {
@@ -107,8 +83,6 @@ const QuizForm: React.FC<QuizProps> = ({
             currentQuestionIndex: questionIndex,
             correctAnswers: correctAnswerCount,
             totalQuestions,
-            wrongAnswers,
-            answers,
             isCompleted: quizComplete,
           });
         } catch (error) {
@@ -122,8 +96,6 @@ const QuizForm: React.FC<QuizProps> = ({
     sessionId,
     questionIndex,
     correctAnswerCount,
-    wrongAnswers,
-    answers,
     quizComplete,
     totalQuestions,
     isLoading,
@@ -143,8 +115,6 @@ const QuizForm: React.FC<QuizProps> = ({
       setQuizComplete(false);
       setQuestionIndex(null);
       setCorrectAnswerCount(0);
-      setWrongAnswers([]);
-      setAnswers({});
       setAnswerStatus(null);
     } catch (error) {
       console.error("Failed to reset quiz progress:", error);
@@ -222,9 +192,7 @@ const QuizForm: React.FC<QuizProps> = ({
       />
       <QuestionComponent
         question={questions[questionIndex]}
-        questionIndex={questionIndex}
-        savedAnswerIndex={answers[questionIndex]}
-        onAnswer={handleAnswer}
+        setAnswerStatus={setAnswerStatus}
       />
       {answerStatus !== null && (
         <div>

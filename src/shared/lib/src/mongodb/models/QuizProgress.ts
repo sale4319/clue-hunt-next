@@ -6,8 +6,6 @@ export interface IQuizProgress {
   currentQuestionIndex: number;
   correctAnswers: number;
   totalQuestions: number;
-  wrongAnswers: number[]; // Array of question indices with wrong answers
-  answers: Record<number, number>; // Map of questionIndex -> selectedAnswerIndex
   isCompleted: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -39,15 +37,6 @@ const QuizProgressSchema = new Schema<IQuizProgress>(
       type: Number,
       required: true,
       default: 0,
-    },
-    wrongAnswers: {
-      type: [Number],
-      default: [],
-    },
-    answers: {
-      type: Map,
-      of: Number,
-      default: {},
     },
     isCompleted: {
       type: Boolean,

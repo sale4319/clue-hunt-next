@@ -39,8 +39,6 @@ export class QuizProgressService {
       currentQuestionIndex?: number;
       correctAnswers?: number;
       totalQuestions?: number;
-      wrongAnswers?: number[];
-      answers?: Record<number, number>;
       isCompleted?: boolean;
     }
   ): Promise<IQuizProgress> {
