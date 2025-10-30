@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Button, QuizForm, SkipButton } from "clue-hunt-ui";
+import { Button, SkipButton } from "clue-hunt-ui";
 
 import { useSettings } from "@app/context/client";
+import { QuizForm } from "@app/quiz-form";
 import { questionSetFour } from "@app/quiz-sets-contract";
 import { getRoute } from "@app/utils";
 
@@ -23,6 +24,7 @@ export default function QuizFour() {
         primary={isLocked}
       />
       <QuizForm
+        sessionId="quiz-4"
         questions={questionSetFour}
         handleUnlock={handleUnlock}
         theme={settings?.theme}
