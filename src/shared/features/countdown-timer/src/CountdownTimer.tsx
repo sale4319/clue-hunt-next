@@ -2,10 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Countdown, { CountdownRenderProps } from "react-countdown";
+import { useIsClient } from "src/shared/hooks/useIsClient";
 
 import { useSettings } from "@app/context/client";
 import { useAuth } from "@app/context/client";
 import { settingsApi } from "@app/lib/client";
+
+import { CountdownLoader } from "./CountdownLoader/CountdownLodaer";
 
 import styles from "./CountdownTimer.module.css";
 
@@ -18,6 +21,7 @@ const renderer = ({ hours, minutes, seconds }: CountdownRenderProps) => (
 );
 
 export const CountdownTimer = () => {
+  const isClient = useIsClient();
   const { settings, isLoading, refreshSettings } = useSettings();
   const { deleteAccount } = useAuth();
   const [endDate, setEndDate] = useState<number | null>(null);
@@ -47,15 +51,20 @@ export const CountdownTimer = () => {
       const delta = savedDate - currentTime;
 
       if (delta <= 0) {
-        setEndDate(null);
+        handleComplete();
       } else {
         setEndDate(savedDate);
       }
     } else {
       setEndDate(null);
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings?.timerEndDate, isLoading]);
+
+  if (!isClient) {
+    return <CountdownLoader />;
+  }
 
   const handleComplete = async () => {
     await deleteAccount();

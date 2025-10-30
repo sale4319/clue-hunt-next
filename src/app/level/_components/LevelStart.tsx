@@ -12,6 +12,10 @@ export default function LevelStart() {
   const { settings } = useSettings();
   const [isLocked, setIsLocked] = useState(true);
 
+  const savedDate = settings?.timerEndDate;
+  const showStartButton =
+    savedDate && savedDate !== null && savedDate !== undefined;
+
   const handleUnlock = () => {
     setIsLocked(false);
   };
@@ -44,12 +48,14 @@ export default function LevelStart() {
           content={TooltipMessages.START_HINT}
         />
       </div>
-      <Button
-        size="medium"
-        href={getRoute(isQuizMode, isQuizRoute)}
-        isLocked={isLocked}
-        primary={isLocked}
-      />
+      {showStartButton && (
+        <Button
+          size="medium"
+          href={getRoute(isQuizMode, isQuizRoute)}
+          isLocked={isLocked}
+          primary={isLocked}
+        />
+      )}
       {settings?.skipMode && <SkipButton onClick={handleUnlock} />}
     </>
   );

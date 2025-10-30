@@ -1,0 +1,51 @@
+.question {
+  width: 100%;
+  right: 80%;
+}
+
+.questionText {
+  font-size: 19px;
+  margin: 20px 0;
+  margin-bottom: 12px;
+}
+
+.answers {
+  margin-bottom: 20px;
+}
+
+.answer {
+  position: relative;
+  padding: 4px;
+  text-align: center;
+  background-color: transparent;
+  margin-bottom: 7px;
+  cursor: pointer;
+  line-height: 35px;
+  font-size: 18px;
+  min-width: 80px;
+  min-height: 35px;
+  border: 2px solid #75f8e2;
+}
+
+.answer:hover {
+  background-color: #75f8e2;
+}
+
+.answer.selected {
+  background: #75f8e2;
+}
+
+.answer.correct {
+  background: #6ad85c;
+  font-weight: bold;
+}
+
+.answer.incorrect {
+  background: #fcb0b0;
+  font-weight: bold;
+}
+
+.answerText {
+  position: relative;
+  z-index: 2;
+}

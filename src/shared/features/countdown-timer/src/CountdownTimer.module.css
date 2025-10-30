@@ -21,7 +21,6 @@
   padding: 12px 24px;
   font-size: 16px;
   font-weight: 600;
-  border: 2px solid transparent;
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
@@ -29,39 +28,36 @@
 }
 
 .easyButton {
-  background-color: #4caf50;
+  background-color: transparent;
   color: white;
-  border-color: #45a049;
+  border: 2px solid #45a049;
 }
 
 .easyButton:hover {
   background-color: #45a049;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
 }
 
 .normalButton {
-  background-color: #ff9800;
+  background-color: transparent;
   color: white;
-  border-color: #e68900;
+  border: 2px solid #e68900;
 }
 
 .normalButton:hover {
   background-color: #e68900;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(255, 152, 0, 0.3);
 }
 
 .hardButton {
-  background-color: #f44336;
+  background-color: transparent;
   color: white;
-  border-color: #da190b;
+  border: 2px solid #da190b;
 }
 
 .hardButton:hover {
   background-color: #da190b;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(244, 67, 54, 0.3);
 }
 
 .difficultyButtons button:active {

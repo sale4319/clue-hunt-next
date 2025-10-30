@@ -45,6 +45,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@app/quiz-form@workspace:src/shared/features/quiz-form":
+  version: 0.0.0-use.local
+  resolution: "@app/quiz-form@workspace:src/shared/features/quiz-form"
+  dependencies:
+    clue-hunt-ui: "npm:0.4.8"
+  languageName: unknown
+  linkType: soft
+
 "@app/quiz-sets-contract@workspace:src/shared/contracts/quiz-sets-contract":
   version: 0.0.0-use.local
   resolution: "@app/quiz-sets-contract@workspace:src/shared/contracts/quiz-sets-contract"
@@ -1196,7 +1204,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"clue-hunt-ui@npm:^0.4.8":
+"clue-hunt-ui@npm:0.4.8, clue-hunt-ui@npm:^0.4.8":
   version: 0.4.8
   resolution: "clue-hunt-ui@npm:0.4.8"
   peerDependencies:
