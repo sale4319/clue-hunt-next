@@ -9,16 +9,14 @@
   padding: 20px;
   font-size: 19px;
   font-weight: 600;
-  margin-top: 3%;
-  border: 2px solid;
+  margin-top: 13%;
+  border: 2px solid #75f8e2;
 }
 
 .light {
   color: black;
-  border-color: #282c34;
 }
 
 .dark {
   color: white;
-  border-color: white;
 }

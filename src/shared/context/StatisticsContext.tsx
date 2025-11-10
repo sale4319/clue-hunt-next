@@ -38,8 +38,8 @@ export const StatisticsProvider: React.FC<StatisticsProviderProps> = ({
     try {
       const stats = await statisticsApi.getStatistics();
       setStatistics(stats);
-    } catch (error) {
-      console.error("Failed to fetch statistics:", error);
+    } catch {
+      setStatistics(null);
     } finally {
       setIsLoading(false);
     }

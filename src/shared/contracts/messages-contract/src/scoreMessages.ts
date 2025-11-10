@@ -1,5 +1,5 @@
 export const ScoreMessages = {
-  TITLE: "Your Score:",
+  TITLE: "Your Score",
   QUIZES_SOLVED: "Quizes solved: ",
   CORRECT_ANSWERS: "Correct answers: ",
   INCORRECT_ANSWERS: "Incorrect answers: ",

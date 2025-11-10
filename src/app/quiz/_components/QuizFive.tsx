@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Button, SkipButton } from "clue-hunt-ui";
-import { useRouter } from "next/router";
+import { SkipButton } from "clue-hunt-ui";
+import { useRouter } from "next/navigation";
 import { statisticsApi } from "src/shared/lib/src/api/statistics";
 
 import { useSettings } from "@app/context/client";
@@ -13,10 +12,9 @@ import { getRoute } from "@app/utils";
 export default function QuizFive() {
   const router = useRouter();
   const { settings } = useSettings();
-  const [isLocked, setIsLocked] = useState(true);
 
-  const handleUnlock = () => {
-    setIsLocked(false);
+  const handleUnlock = async () => {
+    router.push(getRoute("level", "six"));
   };
 
   const handleSkip = async () => {
@@ -26,14 +24,9 @@ export default function QuizFive() {
 
   return (
     <>
-      <Button
-        size="medium"
-        href={getRoute("level", "six")}
-        isLocked={isLocked}
-        primary={isLocked}
-      />
       <QuizForm
         sessionId="quiz-5"
+        quizName="five"
         questions={questionSetFive}
         handleUnlock={handleUnlock}
         theme={settings?.theme}

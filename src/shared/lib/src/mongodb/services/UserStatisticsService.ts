@@ -14,28 +14,14 @@ export class UserStatisticsService {
         userId,
         correctlyCompletedQuizzes: 0,
         incorrectAnswers: 0,
-        completedLevels: 0,
         skipButtonClicks: 0,
         levelLocks: {},
         completedLevelsMap: {},
+        completedQuizzesMap: {},
       });
     }
 
     return stats.toObject();
-  }
-
-  static async incrementCorrectlyCompletedQuizzes(
-    userId: string
-  ): Promise<IUserStatistics> {
-    await connectToDatabase();
-
-    const stats = await UserStatistics.findOneAndUpdate(
-      { userId },
-      { $inc: { correctlyCompletedQuizzes: 1 } },
-      { new: true, upsert: true }
-    );
-
-    return stats!.toObject();
   }
 
   static async incrementIncorrectAnswers(
@@ -47,20 +33,6 @@ export class UserStatisticsService {
     const stats = await UserStatistics.findOneAndUpdate(
       { userId },
       { $inc: { incorrectAnswers: count } },
-      { new: true, upsert: true }
-    );
-
-    return stats!.toObject();
-  }
-
-  static async incrementCompletedLevels(
-    userId: string
-  ): Promise<IUserStatistics> {
-    await connectToDatabase();
-
-    const stats = await UserStatistics.findOneAndUpdate(
-      { userId },
-      { $inc: { completedLevels: 1 } },
       { new: true, upsert: true }
     );
 
@@ -118,6 +90,39 @@ export class UserStatisticsService {
     );
   }
 
+  static async setQuizCompleted(
+    userId: string,
+    quiz: "start" | "one" | "two" | "three" | "four" | "five" | "six",
+    completed: boolean
+  ): Promise<void> {
+    await connectToDatabase();
+
+    // Update the specific quiz completion status and get the updated document
+    const stats = await UserStatistics.findOneAndUpdate(
+      { userId },
+      { $set: { [`completedQuizzesMap.${quiz}`]: completed } },
+      { upsert: true, new: true }
+    );
+
+    if (!stats) return;
+
+    // Count how many quizzes are completed (explicitly check for true)
+    const completedQuizzesMap = stats.completedQuizzesMap || {};
+    const allQuizzes: Array<
+      "start" | "one" | "two" | "three" | "four" | "five" | "six"
+    > = ["start", "one", "two", "three", "four", "five", "six"];
+
+    const completedCount = allQuizzes.filter(
+      (quizName) => completedQuizzesMap[quizName] === true
+    ).length;
+
+    // Update the total count
+    await UserStatistics.findOneAndUpdate(
+      { userId },
+      { $set: { correctlyCompletedQuizzes: completedCount } }
+    );
+  }
+
   static async resetStatistics(userId: string): Promise<IUserStatistics> {
     await connectToDatabase();
 
@@ -127,10 +132,10 @@ export class UserStatisticsService {
         $set: {
           correctlyCompletedQuizzes: 0,
           incorrectAnswers: 0,
-          completedLevels: 0,
           skipButtonClicks: 0,
           levelLocks: {},
           completedLevelsMap: {},
+          completedQuizzesMap: {},
         },
       },
       { new: true, upsert: true }

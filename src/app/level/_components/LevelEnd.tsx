@@ -64,12 +64,12 @@ export default function LevelEnd() {
         <Title
           label={`${ScoreMessages.QUIZES_SOLVED}${
             stats?.correctlyCompletedQuizzes || 0
-          }/6`}
+          }/7`}
           titleSize="small"
           theme={settings?.theme}
         />
         <Title
-          label={`${ScoreMessages.CORRECT_ANSWERS}${correctAnswers}/36`}
+          label={`${ScoreMessages.CORRECT_ANSWERS}${correctAnswers}/42`}
           titleSize="small"
           theme={settings?.theme}
         />
@@ -81,7 +81,7 @@ export default function LevelEnd() {
           theme={settings?.theme}
         />
         <Title
-          label={`${ScoreMessages.LEVELS_COMPLETED}${completedLevelsCount}/6`}
+          label={`${ScoreMessages.LEVELS_COMPLETED}${completedLevelsCount}/7`}
           titleSize="small"
           theme={settings?.theme}
         />

@@ -18,6 +18,7 @@ type Question = {
 
 type QuizProps = {
   sessionId: string;
+  quizName: "start" | "one" | "two" | "three" | "four" | "five" | "six";
   questions?: Question[];
   handleUnlock?: () => void;
   theme?: string;
@@ -26,6 +27,7 @@ type QuizProps = {
 // Quiz Component
 const QuizForm: React.FC<QuizProps> = ({
   sessionId,
+  quizName,
   theme = "dark",
   questions = [],
   handleUnlock,
@@ -35,7 +37,8 @@ const QuizForm: React.FC<QuizProps> = ({
   const [correctAnswerCount, setCorrectAnswerCount] = useState<number>(0);
   const [quizComplete, setQuizComplete] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [answers, setAnswers] = useState<number[]>([]); // Store all answers
+  const [answers, setAnswers] = useState<number[]>([]);
+  const [statisticsTracked, setStatisticsTracked] = useState<boolean>(false);
 
   const totalQuestions = questions.length;
   const isLastQuestion = questionIndex === totalQuestions - 1;
@@ -55,6 +58,7 @@ const QuizForm: React.FC<QuizProps> = ({
           setQuizComplete(true);
           setCorrectAnswerCount(progress.correctAnswers);
           setQuestionIndex(progress.currentQuestionIndex);
+          setStatisticsTracked(true);
         } else if (
           progress.currentQuestionIndex >= 0 &&
           (progress.answers?.length > 0 || progress.correctAnswers > 0)
@@ -89,7 +93,12 @@ const QuizForm: React.FC<QuizProps> = ({
   // Save progress when quiz is completed or question index changes (but not for every answer)
   useEffect(() => {
     const saveProgress = async () => {
-      if (questionIndex !== null && !isLoading && quizComplete) {
+      if (
+        questionIndex !== null &&
+        !isLoading &&
+        quizComplete &&
+        !statisticsTracked
+      ) {
         // Only auto-save when quiz is completed
         try {
           await quizApi.updateProgress(sessionId, {
@@ -102,8 +111,8 @@ const QuizForm: React.FC<QuizProps> = ({
 
           // Track statistics when quiz completes
           if (isPerfectScore) {
-            // Perfect score - track as correctly completed quiz
-            await statisticsApi.incrementCorrectlyCompletedQuizzes();
+            // Perfect score - mark this specific quiz as completed
+            await statisticsApi.setQuizCompleted(quizName, true);
           } else {
             // Track incorrect answers
             const incorrectCount = totalQuestions - correctAnswerCount;
@@ -111,6 +120,8 @@ const QuizForm: React.FC<QuizProps> = ({
               await statisticsApi.incrementIncorrectAnswers(incorrectCount);
             }
           }
+
+          setStatisticsTracked(true);
         } catch (error) {
           console.error("Failed to save quiz progress:", error);
         }
@@ -120,6 +131,7 @@ const QuizForm: React.FC<QuizProps> = ({
     saveProgress();
   }, [
     sessionId,
+    quizName,
     quizComplete, // Only save when quiz completes
     isLoading,
     correctAnswerCount,
@@ -127,6 +139,7 @@ const QuizForm: React.FC<QuizProps> = ({
     isPerfectScore,
     questionIndex,
     answers,
+    statisticsTracked,
   ]);
 
   const handleAnswerSelected = useCallback(

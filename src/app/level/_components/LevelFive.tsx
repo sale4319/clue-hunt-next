@@ -1,27 +1,25 @@
 "use client";
 
 import { Button, SkipButton, SpacerElement, Title } from "clue-hunt-ui";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { statisticsApi } from "src/shared/lib/src/api/statistics";
 
-import { useSettings } from "@app/context/client";
+import { useSettings, useStatistics } from "@app/context/client";
 import { LevelFiveMessages } from "@app/messages-contract";
 import { getRoute, useFeatureToggle } from "@app/utils";
 
 export default function LevelFive() {
   const { settings } = useSettings();
+  const { refreshStatistics } = useStatistics();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const isNewFeatureEnabled = useFeatureToggle("LEVEL_FIVE_UNLOCK");
   const isQuizMode = settings?.quizMode ? "quiz" : "level";
   const isQuizRoute = settings?.quizMode ? "five" : "six";
 
   const handleUnlock = async () => {
-    await statisticsApi.incrementCompletedLevels();
-    const params = new URLSearchParams(searchParams?.toString());
-    params.set("LEVEL_FIVE_UNLOCK", "true");
-
-    router.push(`?${params.toString()}`);
+    await statisticsApi.setLevelCompleted("five", true);
+    await refreshStatistics();
+    router.push(getRoute(isQuizMode, isQuizRoute));
   };
 
   const handleSkip = async () => {
@@ -36,7 +34,6 @@ export default function LevelFive() {
       {isNewFeatureEnabled && (
         <Button
           size="medium"
-          href={getRoute(isQuizMode, isQuizRoute)}
           isLocked={false}
           primary={false}
           onClick={handleUnlock}

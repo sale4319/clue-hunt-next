@@ -38,19 +38,11 @@ export async function POST(request: NextRequest) {
     let stats;
 
     switch (action) {
-      case "incrementQuiz":
-        stats = await UserStatisticsService.incrementCorrectlyCompletedQuizzes(
-          userId
-        );
-        break;
       case "incrementIncorrectAnswers":
         stats = await UserStatisticsService.incrementIncorrectAnswers(
           userId,
           count || 1
         );
-        break;
-      case "incrementLevel":
-        stats = await UserStatisticsService.incrementCompletedLevels(userId);
         break;
       case "incrementSkip":
         stats = await UserStatisticsService.incrementSkipButtonClicks(userId);

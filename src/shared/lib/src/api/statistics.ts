@@ -2,7 +2,6 @@ export interface UserStatistics {
   userId: string;
   correctlyCompletedQuizzes: number;
   incorrectAnswers: number;
-  completedLevels: number;
   skipButtonClicks: number;
   levelLocks: {
     start?: boolean;
@@ -14,6 +13,15 @@ export interface UserStatistics {
     six?: boolean;
   };
   completedLevelsMap: {
+    start?: boolean;
+    one?: boolean;
+    two?: boolean;
+    three?: boolean;
+    four?: boolean;
+    five?: boolean;
+    six?: boolean;
+  };
+  completedQuizzesMap: {
     start?: boolean;
     one?: boolean;
     two?: boolean;
@@ -41,25 +49,6 @@ export const statisticsApi = {
   },
 
   /**
-   * Increment correctly completed quizzes count
-   */
-  async incrementCorrectlyCompletedQuizzes(): Promise<UserStatistics> {
-    const response = await fetch("/api/statistics", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ action: "incrementQuiz" }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to increment quiz count");
-    }
-
-    return response.json();
-  },
-
-  /**
    * Increment incorrect answers count
    */
   async incrementIncorrectAnswers(count: number = 1): Promise<UserStatistics> {
@@ -73,25 +62,6 @@ export const statisticsApi = {
 
     if (!response.ok) {
       throw new Error("Failed to increment incorrect answers");
-    }
-
-    return response.json();
-  },
-
-  /**
-   * Increment completed levels count
-   */
-  async incrementCompletedLevels(): Promise<UserStatistics> {
-    const response = await fetch("/api/statistics", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ action: "incrementLevel" }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to increment level count");
     }
 
     return response.json();
@@ -172,6 +142,26 @@ export const statisticsApi = {
 
     if (!response.ok) {
       throw new Error("Failed to set level completed");
+    }
+  },
+
+  /**
+   * Mark a quiz as completed with perfect score
+   */
+  async setQuizCompleted(
+    quiz: "start" | "one" | "two" | "three" | "four" | "five" | "six",
+    completed: boolean
+  ): Promise<void> {
+    const response = await fetch("/api/statistics/quiz-completed", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ quiz, completed }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to set quiz completed");
     }
   },
 };
