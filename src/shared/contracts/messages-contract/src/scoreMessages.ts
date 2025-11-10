@@ -1,7 +1,8 @@
 export const ScoreMessages = {
-  QUIZES_SOLVED: " quizes solved",
-  CORRECT_ANSWERS: " correct answers",
-  INCORRECT_ANSWERS: " incorrect answers",
-  LEVELS_COMPLETED: " levels completed",
-  SKIPS_USED: " skips used",
+  TITLE: "Your Score:",
+  QUIZES_SOLVED: "Quizes solved: ",
+  CORRECT_ANSWERS: "Correct answers: ",
+  INCORRECT_ANSWERS: "Incorrect answers: ",
+  LEVELS_COMPLETED: "Levels completed: ",
+  SKIPS_USED: "Skips used: ",
 };

@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { Button, SkipButton, Title } from "clue-hunt-ui";
+import { useRouter } from "next/navigation";
 
 import { useSettings } from "@app/context/client";
 import { statisticsApi, type UserStatistics } from "@app/lib/client";
 import { ScoreMessages } from "@app/messages-contract";
 import { getRoute } from "@app/utils";
-import { useRouter } from "next/navigation";
+
+import styles from "./styles.module.css";
 
 export default function LevelEnd() {
   const router = useRouter();
@@ -52,36 +54,49 @@ export default function LevelEnd() {
 
   return (
     <>
+      <Title label={ScoreMessages.TITLE} theme={settings?.theme} />
+      <div
+        className={[
+          styles.scoreContainer,
+          styles[settings?.theme || "dark"],
+        ].join(" ")}
+      >
+        <Title
+          label={`${ScoreMessages.QUIZES_SOLVED}${
+            stats?.correctlyCompletedQuizzes || 0
+          }/6`}
+          titleSize="small"
+          theme={settings?.theme}
+        />
+        <Title
+          label={`${ScoreMessages.CORRECT_ANSWERS}${correctAnswers}/36`}
+          titleSize="small"
+          theme={settings?.theme}
+        />
+        <Title
+          label={`${ScoreMessages.INCORRECT_ANSWERS}${
+            stats?.incorrectAnswers || 0
+          }`}
+          titleSize="small"
+          theme={settings?.theme}
+        />
+        <Title
+          label={`${ScoreMessages.LEVELS_COMPLETED}${completedLevelsCount}/6`}
+          titleSize="small"
+          theme={settings?.theme}
+        />
+        <Title
+          label={`${ScoreMessages.SKIPS_USED}${stats?.skipButtonClicks || 0}`}
+          titleSize="small"
+          theme={settings?.theme}
+        />
+      </div>
       <Button
         size="medium"
         href={getRoute("level", "start")}
         isLocked={false}
         primary={false}
         label="Restart"
-      />
-      <Title
-        label={`${stats?.correctlyCompletedQuizzes || 0}/6${
-          ScoreMessages.QUIZES_SOLVED
-        }`}
-        theme={settings?.theme}
-      />
-      <Title
-        label={`${correctAnswers}/36${ScoreMessages.CORRECT_ANSWERS}`}
-        theme={settings?.theme}
-      />
-      <Title
-        label={`${stats?.incorrectAnswers || 0}${
-          ScoreMessages.INCORRECT_ANSWERS
-        }`}
-        theme={settings?.theme}
-      />
-      <Title
-        label={`${completedLevelsCount}/6${ScoreMessages.LEVELS_COMPLETED}`}
-        theme={settings?.theme}
-      />
-      <Title
-        label={`${stats?.skipButtonClicks || 0}${ScoreMessages.SKIPS_USED}`}
-        theme={settings?.theme}
       />
       {settings?.skipMode && <SkipButton onClick={handleSkip} />}
     </>
