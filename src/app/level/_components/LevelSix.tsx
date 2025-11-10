@@ -20,7 +20,7 @@ export default function LevelSix() {
   };
 
   const isQuizMode = settings?.quizMode ? "quiz" : "level";
-  const isQuizRoute = settings?.quizMode ? "six" : "start";
+  const isQuizRoute = settings?.quizMode ? "six" : "score";
 
   return (
     <>

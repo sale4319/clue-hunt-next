@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   Button,
   SkipButton,
@@ -10,17 +9,30 @@ import {
 } from "clue-hunt-ui";
 
 import { useSettings } from "@app/context/client";
+import { settingsApi, statisticsApi } from "@app/lib/client";
 import { LevelTwoMessages, TooltipMessages } from "@app/messages-contract";
 import { getRoute } from "@app/utils";
 
 export default function LevelTwo() {
-  const { settings } = useSettings();
-  const [isLocked, setIsLocked] = useState(true);
+  const { settings, refreshSettings } = useSettings();
 
-  const handleUnlock = () => {
-    setIsLocked(false);
+  const handleSetLock = async () => {
+    await settingsApi.setLock(true);
+    await refreshSettings();
   };
 
+  const handleDeleteLock = async () => {
+    await settingsApi.setLock(false);
+    await refreshSettings();
+  };
+
+  const handleSkip = async () => {
+    await statisticsApi.incrementSkipButtonClicks();
+    await settingsApi.setLock(true);
+    await refreshSettings();
+  };
+
+  const isLocked = !settings?.isLocked;
   const isQuizMode = settings?.quizMode ? "quiz" : "level";
   const isQuizRoute = settings?.quizMode ? "two" : "three";
 
@@ -29,7 +41,7 @@ export default function LevelTwo() {
       <SpacerElement size="medium">
         <UnlockToolTip
           content={TooltipMessages.LEVEL_TWO_CONGRATS}
-          onClick={handleUnlock}
+          onClick={handleSetLock}
           data-testid="unlockButton"
         />
       </SpacerElement>
@@ -39,8 +51,9 @@ export default function LevelTwo() {
         href={getRoute(isQuizMode, isQuizRoute)}
         isLocked={isLocked}
         primary={isLocked}
+        onClick={handleDeleteLock}
       />
-      {settings?.skipMode && <SkipButton onClick={handleUnlock} />}
+      {settings?.skipMode && <SkipButton onClick={handleSkip} />}
     </>
   );
 }

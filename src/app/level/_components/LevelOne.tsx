@@ -9,6 +9,7 @@ import {
 } from "clue-hunt-ui";
 
 import { useSettings } from "@app/context/client";
+import { statisticsApi } from "@app/lib/client";
 import { settingsApi } from "@app/lib/client";
 import { LevelOneMessages } from "@app/messages-contract";
 import { getRoute } from "@app/utils";
@@ -23,6 +24,12 @@ export default function LevelOne() {
   const isQuizRoute = quizMode ? "one" : "two";
 
   const handleSetLock = async () => {
+    await settingsApi.setLock(true);
+    await refreshSettings();
+  };
+
+  const handleSkip = async () => {
+    await statisticsApi.incrementSkipButtonClicks();
     await settingsApi.setLock(true);
     await refreshSettings();
   };
@@ -49,7 +56,7 @@ export default function LevelOne() {
         primary={isLocked}
         onClick={handleDeleteLock}
       />
-      {skipMode && <SkipButton onClick={handleSetLock} />}
+      {skipMode && <SkipButton onClick={handleSkip} />}
     </>
   );
 }

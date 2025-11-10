@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Button } from "clue-hunt-ui";
 
-import { quizApi } from "@app/lib/client";
+import { quizApi, statisticsApi } from "@app/lib/client";
 import { QuizFormMessages } from "@app/messages-contract";
 
 import { ProgressBar, QuestionComponent } from "./components/";
@@ -99,6 +99,18 @@ const QuizForm: React.FC<QuizProps> = ({
             isCompleted: quizComplete,
             answers,
           });
+
+          // Track statistics when quiz completes
+          if (isPerfectScore) {
+            // Perfect score - track as correctly completed quiz
+            await statisticsApi.incrementCorrectlyCompletedQuizzes();
+          } else {
+            // Track incorrect answers
+            const incorrectCount = totalQuestions - correctAnswerCount;
+            if (incorrectCount > 0) {
+              await statisticsApi.incrementIncorrectAnswers(incorrectCount);
+            }
+          }
         } catch (error) {
           console.error("Failed to save quiz progress:", error);
         }
@@ -110,6 +122,11 @@ const QuizForm: React.FC<QuizProps> = ({
     sessionId,
     quizComplete, // Only save when quiz completes
     isLoading,
+    correctAnswerCount,
+    totalQuestions,
+    isPerfectScore,
+    questionIndex,
+    answers,
   ]);
 
   const handleAnswerSelected = useCallback(

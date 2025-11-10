@@ -19,7 +19,7 @@ export default function QuizSix() {
     <>
       <Button
         size="medium"
-        href={getRoute("level", "start")}
+        href={getRoute("level", "score")}
         isLocked={isLocked}
         primary={isLocked}
       />

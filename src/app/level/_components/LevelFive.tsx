@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useSettings } from "@app/context/client";
 import { LevelFiveMessages } from "@app/messages-contract";
 import { getRoute, useFeatureToggle } from "@app/utils";
+import { statisticsApi } from "src/shared/lib/src/api/statistics";
 
 export default function LevelFive() {
   const { settings } = useSettings();
@@ -13,7 +14,8 @@ export default function LevelFive() {
   const searchParams = useSearchParams();
   const isNewFeatureEnabled = useFeatureToggle("LEVEL_FIVE_UNLOCK");
 
-  const handleUnlock = () => {
+  const handleSkip = async () => {
+    await statisticsApi.incrementSkipButtonClicks();
     const params = new URLSearchParams(searchParams?.toString());
     params.set("LEVEL_FIVE_UNLOCK", "true");
 
@@ -35,7 +37,7 @@ export default function LevelFive() {
           primary={false}
         />
       )}
-      {settings?.skipMode && <SkipButton onClick={handleUnlock} />}
+      {settings?.skipMode && <SkipButton onClick={handleSkip} />}
     </>
   );
 }

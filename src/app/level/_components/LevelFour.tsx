@@ -4,17 +4,30 @@ import { useState } from "react";
 import { Button, ShiftingCircles, SkipButton, Title } from "clue-hunt-ui";
 
 import { useSettings } from "@app/context/client";
+import { settingsApi, statisticsApi } from "@app/lib/client";
 import { LevelFourMessages } from "@app/messages-contract";
 import { getRoute } from "@app/utils";
 
 export default function LevelFour() {
-  const { settings } = useSettings();
-  const [isLocked, setIsLocked] = useState(true);
+  const { settings, refreshSettings } = useSettings();
 
-  const handleUnlock = () => {
-    setIsLocked(false);
+  const handleSetLock = async () => {
+    await settingsApi.setLock(true);
+    await refreshSettings();
   };
 
+  const handleDeleteLock = async () => {
+    await settingsApi.setLock(false);
+    await refreshSettings();
+  };
+
+  const handleSkip = async () => {
+    await statisticsApi.incrementSkipButtonClicks();
+    await settingsApi.setLock(true);
+    await refreshSettings();
+  };
+
+  const isLocked = !settings?.isLocked;
   const isQuizMode = settings?.quizMode ? "quiz" : "level";
   const isQuizRoute = settings?.quizMode ? "four" : "five";
 
@@ -30,14 +43,15 @@ export default function LevelFour() {
         href={getRoute(isQuizMode, isQuizRoute)}
         isLocked={isLocked}
         primary={isLocked}
+        onClick={handleDeleteLock}
       />
 
       <ShiftingCircles
-        handleUnlockNavigation={handleUnlock}
+        handleUnlockNavigation={handleSetLock}
         theme={settings?.theme}
       />
 
-      {settings?.skipMode && <SkipButton onClick={handleUnlock} />}
+      {settings?.skipMode && <SkipButton onClick={handleSkip} />}
     </>
   );
 }

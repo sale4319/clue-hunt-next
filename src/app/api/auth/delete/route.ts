@@ -5,6 +5,7 @@ import {
   AuthService,
   QuizProgressService,
   UserSettingsService,
+  UserStatisticsService,
 } from "@app/lib/server";
 
 export async function DELETE() {
@@ -19,9 +20,10 @@ export async function DELETE() {
     // The auth cookie contains just the username string
     const username = authCookie.value;
 
-    // Delete user settings and all quiz progress
+    // Delete user settings, quiz progress, and statistics
     await UserSettingsService.deleteUserSettings(username);
     await QuizProgressService.deleteAllProgress(username);
+    await UserStatisticsService.deleteStatistics(username);
 
     // Delete the user from database
     const deleted = await AuthService.deleteUser(username);
