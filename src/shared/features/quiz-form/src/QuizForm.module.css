@@ -1,0 +1,22 @@
+.quiz {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  text-align: center;
+  background: transparent;
+  min-width: 600px;
+  min-height: 200px;
+  padding: 20px;
+  font-size: 19px;
+  font-weight: 600;
+  margin-top: 13%;
+  border: 2px solid #75f8e2;
+}
+
+.light {
+  color: black;
+}
+
+.dark {
+  color: white;
+}

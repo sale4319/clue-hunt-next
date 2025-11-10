@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   Button,
   DraggingPuzzle,
@@ -8,20 +7,37 @@ import {
   SpacerElement,
   Title,
 } from "clue-hunt-ui";
+import { useRouter } from "next/navigation";
 
-import { useSettings } from "@app/context/client";
+import { useSettings, useStatistics } from "@app/context/client";
+import { statisticsApi } from "@app/lib/client";
 import { LevelThreeMessages } from "@app/messages-contract";
 import { getRoute } from "@app/utils";
 
 export default function LevelThree() {
+  const router = useRouter();
   const { settings } = useSettings();
-  const [isLocked, setIsLocked] = useState(true);
+  const { statistics, refreshStatistics } = useStatistics();
 
-  const handleUnlock = () => {
-    setIsLocked(false);
-  };
+  const isCompleted = statistics?.completedLevelsMap?.three || false;
+  const isLocked = !isCompleted && !statistics?.levelLocks?.three;
   const isQuizMode = settings?.quizMode ? "quiz" : "level";
   const isQuizRoute = settings?.quizMode ? "three" : "four";
+
+  const handleSetLock = async () => {
+    await statisticsApi.setLevelLock("three", true);
+    await refreshStatistics();
+  };
+
+  const handleCompleteLevel = async () => {
+    await statisticsApi.setLevelCompleted("three", true);
+    router.push(getRoute(isQuizMode, isQuizRoute));
+  };
+
+  const handleSkip = async () => {
+    await statisticsApi.incrementSkipButtonClicks();
+    router.push(getRoute(isQuizMode, isQuizRoute));
+  };
 
   return (
     <>
@@ -33,15 +49,15 @@ export default function LevelThree() {
       />
       <Button
         size="medium"
-        href={getRoute(isQuizMode, isQuizRoute)}
         isLocked={isLocked}
         primary={isLocked}
+        onClick={handleCompleteLevel}
       />
       <DraggingPuzzle
-        handleUnlockNavigation={handleUnlock}
+        handleUnlockNavigation={handleSetLock}
         theme={settings?.theme}
       />
-      {settings?.skipMode && <SkipButton onClick={handleUnlock} />}
+      {settings?.skipMode && <SkipButton onClick={handleSkip} />}
     </>
   );
 }

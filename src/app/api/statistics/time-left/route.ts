@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { UserSettingsService } from "@app/lib/server";
+import { UserStatisticsService } from "@app/lib/server";
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,21 +11,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
 
-    const { isLocked } = await request.json();
+    const { timeLeft } = await request.json();
 
-    if (typeof isLocked !== "boolean") {
+    if (typeof timeLeft !== "number") {
       return NextResponse.json(
-        { error: "isLocked must be a boolean" },
+        { error: "timeLeft must be a number" },
         { status: 400 }
       );
     }
 
     const userId = authCookie.value;
-    await UserSettingsService.setLock(userId, isLocked);
+    await UserStatisticsService.setTimeLeft(userId, timeLeft);
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error setting lock:", error);
-    return NextResponse.json({ error: "Failed to set lock" }, { status: 500 });
+    console.error("Error setting time left:", error);
+    return NextResponse.json(
+      { error: "Failed to set time left" },
+      { status: 500 }
+    );
   }
 }

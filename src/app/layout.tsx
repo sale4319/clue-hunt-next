@@ -3,7 +3,11 @@ import "server-only";
 import type { Metadata } from "next";
 import { Audiowide } from "next/font/google";
 
-import { AuthProvider, SettingsProvider } from "@app/context/client";
+import {
+  AuthProvider,
+  SettingsProvider,
+  StatisticsProvider,
+} from "@app/context/client";
 import { getServerSettings } from "@app/context/server";
 
 import "./globals.css";
@@ -34,11 +38,13 @@ export default async function RootLayout({
       </head>
 
       <SettingsProvider initialSettings={initialSettings}>
-        <AuthProvider>
-          <body className={`${fontFamily.className} antialiased`}>
-            <div className={styles.container}>{children}</div>
-          </body>
-        </AuthProvider>
+        <StatisticsProvider>
+          <AuthProvider>
+            <body className={`${fontFamily.className} antialiased`}>
+              <div className={styles.container}>{children}</div>
+            </body>
+          </AuthProvider>
+        </StatisticsProvider>
       </SettingsProvider>
     </html>
   );

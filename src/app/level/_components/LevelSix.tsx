@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { Button, QuestionForm, SkipButton, Title } from "clue-hunt-ui";
+import { useRouter } from "next/navigation";
 
-import { useSettings } from "@app/context/client";
+import { useSettings, useStatistics } from "@app/context/client";
+import { statisticsApi } from "@app/lib/client";
 import {
   LevelSixMessages,
   QuestionFormMessages,
@@ -12,15 +13,28 @@ import {
 import { getRoute } from "@app/utils";
 
 export default function LevelSix() {
+  const router = useRouter();
   const { settings } = useSettings();
-  const [isLocked, setIsLocked] = useState(true);
+  const { statistics, refreshStatistics } = useStatistics();
 
-  const handleUnlock = () => {
-    setIsLocked(false);
+  const handleSetLock = async () => {
+    await statisticsApi.setLevelLock("six", true);
+    await refreshStatistics();
   };
 
+  const handleCompleteLevel = async () => {
+    await statisticsApi.setLevelCompleted("six", true);
+    router.push(getRoute(isQuizMode, isQuizRoute));
+  };
+  const handleSkip = async () => {
+    await statisticsApi.incrementSkipButtonClicks();
+    router.push(getRoute(isQuizMode, isQuizRoute));
+  };
+
+  const isCompleted = statistics?.completedLevelsMap?.six || false;
+  const isLocked = !isCompleted && !statistics?.levelLocks?.six;
   const isQuizMode = settings?.quizMode ? "quiz" : "level";
-  const isQuizRoute = settings?.quizMode ? "six" : "start";
+  const isQuizRoute = settings?.quizMode ? "six" : "score";
 
   return (
     <>
@@ -31,13 +45,13 @@ export default function LevelSix() {
       />
       <Button
         size="medium"
-        href={getRoute(isQuizMode, isQuizRoute)}
         isLocked={isLocked}
         primary={isLocked}
+        onClick={handleCompleteLevel}
       />
       <QuestionForm
         questionIconSize="small"
-        handleUnlock={handleUnlock}
+        handleUnlock={handleSetLock}
         successMessage={QuestionFormMessages.WOW}
         firstQuestion={QuestionFormMessages.FIRST_Q_LABEL}
         firstHint={TooltipMessages.FIRST_Q_HINT}
@@ -47,7 +61,7 @@ export default function LevelSix() {
         secondPlaceholder={QuestionFormMessages.SECOND_Q_PLACEHOLDER}
         theme={settings?.theme}
       />
-      {settings?.skipMode && <SkipButton onClick={handleUnlock} />}
+      {settings?.skipMode && <SkipButton onClick={handleSkip} />}
     </>
   );
 }

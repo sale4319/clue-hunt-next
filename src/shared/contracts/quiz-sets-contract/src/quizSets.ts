@@ -347,7 +347,7 @@ export const questionSetSix = [
   },
   {
     question: "Which folder is used for routing in a Next.js application?",
-    answers: ["routes/", "pages/", "views/", "components/"],
+    answers: ["routes/", "app/", "views/", "components/"],
     correctAnswerIndex: 1,
   },
   {

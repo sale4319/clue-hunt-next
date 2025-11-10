@@ -1,7 +1,12 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-import { AuthService, UserSettingsService } from "@app/lib/server";
+import {
+  AuthService,
+  QuizProgressService,
+  UserSettingsService,
+  UserStatisticsService,
+} from "@app/lib/server";
 
 export async function DELETE() {
   try {
@@ -15,8 +20,10 @@ export async function DELETE() {
     // The auth cookie contains just the username string
     const username = authCookie.value;
 
-    // Delete user settings first
+    // Delete user settings, quiz progress, and statistics
     await UserSettingsService.deleteUserSettings(username);
+    await QuizProgressService.deleteAllProgress(username);
+    await UserStatisticsService.deleteStatistics(username);
 
     // Delete the user from database
     const deleted = await AuthService.deleteUser(username);

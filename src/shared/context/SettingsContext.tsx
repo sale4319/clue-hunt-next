@@ -40,17 +40,6 @@ export function SettingsProvider({
   const [isLoading, setIsLoading] = useState(!initialSettings);
   const pathname = usePathname();
 
-  // Debug: Log initial settings to see if theme is included
-  useEffect(() => {
-    if (initialSettings) {
-      console.log("SettingsProvider - Initial settings:", initialSettings);
-      console.log(
-        "SettingsProvider - Theme from initial:",
-        initialSettings.theme
-      );
-    }
-  }, [initialSettings]);
-
   const refreshSettings = async () => {
     setIsLoading(true);
     try {

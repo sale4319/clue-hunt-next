@@ -1,23 +1,42 @@
 "use client";
 
-import { useState } from "react";
 import { Button, QuestionIconToolTip, SkipButton, Title } from "clue-hunt-ui";
+import { useRouter } from "next/navigation";
 
-import { useSettings } from "@app/context/client";
+import { useSettings, useStatistics } from "@app/context/client";
 import { CountdownTimer } from "@app/countdown-timer";
+import { statisticsApi } from "@app/lib/client";
 import { LevelStartMessages, TooltipMessages } from "@app/messages-contract";
 import { getRoute } from "@app/utils";
 
 export default function LevelStart() {
   const { settings } = useSettings();
-  const [isLocked, setIsLocked] = useState(true);
+  const { statistics, refreshStatistics } = useStatistics();
+  const router = useRouter();
 
-  const handleUnlock = () => {
-    setIsLocked(false);
-  };
+  const savedDate = settings?.timerEndDate;
+  const showStartButton =
+    savedDate && savedDate !== null && savedDate !== undefined;
 
+  const isCompleted = statistics?.completedLevelsMap?.start || false;
+  const isLocked = !isCompleted && !statistics?.levelLocks?.start;
   const isQuizMode = settings?.quizMode ? "quiz" : "level";
   const isQuizRoute = settings?.quizMode ? "start" : "one";
+
+  const handleSetLock = async () => {
+    await statisticsApi.setLevelLock("start", true);
+    await refreshStatistics();
+  };
+
+  const handleSkip = async () => {
+    await statisticsApi.incrementSkipButtonClicks();
+    router.push(getRoute(isQuizMode, isQuizRoute));
+  };
+
+  const handleCompleteLevel = async () => {
+    await statisticsApi.setLevelCompleted("start", true);
+    router.push(getRoute(isQuizMode, isQuizRoute));
+  };
 
   return (
     <>
@@ -40,17 +59,19 @@ export default function LevelStart() {
         />
         <QuestionIconToolTip
           size="large"
-          onClick={handleUnlock}
+          onClick={handleSetLock}
           content={TooltipMessages.START_HINT}
         />
       </div>
-      <Button
-        size="medium"
-        href={getRoute(isQuizMode, isQuizRoute)}
-        isLocked={isLocked}
-        primary={isLocked}
-      />
-      {settings?.skipMode && <SkipButton onClick={handleUnlock} />}
+      {showStartButton && (
+        <Button
+          size="medium"
+          isLocked={isLocked}
+          primary={isLocked}
+          onClick={handleCompleteLevel}
+        />
+      )}
+      {settings?.skipMode && <SkipButton onClick={handleSkip} />}
     </>
   );
 }

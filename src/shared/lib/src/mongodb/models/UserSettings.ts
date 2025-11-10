@@ -5,7 +5,6 @@ export interface IUserSettings {
   theme: "light" | "dark";
   quizMode: boolean;
   skipMode: boolean;
-  isLocked: boolean;
   settingsOpen: boolean;
   timerEndDate: number | null;
   createdAt: Date;
@@ -32,10 +31,6 @@ const UserSettingsSchema = new Schema<IUserSettings>(
     skipMode: {
       type: Boolean,
       default: true,
-    },
-    isLocked: {
-      type: Boolean,
-      default: false,
     },
     settingsOpen: {
       type: Boolean,

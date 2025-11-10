@@ -1,6 +1,6 @@
 import "server-only";
 
-import { Page } from "@app/page-component:";
+import { Page } from "@app/page-component";
 
 import LoginPage from "./_components/Login";
 
