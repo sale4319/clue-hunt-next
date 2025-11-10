@@ -2,7 +2,7 @@ import "server-only";
 
 import { cookies } from "next/headers";
 
-import { type UserSettings,UserSettingsService } from "@app/lib/server";
+import { type UserSettings, UserSettingsService } from "@app/lib/server";
 
 /**
  * Server-side function to get user settings with theme from cookie
@@ -30,7 +30,6 @@ export async function getServerSettings(): Promise<UserSettings | null> {
       theme: themeFromCookie,
       quizMode: settings.quizMode,
       skipMode: settings.skipMode,
-      isLocked: settings.isLocked,
       settingsOpen: settings.settingsOpen,
       timerEndDate: settings.timerEndDate,
       createdAt: settings.createdAt.toISOString(),
