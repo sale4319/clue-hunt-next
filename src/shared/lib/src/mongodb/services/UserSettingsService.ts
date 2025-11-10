@@ -4,9 +4,6 @@ import { connectToDatabase } from "../connection";
 import { type IUserSettings, UserSettings } from "../models";
 
 export class UserSettingsService {
-  /**
-   * Get user settings by user ID, creates default settings if not found
-   */
   static async getSettings(userId: string): Promise<IUserSettings> {
     await connectToDatabase();
 
@@ -18,17 +15,23 @@ export class UserSettingsService {
         theme: "dark",
         quizMode: true,
         skipMode: true,
-        isLocked: false,
         settingsOpen: false,
         timerEndDate: null,
       });
-    } else if (settings.timerEndDate === undefined) {
-      // Migration: Add timerEndDate field to existing documents
-      settings = await UserSettings.findOneAndUpdate(
-        { userId },
-        { $set: { timerEndDate: null } },
-        { new: true }
-      );
+    } else {
+      const updates: Partial<IUserSettings> = {};
+
+      if (settings.timerEndDate === undefined) {
+        updates.timerEndDate = null;
+      }
+
+      if (Object.keys(updates).length > 0) {
+        settings = await UserSettings.findOneAndUpdate(
+          { userId },
+          { $set: updates },
+          { new: true }
+        );
+      }
     }
 
     const settingsObj = settings!.toObject();
@@ -59,9 +62,6 @@ export class UserSettingsService {
     return newTheme;
   }
 
-  /**
-   * Delete/reset theme to default
-   */
   static async deleteTheme(userId: string): Promise<void> {
     await connectToDatabase();
 
@@ -72,9 +72,6 @@ export class UserSettingsService {
     );
   }
 
-  /**
-   * Toggle quiz mode
-   */
   static async toggleQuizMode(userId: string): Promise<boolean> {
     await connectToDatabase();
 
@@ -90,9 +87,6 @@ export class UserSettingsService {
     return newQuizMode;
   }
 
-  /**
-   * Toggle skip mode
-   */
   static async toggleSkipMode(userId: string): Promise<boolean> {
     await connectToDatabase();
 
@@ -108,22 +102,6 @@ export class UserSettingsService {
     return newSkipMode;
   }
 
-  /**
-   * Set lock state
-   */
-  static async setLock(userId: string, isLocked: boolean): Promise<void> {
-    await connectToDatabase();
-
-    await UserSettings.findOneAndUpdate(
-      { userId },
-      { isLocked },
-      { upsert: true }
-    );
-  }
-
-  /**
-   * Toggle settings modal open state
-   */
   static async toggleSettingsOpen(userId: string): Promise<boolean> {
     await connectToDatabase();
 
@@ -139,9 +117,6 @@ export class UserSettingsService {
     return newSettingsOpen;
   }
 
-  /**
-   * Set timer end date
-   */
   static async setTimerEndDate(userId: string, endDate: number): Promise<void> {
     await connectToDatabase();
 
@@ -152,9 +127,6 @@ export class UserSettingsService {
     );
   }
 
-  /**
-   * Clear timer end date
-   */
   static async clearTimerEndDate(userId: string): Promise<void> {
     await connectToDatabase();
 
@@ -165,9 +137,6 @@ export class UserSettingsService {
     );
   }
 
-  /**
-   * Delete user settings
-   */
   static async deleteUserSettings(userId: string): Promise<boolean> {
     await connectToDatabase();
 

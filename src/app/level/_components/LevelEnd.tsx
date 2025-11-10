@@ -7,10 +7,12 @@ import { useSettings } from "@app/context/client";
 import { statisticsApi, type UserStatistics } from "@app/lib/client";
 import { ScoreMessages } from "@app/messages-contract";
 import { getRoute } from "@app/utils";
+import { useRouter } from "next/navigation";
 
 export default function LevelEnd() {
+  const router = useRouter();
   const { settings } = useSettings();
-  const [isLocked, setIsLocked] = useState(true);
+
   const [stats, setStats] = useState<UserStatistics | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -29,8 +31,8 @@ export default function LevelEnd() {
     loadStats();
   }, []);
 
-  const handleUnlock = () => {
-    setIsLocked(false);
+  const handleSkip = async () => {
+    router.push(getRoute("level", "start"));
   };
 
   if (isLoading) {
@@ -43,13 +45,19 @@ export default function LevelEnd() {
 
   const correctAnswers = (stats?.correctlyCompletedQuizzes || 0) * 6;
 
+  const completedLevelsCount = stats?.completedLevelsMap
+    ? Object.values(stats.completedLevelsMap).filter((val) => val === true)
+        .length
+    : 0;
+
   return (
     <>
       <Button
         size="medium"
         href={getRoute("level", "start")}
-        isLocked={isLocked}
-        primary={isLocked}
+        isLocked={false}
+        primary={false}
+        label="Restart"
       />
       <Title
         label={`${stats?.correctlyCompletedQuizzes || 0}/6${
@@ -68,16 +76,14 @@ export default function LevelEnd() {
         theme={settings?.theme}
       />
       <Title
-        label={`${stats?.completedLevels || 0}/6${
-          ScoreMessages.LEVELS_COMPLETED
-        }`}
+        label={`${completedLevelsCount}/6${ScoreMessages.LEVELS_COMPLETED}`}
         theme={settings?.theme}
       />
       <Title
         label={`${stats?.skipButtonClicks || 0}${ScoreMessages.SKIPS_USED}`}
         theme={settings?.theme}
       />
-      {settings?.skipMode && <SkipButton onClick={handleUnlock} />}
+      {settings?.skipMode && <SkipButton onClick={handleSkip} />}
     </>
   );
 }

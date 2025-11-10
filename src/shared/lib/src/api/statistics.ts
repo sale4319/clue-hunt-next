@@ -4,6 +4,24 @@ export interface UserStatistics {
   incorrectAnswers: number;
   completedLevels: number;
   skipButtonClicks: number;
+  levelLocks: {
+    start?: boolean;
+    one?: boolean;
+    two?: boolean;
+    three?: boolean;
+    four?: boolean;
+    five?: boolean;
+    six?: boolean;
+  };
+  completedLevelsMap: {
+    start?: boolean;
+    one?: boolean;
+    two?: boolean;
+    three?: boolean;
+    four?: boolean;
+    five?: boolean;
+    six?: boolean;
+  };
   createdAt: string;
   updatedAt: string;
 }
@@ -115,5 +133,45 @@ export const statisticsApi = {
     }
 
     return response.json();
+  },
+
+  /**
+   * Set lock state for a specific level
+   */
+  async setLevelLock(
+    level: "start" | "one" | "two" | "three" | "four" | "five" | "six",
+    isLocked: boolean
+  ): Promise<void> {
+    const response = await fetch("/api/statistics/level-lock", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ level, isLocked }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to set level lock");
+    }
+  },
+
+  /**
+   * Mark a level as completed
+   */
+  async setLevelCompleted(
+    level: "start" | "one" | "two" | "three" | "four" | "five" | "six",
+    completed: boolean
+  ): Promise<void> {
+    const response = await fetch("/api/statistics/level-completed", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ level, completed }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to set level completed");
+    }
   },
 };

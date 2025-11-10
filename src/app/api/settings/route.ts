@@ -25,7 +25,6 @@ export async function GET(request: NextRequest) {
       theme: themeFromCookie,
       quizMode: settings.quizMode,
       skipMode: settings.skipMode,
-      isLocked: settings.isLocked,
       settingsOpen: settings.settingsOpen,
       timerEndDate: settings.timerEndDate,
       createdAt: settings.createdAt.toISOString(),

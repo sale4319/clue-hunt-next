@@ -3,7 +3,6 @@ export interface UserSettings {
   theme: string;
   quizMode: boolean;
   skipMode: boolean;
-  isLocked: boolean;
   settingsOpen: boolean;
   timerEndDate: number | null;
   createdAt: string;
@@ -52,20 +51,6 @@ export const settingsApi = {
 
     const data = await response.json();
     return data.settingsOpen;
-  },
-
-  async setLock(isLocked: boolean): Promise<void> {
-    const response = await fetch("/api/settings/lock", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ isLocked }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to set lock");
-    }
   },
 
   async setTimerEndDate(endDate: number): Promise<void> {

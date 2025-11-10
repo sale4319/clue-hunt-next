@@ -7,34 +7,37 @@ import {
   SpacerElement,
   Title,
 } from "clue-hunt-ui";
+import { useRouter } from "next/navigation";
 
-import { useSettings } from "@app/context/client";
-import { settingsApi, statisticsApi } from "@app/lib/client";
+import { useSettings, useStatistics } from "@app/context/client";
+import { statisticsApi } from "@app/lib/client";
 import { LevelThreeMessages } from "@app/messages-contract";
 import { getRoute } from "@app/utils";
 
 export default function LevelThree() {
-  const { settings, refreshSettings } = useSettings();
+  const router = useRouter();
+  const { settings } = useSettings();
+  const { statistics, refreshStatistics } = useStatistics();
+
+  const isCompleted = statistics?.completedLevelsMap?.three || false;
+  const isLocked = !isCompleted && !statistics?.levelLocks?.three;
+  const isQuizMode = settings?.quizMode ? "quiz" : "level";
+  const isQuizRoute = settings?.quizMode ? "three" : "four";
 
   const handleSetLock = async () => {
-    await settingsApi.setLock(true);
-    await refreshSettings();
+    await statisticsApi.setLevelLock("three", true);
+    await refreshStatistics();
   };
 
-  const handleDeleteLock = async () => {
-    await settingsApi.setLock(false);
-    await refreshSettings();
+  const handleCompleteLevel = async () => {
+    await statisticsApi.setLevelCompleted("three", true);
+    router.push(getRoute(isQuizMode, isQuizRoute));
   };
 
   const handleSkip = async () => {
     await statisticsApi.incrementSkipButtonClicks();
-    await settingsApi.setLock(true);
-    await refreshSettings();
+    router.push(getRoute(isQuizMode, isQuizRoute));
   };
-
-  const isLocked = !settings?.isLocked;
-  const isQuizMode = settings?.quizMode ? "quiz" : "level";
-  const isQuizRoute = settings?.quizMode ? "three" : "four";
 
   return (
     <>
@@ -46,10 +49,9 @@ export default function LevelThree() {
       />
       <Button
         size="medium"
-        href={getRoute(isQuizMode, isQuizRoute)}
         isLocked={isLocked}
         primary={isLocked}
-        onClick={handleDeleteLock}
+        onClick={handleCompleteLevel}
       />
       <DraggingPuzzle
         handleUnlockNavigation={handleSetLock}

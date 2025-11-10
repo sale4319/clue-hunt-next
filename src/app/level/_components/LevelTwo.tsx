@@ -7,34 +7,37 @@ import {
   Title,
   UnlockToolTip,
 } from "clue-hunt-ui";
+import { useRouter } from "next/navigation";
 
-import { useSettings } from "@app/context/client";
-import { settingsApi, statisticsApi } from "@app/lib/client";
+import { useSettings, useStatistics } from "@app/context/client";
+import { statisticsApi } from "@app/lib/client";
 import { LevelTwoMessages, TooltipMessages } from "@app/messages-contract";
 import { getRoute } from "@app/utils";
 
 export default function LevelTwo() {
-  const { settings, refreshSettings } = useSettings();
+  const router = useRouter();
+  const { settings } = useSettings();
+  const { statistics, refreshStatistics } = useStatistics();
+
+  const isCompleted = statistics?.completedLevelsMap?.two || false;
+  const isLocked = !isCompleted && !statistics?.levelLocks?.two;
+  const isQuizMode = settings?.quizMode ? "quiz" : "level";
+  const isQuizRoute = settings?.quizMode ? "two" : "three";
 
   const handleSetLock = async () => {
-    await settingsApi.setLock(true);
-    await refreshSettings();
+    await statisticsApi.setLevelLock("two", true);
+    await refreshStatistics();
   };
 
-  const handleDeleteLock = async () => {
-    await settingsApi.setLock(false);
-    await refreshSettings();
+  const handleCompleteLevel = async () => {
+    await statisticsApi.setLevelCompleted("two", true);
+    router.push(getRoute(isQuizMode, isQuizRoute));
   };
 
   const handleSkip = async () => {
     await statisticsApi.incrementSkipButtonClicks();
-    await settingsApi.setLock(true);
-    await refreshSettings();
+    router.push(getRoute(isQuizMode, isQuizRoute));
   };
-
-  const isLocked = !settings?.isLocked;
-  const isQuizMode = settings?.quizMode ? "quiz" : "level";
-  const isQuizRoute = settings?.quizMode ? "two" : "three";
 
   return (
     <>
@@ -48,10 +51,9 @@ export default function LevelTwo() {
       <Title label={LevelTwoMessages.HINT} theme={settings?.theme} />
       <Button
         size="medium"
-        href={getRoute(isQuizMode, isQuizRoute)}
         isLocked={isLocked}
         primary={isLocked}
-        onClick={handleDeleteLock}
+        onClick={handleCompleteLevel}
       />
       {settings?.skipMode && <SkipButton onClick={handleSkip} />}
     </>

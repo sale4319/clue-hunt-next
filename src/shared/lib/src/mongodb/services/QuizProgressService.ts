@@ -4,9 +4,6 @@ import { connectToDatabase } from "../connection";
 import { type IQuizProgress, QuizProgress } from "../models";
 
 export class QuizProgressService {
-  /**
-   * Get quiz progress by user ID and session ID, creates default if not found
-   */
   static async getProgress(
     userId: string,
     sessionId: string
@@ -30,9 +27,6 @@ export class QuizProgressService {
     return progress.toObject();
   }
 
-  /**
-   * Update quiz progress
-   */
   static async updateProgress(
     userId: string,
     sessionId: string,
@@ -55,9 +49,6 @@ export class QuizProgressService {
     return progress!.toObject();
   }
 
-  /**
-   * Reset quiz progress for a specific session
-   */
   static async resetProgress(
     userId: string,
     sessionId: string
@@ -81,9 +72,6 @@ export class QuizProgressService {
     return progress!.toObject();
   }
 
-  /**
-   * Delete quiz progress for a specific session
-   */
   static async deleteProgress(
     userId: string,
     sessionId: string
@@ -99,9 +87,6 @@ export class QuizProgressService {
     }
   }
 
-  /**
-   * Delete all quiz progress for a user (used when deleting user account)
-   */
   static async deleteAllProgress(userId: string): Promise<boolean> {
     await connectToDatabase();
 

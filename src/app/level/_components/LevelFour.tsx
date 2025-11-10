@@ -1,36 +1,36 @@
 "use client";
 
-import { useState } from "react";
 import { Button, ShiftingCircles, SkipButton, Title } from "clue-hunt-ui";
+import { useRouter } from "next/navigation";
 
-import { useSettings } from "@app/context/client";
-import { settingsApi, statisticsApi } from "@app/lib/client";
+import { useSettings, useStatistics } from "@app/context/client";
+import { statisticsApi } from "@app/lib/client";
 import { LevelFourMessages } from "@app/messages-contract";
 import { getRoute } from "@app/utils";
 
 export default function LevelFour() {
-  const { settings, refreshSettings } = useSettings();
+  const router = useRouter();
+  const { settings } = useSettings();
+  const { statistics, refreshStatistics } = useStatistics();
+  const isCompleted = statistics?.completedLevelsMap?.four || false;
+  const isLocked = !isCompleted && !statistics?.levelLocks?.four;
+  const isQuizMode = settings?.quizMode ? "quiz" : "level";
+  const isQuizRoute = settings?.quizMode ? "four" : "five";
 
   const handleSetLock = async () => {
-    await settingsApi.setLock(true);
-    await refreshSettings();
+    await statisticsApi.setLevelLock("four", true);
+    await refreshStatistics();
   };
 
-  const handleDeleteLock = async () => {
-    await settingsApi.setLock(false);
-    await refreshSettings();
+  const handleCompleteLevel = async () => {
+    await statisticsApi.setLevelCompleted("four", true);
+    router.push(getRoute(isQuizMode, isQuizRoute));
   };
 
   const handleSkip = async () => {
     await statisticsApi.incrementSkipButtonClicks();
-    await settingsApi.setLock(true);
-    await refreshSettings();
+    router.push(getRoute(isQuizMode, isQuizRoute));
   };
-
-  const isLocked = !settings?.isLocked;
-  const isQuizMode = settings?.quizMode ? "quiz" : "level";
-  const isQuizRoute = settings?.quizMode ? "four" : "five";
-
   return (
     <>
       <Title
@@ -40,10 +40,9 @@ export default function LevelFour() {
       />
       <Button
         size="medium"
-        href={getRoute(isQuizMode, isQuizRoute)}
         isLocked={isLocked}
         primary={isLocked}
-        onClick={handleDeleteLock}
+        onClick={handleCompleteLevel}
       />
 
       <ShiftingCircles

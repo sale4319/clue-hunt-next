@@ -7,36 +7,38 @@ import {
   Title,
   UnlockButton,
 } from "clue-hunt-ui";
+import { useRouter } from "next/navigation";
 
-import { useSettings } from "@app/context/client";
+import { useSettings, useStatistics } from "@app/context/client";
 import { statisticsApi } from "@app/lib/client";
-import { settingsApi } from "@app/lib/client";
 import { LevelOneMessages } from "@app/messages-contract";
 import { getRoute } from "@app/utils";
 
 export default function LevelOne() {
-  const { settings, refreshSettings } = useSettings();
+  const router = useRouter();
+  const { settings } = useSettings();
+  const { statistics, refreshStatistics } = useStatistics();
 
-  const isLocked = !settings?.isLocked;
+  const isCompleted = statistics?.completedLevelsMap?.one || false;
+  const isLocked = !isCompleted && !statistics?.levelLocks?.one;
   const quizMode = settings?.quizMode;
   const skipMode = settings?.skipMode;
   const isQuizMode = quizMode ? "quiz" : "level";
   const isQuizRoute = quizMode ? "one" : "two";
 
   const handleSetLock = async () => {
-    await settingsApi.setLock(true);
-    await refreshSettings();
+    await statisticsApi.setLevelLock("one", true);
+    await refreshStatistics();
   };
 
   const handleSkip = async () => {
     await statisticsApi.incrementSkipButtonClicks();
-    await settingsApi.setLock(true);
-    await refreshSettings();
+    router.push(getRoute(isQuizMode, isQuizRoute));
   };
 
-  const handleDeleteLock = async () => {
-    await settingsApi.setLock(false);
-    await refreshSettings();
+  const handleCompleteLevel = async () => {
+    await statisticsApi.setLevelCompleted("one", true);
+    router.push(getRoute(isQuizMode, isQuizRoute));
   };
 
   return (
@@ -51,10 +53,9 @@ export default function LevelOne() {
       <Title label={LevelOneMessages.HINT} theme={settings?.theme} />
       <Button
         size="medium"
-        href={getRoute(isQuizMode, isQuizRoute)}
         isLocked={isLocked}
         primary={isLocked}
-        onClick={handleDeleteLock}
+        onClick={handleCompleteLevel}
       />
       {skipMode && <SkipButton onClick={handleSkip} />}
     </>

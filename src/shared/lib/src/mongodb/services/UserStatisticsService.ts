@@ -4,9 +4,6 @@ import { connectToDatabase } from "../connection";
 import { type IUserStatistics, UserStatistics } from "../models";
 
 export class UserStatisticsService {
-  /**
-   * Get user statistics, creates default if not found
-   */
   static async getStatistics(userId: string): Promise<IUserStatistics> {
     await connectToDatabase();
 
@@ -19,15 +16,14 @@ export class UserStatisticsService {
         incorrectAnswers: 0,
         completedLevels: 0,
         skipButtonClicks: 0,
+        levelLocks: {},
+        completedLevelsMap: {},
       });
     }
 
     return stats.toObject();
   }
 
-  /**
-   * Increment correctly completed quizzes count
-   */
   static async incrementCorrectlyCompletedQuizzes(
     userId: string
   ): Promise<IUserStatistics> {
@@ -42,9 +38,6 @@ export class UserStatisticsService {
     return stats!.toObject();
   }
 
-  /**
-   * Increment incorrect answers count
-   */
   static async incrementIncorrectAnswers(
     userId: string,
     count: number = 1
@@ -60,9 +53,6 @@ export class UserStatisticsService {
     return stats!.toObject();
   }
 
-  /**
-   * Increment completed levels count
-   */
   static async incrementCompletedLevels(
     userId: string
   ): Promise<IUserStatistics> {
@@ -77,9 +67,6 @@ export class UserStatisticsService {
     return stats!.toObject();
   }
 
-  /**
-   * Increment skip button clicks count
-   */
   static async incrementSkipButtonClicks(
     userId: string
   ): Promise<IUserStatistics> {
@@ -94,9 +81,43 @@ export class UserStatisticsService {
     return stats!.toObject();
   }
 
-  /**
-   * Reset user statistics
-   */
+  static async setLevelLock(
+    userId: string,
+    level: "start" | "one" | "two" | "three" | "four" | "five" | "six",
+    isLocked: boolean
+  ): Promise<void> {
+    await connectToDatabase();
+
+    await UserStatistics.findOneAndUpdate(
+      { userId },
+      { $set: { [`levelLocks.${level}`]: isLocked } },
+      { upsert: true }
+    );
+  }
+
+  static async setLevelCompleted(
+    userId: string,
+    level: "start" | "one" | "two" | "three" | "four" | "five" | "six",
+    completed: boolean
+  ): Promise<void> {
+    await connectToDatabase();
+
+    // When completing a level, also unlock it
+    const updates: Record<string, boolean> = {
+      [`completedLevelsMap.${level}`]: completed,
+    };
+
+    if (completed) {
+      updates[`levelLocks.${level}`] = true;
+    }
+
+    await UserStatistics.findOneAndUpdate(
+      { userId },
+      { $set: updates },
+      { upsert: true }
+    );
+  }
+
   static async resetStatistics(userId: string): Promise<IUserStatistics> {
     await connectToDatabase();
 
@@ -108,6 +129,8 @@ export class UserStatisticsService {
           incorrectAnswers: 0,
           completedLevels: 0,
           skipButtonClicks: 0,
+          levelLocks: {},
+          completedLevelsMap: {},
         },
       },
       { new: true, upsert: true }
@@ -116,9 +139,6 @@ export class UserStatisticsService {
     return stats!.toObject();
   }
 
-  /**
-   * Delete user statistics (called when deleting user account)
-   */
   static async deleteStatistics(userId: string): Promise<boolean> {
     await connectToDatabase();
 

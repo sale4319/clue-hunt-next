@@ -1,39 +1,42 @@
 "use client";
 
 import { Button, QuestionIconToolTip, SkipButton, Title } from "clue-hunt-ui";
+import { useRouter } from "next/navigation";
 
-import { useSettings } from "@app/context/client";
+import { useSettings, useStatistics } from "@app/context/client";
 import { CountdownTimer } from "@app/countdown-timer";
+import { statisticsApi } from "@app/lib/client";
 import { LevelStartMessages, TooltipMessages } from "@app/messages-contract";
 import { getRoute } from "@app/utils";
-import { settingsApi, statisticsApi } from "@app/lib/client";
 
 export default function LevelStart() {
-  const { settings, refreshSettings } = useSettings();
+  const { settings } = useSettings();
+  const { statistics, refreshStatistics } = useStatistics();
+  const router = useRouter();
 
   const savedDate = settings?.timerEndDate;
   const showStartButton =
     savedDate && savedDate !== null && savedDate !== undefined;
 
+  const isCompleted = statistics?.completedLevelsMap?.start || false;
+  const isLocked = !isCompleted && !statistics?.levelLocks?.start;
+  const isQuizMode = settings?.quizMode ? "quiz" : "level";
+  const isQuizRoute = settings?.quizMode ? "start" : "one";
+
   const handleSetLock = async () => {
-    await settingsApi.setLock(true);
-    await refreshSettings();
+    await statisticsApi.setLevelLock("start", true);
+    await refreshStatistics();
   };
 
   const handleSkip = async () => {
     await statisticsApi.incrementSkipButtonClicks();
-    await settingsApi.setLock(true);
-    await refreshSettings();
+    router.push(getRoute(isQuizMode, isQuizRoute));
   };
 
-  const handleDeleteLock = async () => {
-    await settingsApi.setLock(false);
-    await refreshSettings();
+  const handleCompleteLevel = async () => {
+    await statisticsApi.setLevelCompleted("start", true);
+    router.push(getRoute(isQuizMode, isQuizRoute));
   };
-
-  const isLocked = !settings?.isLocked;
-  const isQuizMode = settings?.quizMode ? "quiz" : "level";
-  const isQuizRoute = settings?.quizMode ? "start" : "one";
 
   return (
     <>
@@ -63,10 +66,9 @@ export default function LevelStart() {
       {showStartButton && (
         <Button
           size="medium"
-          href={getRoute(isQuizMode, isQuizRoute)}
           isLocked={isLocked}
           primary={isLocked}
-          onClick={handleDeleteLock}
+          onClick={handleCompleteLevel}
         />
       )}
       {settings?.skipMode && <SkipButton onClick={handleSkip} />}
