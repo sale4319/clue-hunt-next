@@ -4,9 +4,8 @@ import { useEffect, useState } from "react";
 import Countdown, { CountdownRenderProps } from "react-countdown";
 import { useIsClient } from "src/shared/hooks/useIsClient";
 
-import { useSettings, useStatistics } from "@app/context/client";
-import { useAuth } from "@app/context/client";
-import { settingsApi, statisticsApi, quizApi } from "@app/lib/client";
+import { useAuth, useSettings, useStatistics } from "@app/context/client";
+import { quizApi, settingsApi, statisticsApi } from "@app/lib/client";
 
 import { CountdownLoader } from "./CountdownLoader/CountdownLodaer";
 

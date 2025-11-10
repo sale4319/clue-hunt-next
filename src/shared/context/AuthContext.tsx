@@ -102,7 +102,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const timeSinceLastActivity = now - lastActivity;
 
       if (timeSinceLastActivity >= INACTIVITY_TIMEOUT) {
-        console.log("User inactive for 1 hour, logging out...");
         logout();
       }
     }, 60000);
