@@ -26,6 +26,10 @@ export const CountdownTimer = () => {
   const { deleteAccount } = useAuth();
   const [endDate, setEndDate] = useState<number | null>(null);
 
+  const handleComplete = async () => {
+    await deleteAccount();
+  };
+
   useEffect(() => {
     if (isLoading) {
       return;
@@ -65,10 +69,6 @@ export const CountdownTimer = () => {
   if (!isClient) {
     return <CountdownLoader />;
   }
-
-  const handleComplete = async () => {
-    await deleteAccount();
-  };
 
   const setDifficulty = async (hours: number) => {
     const newEndDate = Date.now() + hours * 60 * 60 * 1000;

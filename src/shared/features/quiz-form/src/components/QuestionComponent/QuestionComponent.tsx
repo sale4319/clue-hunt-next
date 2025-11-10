@@ -11,25 +11,36 @@ type Question = {
 type QuestionProps = {
   question: Question;
   setAnswerStatus: (isCorrect: boolean) => void;
+  savedAnswerIndex?: number | null; // Previously saved answer index
+  onAnswerSelected: (answerIndex: number) => void; // Callback to save answer immediately
 };
 
 export const QuestionComponent = ({
   question,
   setAnswerStatus,
+  savedAnswerIndex = null,
+  onAnswerSelected,
 }: QuestionProps) => {
   const [selectedAnswerIndex, setSelectedAnswerIndex] = useState<number | null>(
     null
   );
 
+  // Initialize with saved answer when question changes or on mount
   useEffect(() => {
-    if (selectedAnswerIndex !== null) {
-      setAnswerStatus(selectedAnswerIndex === question.correctAnswerIndex);
-    }
-  }, [selectedAnswerIndex, question.correctAnswerIndex, setAnswerStatus]);
+    // Set the selected answer index (could be null/undefined for unanswered)
+    const answerIndex = savedAnswerIndex ?? null;
+    setSelectedAnswerIndex(answerIndex);
 
-  useEffect(() => {
-    setSelectedAnswerIndex(null);
-  }, [question]);
+    // Update answer status if we have a saved answer
+    if (answerIndex !== null) {
+      setAnswerStatus(answerIndex === question.correctAnswerIndex);
+    }
+  }, [
+    question,
+    savedAnswerIndex,
+    question.correctAnswerIndex,
+    setAnswerStatus,
+  ]);
 
   const getAnswerClasses = useCallback(
     (index: number): string => {
@@ -59,9 +70,16 @@ export const QuestionComponent = ({
       // Prevent clicking if already answered
       if (selectedAnswerIndex === null) {
         setSelectedAnswerIndex(index);
+        setAnswerStatus(index === question.correctAnswerIndex);
+        onAnswerSelected(index); // Save answer immediately
       }
     },
-    [selectedAnswerIndex]
+    [
+      selectedAnswerIndex,
+      question.correctAnswerIndex,
+      setAnswerStatus,
+      onAnswerSelected,
+    ]
   );
 
   return (

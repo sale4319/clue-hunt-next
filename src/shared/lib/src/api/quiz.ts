@@ -5,6 +5,7 @@ export interface QuizProgress {
   correctAnswers: number;
   totalQuestions: number;
   isCompleted: boolean;
+  answers: number[]; // Array of selected answer indices for each question
   createdAt: string;
   updatedAt: string;
 }
@@ -33,6 +34,7 @@ export const quizApi = {
       correctAnswers?: number;
       totalQuestions?: number;
       isCompleted?: boolean;
+      answers?: number[];
     }
   ): Promise<QuizProgress> {
     const response = await fetch("/api/quiz/progress", {

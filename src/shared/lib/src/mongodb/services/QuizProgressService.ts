@@ -23,6 +23,7 @@ export class QuizProgressService {
         correctAnswers: 0,
         totalQuestions: 0,
         isCompleted: false,
+        answers: [],
       });
     }
 
@@ -40,6 +41,7 @@ export class QuizProgressService {
       correctAnswers?: number;
       totalQuestions?: number;
       isCompleted?: boolean;
+      answers?: number[];
     }
   ): Promise<IQuizProgress> {
     await connectToDatabase();
@@ -70,6 +72,7 @@ export class QuizProgressService {
           correctAnswers: 0,
           totalQuestions: 0,
           isCompleted: false,
+          answers: [],
         },
       },
       { new: true, upsert: true }

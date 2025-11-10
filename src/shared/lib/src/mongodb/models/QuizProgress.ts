@@ -7,6 +7,7 @@ export interface IQuizProgress {
   correctAnswers: number;
   totalQuestions: number;
   isCompleted: boolean;
+  answers: number[]; // Array of selected answer indices for each question
   createdAt: Date;
   updatedAt: Date;
 }
@@ -41,6 +42,10 @@ const QuizProgressSchema = new Schema<IQuizProgress>(
     isCompleted: {
       type: Boolean,
       default: false,
+    },
+    answers: {
+      type: [Number],
+      default: [],
     },
   },
   {

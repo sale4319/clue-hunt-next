@@ -35,6 +35,7 @@ const QuizForm: React.FC<QuizProps> = ({
   const [correctAnswerCount, setCorrectAnswerCount] = useState<number>(0);
   const [quizComplete, setQuizComplete] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [answers, setAnswers] = useState<number[]>([]); // Store all answers
 
   const totalQuestions = questions.length;
   const isLastQuestion = questionIndex === totalQuestions - 1;
@@ -46,11 +47,19 @@ const QuizForm: React.FC<QuizProps> = ({
       try {
         const progress = await quizApi.getProgress(sessionId);
 
+        // Always load answers first
+        const loadedAnswers = progress.answers || [];
+        setAnswers(loadedAnswers);
+
         if (progress.isCompleted) {
           setQuizComplete(true);
           setCorrectAnswerCount(progress.correctAnswers);
           setQuestionIndex(progress.currentQuestionIndex);
-        } else if (progress.currentQuestionIndex > 0) {
+        } else if (
+          progress.currentQuestionIndex >= 0 &&
+          (progress.answers?.length > 0 || progress.correctAnswers > 0)
+        ) {
+          // If there's any progress (answers saved or questions answered), restore position
           setQuestionIndex(progress.currentQuestionIndex);
           setCorrectAnswerCount(progress.correctAnswers);
         }
@@ -65,25 +74,30 @@ const QuizForm: React.FC<QuizProps> = ({
   }, [sessionId]);
 
   useEffect(() => {
-    setAnswerStatus(null);
-  }, [questionIndex]);
-
-  useEffect(() => {
-    if (answerStatus) {
-      setCorrectAnswerCount((count) => count + 1);
+    // Reset answer status when moving to a new question
+    // But set it if we already have an answer for this question
+    if (questionIndex !== null && answers[questionIndex] !== undefined) {
+      const savedAnswer = answers[questionIndex];
+      const isCorrect =
+        savedAnswer === questions[questionIndex]?.correctAnswerIndex;
+      setAnswerStatus(isCorrect);
+    } else {
+      setAnswerStatus(null);
     }
-  }, [answerStatus]);
+  }, [questionIndex, answers, questions]);
 
-  // Save progress when answer is given
+  // Save progress when quiz is completed or question index changes (but not for every answer)
   useEffect(() => {
     const saveProgress = async () => {
-      if (questionIndex !== null && !isLoading) {
+      if (questionIndex !== null && !isLoading && quizComplete) {
+        // Only auto-save when quiz is completed
         try {
           await quizApi.updateProgress(sessionId, {
             currentQuestionIndex: questionIndex,
             correctAnswers: correctAnswerCount,
             totalQuestions,
             isCompleted: quizComplete,
+            answers,
           });
         } catch (error) {
           console.error("Failed to save quiz progress:", error);
@@ -94,20 +108,80 @@ const QuizForm: React.FC<QuizProps> = ({
     saveProgress();
   }, [
     sessionId,
-    questionIndex,
-    correctAnswerCount,
-    quizComplete,
-    totalQuestions,
+    quizComplete, // Only save when quiz completes
     isLoading,
   ]);
 
-  const handleNext = useCallback(() => {
+  const handleAnswerSelected = useCallback(
+    async (answerIndex: number) => {
+      if (questionIndex === null) return;
+
+      // Update the answers array
+      const newAnswers = [...answers];
+      newAnswers[questionIndex] = answerIndex;
+      setAnswers(newAnswers);
+
+      // Check if answer is correct and update count
+      const isCorrect =
+        answerIndex === questions[questionIndex].correctAnswerIndex;
+      if (isCorrect) {
+        setCorrectAnswerCount((count) => count + 1);
+      }
+
+      // Save immediately to database
+      try {
+        await quizApi.updateProgress(sessionId, {
+          currentQuestionIndex: questionIndex,
+          correctAnswers: isCorrect
+            ? correctAnswerCount + 1
+            : correctAnswerCount,
+          totalQuestions,
+          isCompleted: quizComplete,
+          answers: newAnswers,
+        });
+      } catch (error) {
+        console.error("Failed to save answer:", error);
+      }
+    },
+    [
+      questionIndex,
+      answers,
+      questions,
+      correctAnswerCount,
+      sessionId,
+      totalQuestions,
+      quizComplete,
+    ]
+  );
+
+  const handleNext = useCallback(async () => {
     if (isLastQuestion) {
       setQuizComplete(true);
     } else {
-      setQuestionIndex((prev) => (prev === null ? 0 : prev + 1));
+      const nextIndex = questionIndex === null ? 0 : questionIndex + 1;
+      setQuestionIndex(nextIndex);
+
+      // Save progress when moving to next question
+      try {
+        await quizApi.updateProgress(sessionId, {
+          currentQuestionIndex: nextIndex,
+          correctAnswers: correctAnswerCount,
+          totalQuestions,
+          isCompleted: false,
+          answers,
+        });
+      } catch (error) {
+        console.error("Failed to save progress on next:", error);
+      }
     }
-  }, [isLastQuestion]);
+  }, [
+    isLastQuestion,
+    questionIndex,
+    sessionId,
+    correctAnswerCount,
+    totalQuestions,
+    answers,
+  ]);
 
   const handleRestart = useCallback(async () => {
     try {
@@ -116,6 +190,7 @@ const QuizForm: React.FC<QuizProps> = ({
       setQuestionIndex(null);
       setCorrectAnswerCount(0);
       setAnswerStatus(null);
+      setAnswers([]); // Clear saved answers
     } catch (error) {
       console.error("Failed to reset quiz progress:", error);
     }
@@ -193,6 +268,8 @@ const QuizForm: React.FC<QuizProps> = ({
       <QuestionComponent
         question={questions[questionIndex]}
         setAnswerStatus={setAnswerStatus}
+        savedAnswerIndex={answers[questionIndex]}
+        onAnswerSelected={handleAnswerSelected}
       />
       {answerStatus !== null && (
         <div>
