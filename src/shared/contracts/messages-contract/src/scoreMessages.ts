@@ -5,4 +5,6 @@ export const ScoreMessages = {
   INCORRECT_ANSWERS: "Incorrect answers: ",
   LEVELS_COMPLETED: "Levels completed: ",
   SKIPS_USED: "Skips used: ",
+  TIME_LEFT: "Time left: ",
+  COMPLETION_TIME: "Completion time: ",
 };

@@ -3,6 +3,7 @@ export interface UserStatistics {
   correctlyCompletedQuizzes: number;
   incorrectAnswers: number;
   skipButtonClicks: number;
+  timeLeft: number;
   levelLocks: {
     start?: boolean;
     one?: boolean;
@@ -162,6 +163,23 @@ export const statisticsApi = {
 
     if (!response.ok) {
       throw new Error("Failed to set quiz completed");
+    }
+  },
+
+  /**
+   * Set time left in milliseconds when game is completed
+   */
+  async setTimeLeft(timeLeft: number): Promise<void> {
+    const response = await fetch("/api/statistics/time-left", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ timeLeft }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to set time left");
     }
   },
 };

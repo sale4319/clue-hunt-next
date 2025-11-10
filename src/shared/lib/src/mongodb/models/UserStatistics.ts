@@ -2,9 +2,10 @@ import { model, models, Schema } from "mongoose";
 
 export interface IUserStatistics {
   userId: string;
-  correctlyCompletedQuizzes: number; // Number of quizzes completed with 6/6 correct answers
-  incorrectAnswers: number; // Total number of incorrect answers across all quizzes
-  skipButtonClicks: number; // Total number of skip button clicks
+  correctlyCompletedQuizzes: number;
+  incorrectAnswers: number;
+  skipButtonClicks: number;
+  timeLeft: number;
   levelLocks: {
     start?: boolean;
     one?: boolean;
@@ -55,6 +56,11 @@ const UserStatisticsSchema = new Schema<IUserStatistics>(
       default: 0,
     },
     skipButtonClicks: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    timeLeft: {
       type: Number,
       required: true,
       default: 0,

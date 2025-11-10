@@ -66,4 +66,17 @@ export const quizApi = {
 
     return response.json();
   },
+
+  /**
+   * Delete all quiz progress for the current user
+   */
+  async resetAllProgress(): Promise<void> {
+    const response = await fetch("/api/quiz/progress/reset-all", {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to reset all quiz progress");
+    }
+  },
 };

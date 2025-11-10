@@ -15,6 +15,7 @@ export class UserStatisticsService {
         correctlyCompletedQuizzes: 0,
         incorrectAnswers: 0,
         skipButtonClicks: 0,
+        timeLeft: 0,
         levelLocks: {},
         completedLevelsMap: {},
         completedQuizzesMap: {},
@@ -133,11 +134,27 @@ export class UserStatisticsService {
           correctlyCompletedQuizzes: 0,
           incorrectAnswers: 0,
           skipButtonClicks: 0,
+          timeLeft: 0,
           levelLocks: {},
           completedLevelsMap: {},
           completedQuizzesMap: {},
         },
       },
+      { new: true, upsert: true }
+    );
+
+    return stats!.toObject();
+  }
+
+  static async setTimeLeft(
+    userId: string,
+    timeLeft: number
+  ): Promise<IUserStatistics> {
+    await connectToDatabase();
+
+    const stats = await UserStatistics.findOneAndUpdate(
+      { userId },
+      { $set: { timeLeft } },
       { new: true, upsert: true }
     );
 

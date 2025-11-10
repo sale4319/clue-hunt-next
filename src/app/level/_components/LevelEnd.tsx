@@ -17,6 +17,7 @@ export default function LevelEnd() {
 
   const [stats, setStats] = useState<UserStatistics | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const timeLeftCheck = stats?.timeLeft && stats.timeLeft > 0;
 
   useEffect(() => {
     const loadStats = async () => {
@@ -51,6 +52,36 @@ export default function LevelEnd() {
     ? Object.values(stats.completedLevelsMap).filter((val) => val === true)
         .length
     : 0;
+
+  // Format timeLeft from milliseconds to HH:MM:SS
+  const formatTimeLeft = (milliseconds: number): string => {
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    const pad = (num: number) => String(num).padStart(2, "0");
+    return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+  };
+
+  const getTimeLeftDisplay = (): string => {
+    if (timeLeftCheck) {
+      return formatTimeLeft(stats.timeLeft);
+    }
+
+    if (settings?.timerEndDate) {
+      const currentTime = Date.now();
+      const timeRemaining = settings.timerEndDate - currentTime;
+
+      if (timeRemaining > 0) {
+        return formatTimeLeft(timeRemaining);
+      }
+    }
+
+    return "00:00:00";
+  };
+
+  const timeLeftDisplay = getTimeLeftDisplay();
 
   return (
     <>
@@ -90,13 +121,22 @@ export default function LevelEnd() {
           titleSize="small"
           theme={settings?.theme}
         />
+        <Title
+          label={`${
+            timeLeftCheck
+              ? ScoreMessages.COMPLETION_TIME
+              : ScoreMessages.TIME_LEFT
+          }${timeLeftDisplay}`}
+          titleSize="small"
+          theme={settings?.theme}
+        />
       </div>
       <Button
         size="medium"
         href={getRoute("level", "start")}
         isLocked={false}
         primary={false}
-        label="Restart"
+        label="Recycle"
       />
       {settings?.skipMode && <SkipButton onClick={handleSkip} />}
     </>
