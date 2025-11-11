@@ -1,0 +1,49 @@
+.scoreContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 30px;
+  width: 330px;
+}
+
+.dark {
+  border: 2px solid white;
+}
+
+.light {
+  border: 2px solid #282c34;
+}
+
+.yourScore {
+  cursor: pointer;
+  user-select: none;
+}
+
+.yourScore:hover {
+  cursor: pointer;
+  user-select: none;
+  color: #75f8e2;
+}
+
+.scoreColapsed {
+  margin-top: 5px;
+  border-bottom: 2px solid #75f8e2;
+}
+
+.scoreExpanded {
+  padding: 10px;
+  border: 1px solid #75f8e2;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.scoreExplanationText {
+  font-size: 12px;
+  color: #75f8e2;
+}
+
+.noPadding {
+  padding: 0;
+  text-align: center;
+}

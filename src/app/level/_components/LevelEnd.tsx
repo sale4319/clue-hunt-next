@@ -1,23 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, SkipButton, Title } from "clue-hunt-ui";
 import { useRouter } from "next/navigation";
 
 import { useSettings } from "@app/context/client";
-import { statisticsApi, type UserStatistics } from "@app/lib/client";
-import { ScoreMessages } from "@app/messages-contract";
-import { getRoute } from "@app/utils";
-
-import styles from "./styles.module.css";
+import { ScoreBoard } from "@app/highscore-list";
+import {
+  settingsApi,
+  statisticsApi,
+  type UserStatistics,
+} from "@app/lib/client";
+import { calculateScore, getRoute, getTimeLeftDisplay } from "@app/utils";
 
 export default function LevelEnd() {
   const router = useRouter();
-  const { settings, isTimerStarted } = useSettings();
+  const { settings, isTimerStarted, refreshSettings } = useSettings();
 
   const [stats, setStats] = useState<UserStatistics | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const timeLeftCheck = stats?.timeLeft && stats.timeLeft > 0;
+  const [highscoreRefreshTrigger, setHighscoreRefreshTrigger] = useState(0);
 
   useEffect(() => {
     const loadStats = async () => {
@@ -34,6 +36,46 @@ export default function LevelEnd() {
     loadStats();
   }, []);
 
+  useEffect(() => {
+    if (!stats || isLoading) return;
+
+    const correctQuizzes = stats.correctlyCompletedQuizzes || 0;
+    const completedLevels = stats.completedLevelsMap
+      ? Object.values(stats.completedLevelsMap).filter((val) => val === true)
+          .length
+      : 0;
+
+    const allCompleted = correctQuizzes >= 7 && completedLevels >= 7;
+
+    if (allCompleted && !stats.gameCompletedAt) {
+      const markCompleted = async () => {
+        try {
+          if (settings?.timerEndDate) {
+            const currentTime = Date.now();
+            const timeLeft = settings.timerEndDate - currentTime;
+            if (timeLeft > 0) {
+              await statisticsApi.setTimeLeft(timeLeft);
+            }
+          }
+
+          await statisticsApi.markGameCompleted(
+            settings?.timerEndDate || undefined
+          );
+
+          await settingsApi.clearTimerEndDate();
+
+          await refreshSettings();
+          const updatedStats = await statisticsApi.getStatistics();
+          setStats(updatedStats);
+        } catch (error) {
+          console.error("Failed to mark game as completed:", error);
+        }
+      };
+
+      markCompleted();
+    }
+  }, [stats, isLoading, settings?.timerEndDate, refreshSettings]);
+
   const handleSkip = async () => {
     router.push(getRoute("level", "start"));
   };
@@ -46,91 +88,58 @@ export default function LevelEnd() {
     );
   }
 
-  const correctAnswers = (stats?.correctlyCompletedQuizzes || 0) * 6;
-
   const completedLevelsCount = stats?.completedLevelsMap
     ? Object.values(stats.completedLevelsMap).filter((val) => val === true)
         .length
     : 0;
 
-  // Format timeLeft from milliseconds to HH:MM:SS
-  const formatTimeLeft = (milliseconds: number): string => {
-    const totalSeconds = Math.floor(milliseconds / 1000);
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
+  const allCompleted =
+    (stats?.correctlyCompletedQuizzes || 0) >= 7 && completedLevelsCount >= 7;
 
-    const pad = (num: number) => String(num).padStart(2, "0");
-    return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
-  };
+  const timeLeftCheck = stats?.timeLeft && stats.timeLeft > 0;
 
-  const getTimeLeftDisplay = (): string => {
-    if (timeLeftCheck) {
-      return formatTimeLeft(stats.timeLeft);
-    }
+  let initialTimerDuration: number | undefined;
+  if (settings?.timerEndDate && stats?.gameCompletedAt) {
+    const gameCompletedTime = new Date(stats.gameCompletedAt).getTime();
+    const remainingTimeMs = Math.max(
+      0,
+      settings.timerEndDate - gameCompletedTime
+    );
+    const completionTimeMs = stats.completionTimeInSeconds
+      ? stats.completionTimeInSeconds * 1000
+      : 0;
+    const totalTimerDurationMs = remainingTimeMs + completionTimeMs;
+    initialTimerDuration = totalTimerDurationMs / 1000;
+  }
 
-    if (settings?.timerEndDate) {
-      const currentTime = Date.now();
-      const timeRemaining = settings.timerEndDate - currentTime;
+  const finalScore = calculateScore({
+    stats,
+    timerEndDate: settings?.timerEndDate,
+    timeLeftCheck: Boolean(timeLeftCheck),
+    isTimerStarted,
+    initialTimerDuration,
+  });
 
-      if (timeRemaining > 0) {
-        return formatTimeLeft(timeRemaining);
-      }
-    }
-
-    return "00:00:00";
-  };
-
-  const timeLeftDisplay = getTimeLeftDisplay();
+  const timeLeftDisplay = getTimeLeftDisplay({
+    stats,
+    timerEndDate: settings?.timerEndDate,
+  });
 
   return (
     <>
-      <Title label={ScoreMessages.TITLE} theme={settings?.theme} />
-      <div
-        className={[
-          styles.scoreContainer,
-          styles[settings?.theme || "dark"],
-        ].join(" ")}
-      >
-        <Title
-          label={`${ScoreMessages.QUIZES_SOLVED}${
-            stats?.correctlyCompletedQuizzes || 0
-          }/7`}
-          titleSize="small"
-          theme={settings?.theme}
-        />
-        <Title
-          label={`${ScoreMessages.CORRECT_ANSWERS}${correctAnswers}/42`}
-          titleSize="small"
-          theme={settings?.theme}
-        />
-        <Title
-          label={`${ScoreMessages.INCORRECT_ANSWERS}${
-            stats?.incorrectAnswers || 0
-          }`}
-          titleSize="small"
-          theme={settings?.theme}
-        />
-        <Title
-          label={`${ScoreMessages.LEVELS_COMPLETED}${completedLevelsCount}/7`}
-          titleSize="small"
-          theme={settings?.theme}
-        />
-        <Title
-          label={`${ScoreMessages.SKIPS_USED}${stats?.skipButtonClicks || 0}`}
-          titleSize="small"
-          theme={settings?.theme}
-        />
-        <Title
-          label={`${
-            timeLeftCheck
-              ? ScoreMessages.COMPLETION_TIME
-              : ScoreMessages.TIME_LEFT
-          }${timeLeftDisplay}`}
-          titleSize="small"
-          theme={settings?.theme}
-        />
-      </div>
+      <ScoreBoard
+        theme={settings?.theme}
+        showSubmitButton={allCompleted}
+        finalScore={finalScore}
+        stats={stats}
+        timerEndDate={settings?.timerEndDate ?? undefined}
+        timeLeftCheck={Boolean(timeLeftCheck)}
+        timeLeftDisplay={timeLeftDisplay}
+        completedLevelsCount={completedLevelsCount}
+        refreshTrigger={highscoreRefreshTrigger}
+        onSubmitSuccess={() => setHighscoreRefreshTrigger((prev) => prev + 1)}
+      />
+
       <Button
         size="medium"
         href={getRoute("level", "start")}

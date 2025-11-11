@@ -17,7 +17,6 @@ const UserSettingsSchema = new Schema<IUserSettings>(
       type: String,
       required: true,
       unique: true,
-      index: true,
     },
     theme: {
       type: String,

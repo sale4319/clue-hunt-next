@@ -2,6 +2,7 @@
 export { connectToDatabase } from "./mongodb/connection";
 export * from "./mongodb/models";
 export { AuthService } from "./mongodb/services/AuthService";
+export { HighscoreService } from "./mongodb/services/HighscoreService";
 export { QuizProgressService } from "./mongodb/services/QuizProgressService";
 export { UserSettingsService } from "./mongodb/services/UserSettingsService";
 export { UserStatisticsService } from "./mongodb/services/UserStatisticsService";

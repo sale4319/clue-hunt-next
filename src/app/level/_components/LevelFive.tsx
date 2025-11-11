@@ -10,15 +10,20 @@ import { getRoute, useFeatureToggle } from "@app/utils";
 
 export default function LevelFive() {
   const { settings, isTimerStarted } = useSettings();
-  const { refreshStatistics } = useStatistics();
+  const { statistics, refreshStatistics } = useStatistics();
   const router = useRouter();
   const isNewFeatureEnabled = useFeatureToggle("LEVEL_FIVE_UNLOCK");
+  const isCompleted = statistics?.completedLevelsMap?.five || false;
   const isQuizMode = settings?.quizMode ? "quiz" : "level";
   const isQuizRoute = settings?.quizMode ? "five" : "six";
 
   const handleUnlock = async () => {
     await statisticsApi.setLevelCompleted("five", true);
     await refreshStatistics();
+    router.push(getRoute(isQuizMode, isQuizRoute));
+  };
+
+  const handleContinue = async () => {
     router.push(getRoute(isQuizMode, isQuizRoute));
   };
 
@@ -30,14 +35,28 @@ export default function LevelFive() {
   return (
     <>
       <SpacerElement size="large" />
-      <Title label={LevelFiveMessages.HINT} theme={settings?.theme} />
-      {isNewFeatureEnabled && (
+      <Title
+        label={LevelFiveMessages.HINT}
+        theme={settings?.theme}
+        align="center"
+      />
+      {isCompleted ? (
         <Button
           size="medium"
           isLocked={false}
           primary={false}
-          onClick={handleUnlock}
+          onClick={handleContinue}
+          label="Continue"
         />
+      ) : (
+        isNewFeatureEnabled && (
+          <Button
+            size="medium"
+            isLocked={false}
+            primary={false}
+            onClick={handleUnlock}
+          />
+        )
       )}
       {settings?.skipMode && (
         <SkipButton onClick={handleSkip} disabled={!isTimerStarted} />

@@ -48,7 +48,11 @@ export default function LevelTwo() {
           data-testid="unlockButton"
         />
       </SpacerElement>
-      <Title label={LevelTwoMessages.HINT} theme={settings?.theme} />
+      <Title
+        label={LevelTwoMessages.HINT}
+        theme={settings?.theme}
+        align="center"
+      />
       <Button
         size="medium"
         isLocked={isLocked}

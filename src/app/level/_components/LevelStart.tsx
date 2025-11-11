@@ -23,6 +23,17 @@ export default function LevelStart() {
   const isQuizMode = settings?.quizMode ? "quiz" : "level";
   const isQuizRoute = settings?.quizMode ? "start" : "one";
 
+  const completedLevelsCount = statistics?.completedLevelsMap
+    ? Object.values(statistics.completedLevelsMap).filter((val) => val === true)
+        .length
+    : 0;
+
+  const completedQuizzesCount = statistics?.correctlyCompletedQuizzes || 0;
+  const isGameComplete =
+    completedLevelsCount === 7 && completedQuizzesCount === 7;
+
+  const shouldShowStartButton = showStartButton && !isGameComplete;
+
   const handleSetLock = async () => {
     await statisticsApi.setLevelLock("start", true);
     await refreshStatistics();
@@ -44,11 +55,13 @@ export default function LevelStart() {
         titleSize="medium"
         label={LevelStartMessages.TITLE}
         theme={settings?.theme}
+        align="center"
       />
       <Title
         titleSize="small"
         color="#75F8E2"
         label={LevelStartMessages.INSTRUCTION}
+        align="center"
       />
       <CountdownTimer />
       <div style={{ display: "flex", alignItems: "center" }}>
@@ -63,7 +76,7 @@ export default function LevelStart() {
           content={TooltipMessages.START_HINT}
         />
       </div>
-      {showStartButton && (
+      {shouldShowStartButton && (
         <Button
           size="medium"
           isLocked={isLocked}

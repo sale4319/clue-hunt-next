@@ -1,9 +1,14 @@
-.scoreContainer {
+.contentBox {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  padding: 30px 70px;
+  padding: 30px;
+  width: 330px;
+}
+
+.contentText {
+  text-align: center;
 }
 
 .dark {

@@ -4,6 +4,8 @@ export interface UserStatistics {
   incorrectAnswers: number;
   skipButtonClicks: number;
   timeLeft: number;
+  gameCompletedAt?: string;
+  completionTimeInSeconds?: number;
   levelLocks: {
     start?: boolean;
     one?: boolean;
@@ -181,5 +183,27 @@ export const statisticsApi = {
     if (!response.ok) {
       throw new Error("Failed to set time left");
     }
+  },
+
+  /**
+   * Mark the game as completed with completion timestamp and time
+   */
+  async markGameCompleted(timerEndDate?: number): Promise<UserStatistics> {
+    const response = await fetch("/api/statistics", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        action: "markGameCompleted",
+        timerEndDate,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to mark game as completed");
+    }
+
+    return response.json();
   },
 };

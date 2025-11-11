@@ -50,7 +50,11 @@ export default function LevelOne() {
           label={LevelOneMessages.UNLOCK}
         />
       </SpacerElement>
-      <Title label={LevelOneMessages.HINT} theme={settings?.theme} />
+      <Title
+        label={LevelOneMessages.HINT}
+        theme={settings?.theme}
+        align="center"
+      />
       <Button
         size="medium"
         isLocked={isLocked}

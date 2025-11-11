@@ -37,6 +37,7 @@ export default function LevelFour() {
         titleSize="medium"
         label={LevelFourMessages.HINT}
         theme={settings?.theme}
+        align="center"
       />
       <Button
         size="medium"

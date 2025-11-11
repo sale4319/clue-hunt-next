@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Countdown, { CountdownRenderProps } from "react-countdown";
 import { useIsClient } from "src/shared/hooks/useIsClient";
 
@@ -36,31 +36,67 @@ export const CountdownTimer = () => {
   const [gameCompleted, setGameCompleted] = useState(false);
   const [frozenTimeLeft, setFrozenTimeLeft] = useState<number | null>(null);
 
-  const handleComplete = async () => {
+  const handleComplete = useCallback(async () => {
     await deleteAccount();
-  };
+  }, [deleteAccount]);
 
   const handleRestart = async () => {
-    // Reset statistics first (this clears completedLevelsMap and completedQuizzesMap)
-    await statisticsApi.resetStatistics();
+    try {
+      setGameCompleted(false);
+      setFrozenTimeLeft(null);
+      setEndDate(null);
 
-    // Reset all quiz progress (this clears all quiz sessions)
-    await quizApi.resetAllProgress();
+      await statisticsApi.resetStatistics();
 
-    // Refresh statistics context to update the UI
-    await refreshStatistics();
+      await quizApi.resetAllProgress();
 
-    // Reset game completion state and allow new difficulty selection
-    setGameCompleted(false);
-    setFrozenTimeLeft(null);
-    setEndDate(null);
-    await settingsApi.clearTimerEndDate();
-    await refreshSettings();
+      await settingsApi.clearTimerEndDate();
+
+      await refreshSettings();
+      await refreshStatistics();
+    } catch (error) {
+      console.error("Error during restart:", error);
+
+      setGameCompleted(false);
+      setFrozenTimeLeft(null);
+      setEndDate(null);
+    }
   };
 
-  // Check if game is complete (7/7 levels and 7/7 quizzes)
   useEffect(() => {
-    if (!statistics || gameCompleted) return;
+    if (!statistics) return;
+
+    if (statistics.gameCompletedAt) {
+      setGameCompleted(true);
+
+      setEndDate(null);
+
+      if (statistics.timeLeft && statistics.timeLeft > 0) {
+        setFrozenTimeLeft(statistics.timeLeft);
+      } else if (
+        statistics.completionTimeInSeconds &&
+        statistics.completionTimeInSeconds > 0
+      ) {
+        const estimatedOriginalSeconds = 2 * 3600;
+        const remainingSeconds = Math.max(
+          0,
+          estimatedOriginalSeconds - statistics.completionTimeInSeconds
+        );
+        const frozenMs = remainingSeconds * 1000;
+        setFrozenTimeLeft(frozenMs);
+      } else {
+        setFrozenTimeLeft(0);
+      }
+
+      if (settings?.timerEndDate) {
+        settingsApi.clearTimerEndDate().catch((error) => {
+          console.error("Failed to clear timer end date:", error);
+        });
+      }
+      return;
+    }
+
+    if (gameCompleted) return;
 
     const completedLevelsCount = statistics.completedLevelsMap
       ? Object.values(statistics.completedLevelsMap).filter(
@@ -73,11 +109,12 @@ export const CountdownTimer = () => {
     const isGameComplete =
       completedLevelsCount === 7 && completedQuizzesCount === 7;
 
-    if (isGameComplete && endDate) {
+    if (isGameComplete && endDate && !statistics.gameCompletedAt) {
       setGameCompleted(true);
 
       const currentTime = Date.now();
       const timeLeft = endDate - currentTime;
+      setEndDate(null);
 
       if (timeLeft > 0) {
         setFrozenTimeLeft(timeLeft);
@@ -85,9 +122,12 @@ export const CountdownTimer = () => {
         statisticsApi.setTimeLeft(timeLeft).catch((error) => {
           console.error("Failed to save time left:", error);
         });
+      } else if (timeLeft <= 0) {
+        setFrozenTimeLeft(0);
       }
     }
-  }, [statistics, gameCompleted, endDate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [statistics, endDate, gameCompleted]);
 
   useEffect(() => {
     if (isLoading) {
@@ -96,6 +136,22 @@ export const CountdownTimer = () => {
 
     if (!settings) {
       setEndDate(null);
+      return;
+    }
+
+    if (!statistics) {
+      setEndDate(null);
+      return;
+    }
+
+    if (gameCompleted || statistics?.gameCompletedAt) {
+      setEndDate(null);
+
+      if (settings?.timerEndDate) {
+        settingsApi.clearTimerEndDate().catch((error) => {
+          console.error("Failed to clear timer end date:", error);
+        });
+      }
       return;
     }
 
@@ -121,26 +177,48 @@ export const CountdownTimer = () => {
     } else {
       setEndDate(null);
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [settings?.timerEndDate, isLoading]);
+  }, [
+    settings,
+    isLoading,
+    gameCompleted,
+    statistics?.gameCompletedAt,
+    statistics,
+    endDate,
+    handleComplete,
+  ]);
 
   if (!isClient) {
     return <CountdownLoader />;
   }
 
-  const setDifficulty = async (hours: number) => {
-    const newEndDate = Date.now() + hours * 60 * 60 * 1000;
-    setEndDate(newEndDate);
-    await settingsApi.setTimerEndDate(newEndDate);
-    await refreshSettings();
-  };
+  if (gameCompleted || statistics?.gameCompletedAt) {
+    let displayFrozenTime = frozenTimeLeft;
+    if (
+      displayFrozenTime === null &&
+      statistics?.gameCompletedAt &&
+      statistics
+    ) {
+      if (statistics.timeLeft && statistics.timeLeft > 0) {
+        displayFrozenTime = statistics.timeLeft;
+      } else if (
+        statistics.completionTimeInSeconds &&
+        statistics.completionTimeInSeconds > 0
+      ) {
+        const estimatedOriginalSeconds = 2 * 3600;
+        const remainingSeconds = Math.max(
+          0,
+          estimatedOriginalSeconds - statistics.completionTimeInSeconds
+        );
+        displayFrozenTime = remainingSeconds * 1000;
+      } else {
+        displayFrozenTime = 0;
+      }
+    }
 
-  if (gameCompleted && frozenTimeLeft !== null) {
     return (
       <div className={styles.container}>
         <span className={styles.timeCounter}>
-          <span>{formatTimeFromMs(frozenTimeLeft)}</span>
+          <span>{formatTimeFromMs(displayFrozenTime ?? 0)}</span>
         </span>
         <div className={styles.difficultyButtons}>
           <button
@@ -156,6 +234,13 @@ export const CountdownTimer = () => {
       </div>
     );
   }
+
+  const setDifficulty = async (hours: number) => {
+    const newEndDate = Date.now() + hours * 60 * 60 * 1000;
+    setEndDate(newEndDate);
+    await settingsApi.setTimerEndDate(newEndDate);
+    await refreshSettings();
+  };
 
   if (!endDate) {
     return (

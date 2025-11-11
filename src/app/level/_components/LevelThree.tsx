@@ -46,6 +46,7 @@ export default function LevelThree() {
         titleSize="medium"
         label={LevelThreeMessages.HINT}
         theme={settings?.theme}
+        align="center"
       />
       <Button
         size="medium"

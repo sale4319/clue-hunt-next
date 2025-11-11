@@ -6,6 +6,8 @@ export interface IUserStatistics {
   incorrectAnswers: number;
   skipButtonClicks: number;
   timeLeft: number;
+  gameCompletedAt?: Date;
+  completionTimeInSeconds?: number;
   levelLocks: {
     start?: boolean;
     one?: boolean;
@@ -43,7 +45,6 @@ const UserStatisticsSchema = new Schema<IUserStatistics>(
       type: String,
       required: true,
       unique: true,
-      index: true,
     },
     correctlyCompletedQuizzes: {
       type: Number,
@@ -64,6 +65,14 @@ const UserStatisticsSchema = new Schema<IUserStatistics>(
       type: Number,
       required: true,
       default: 0,
+    },
+    gameCompletedAt: {
+      type: Date,
+      required: false,
+    },
+    completionTimeInSeconds: {
+      type: Number,
+      required: false,
     },
     levelLocks: {
       type: {
