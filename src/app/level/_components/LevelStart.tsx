@@ -55,11 +55,13 @@ export default function LevelStart() {
         titleSize="medium"
         label={LevelStartMessages.TITLE}
         theme={settings?.theme}
+        align="center"
       />
       <Title
         titleSize="small"
         color="#75F8E2"
         label={LevelStartMessages.INSTRUCTION}
+        align="center"
       />
       <CountdownTimer />
       <div style={{ display: "flex", alignItems: "center" }}>

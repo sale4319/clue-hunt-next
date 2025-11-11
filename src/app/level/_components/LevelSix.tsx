@@ -46,12 +46,13 @@ export default function LevelSix() {
         titleSize="small"
         label={LevelSixMessages.HINT}
         theme={settings?.theme}
+        align="center"
       />
 
       {isCompleted ? (
         <div
           className={[
-            styles.scoreContainer,
+            styles.contentBox,
             styles[settings?.theme || "dark"],
           ].join(" ")}
         >
@@ -59,6 +60,7 @@ export default function LevelSix() {
             label="Level completed! You can continue."
             titleSize="small"
             color="#75f8e2"
+            align="center"
           />
           <Button
             size="medium"

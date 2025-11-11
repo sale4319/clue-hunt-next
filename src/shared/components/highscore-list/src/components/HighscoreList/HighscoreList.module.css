@@ -4,6 +4,7 @@
   align-items: center;
   gap: 16px;
 }
+
 .scoreContainer {
   display: flex;
   flex-direction: column;

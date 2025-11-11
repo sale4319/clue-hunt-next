@@ -35,7 +35,11 @@ export default function LevelFive() {
   return (
     <>
       <SpacerElement size="large" />
-      <Title label={LevelFiveMessages.HINT} theme={settings?.theme} />
+      <Title
+        label={LevelFiveMessages.HINT}
+        theme={settings?.theme}
+        align="center"
+      />
       {isCompleted ? (
         <Button
           size="medium"
