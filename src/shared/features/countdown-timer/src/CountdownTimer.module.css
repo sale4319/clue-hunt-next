@@ -63,3 +63,11 @@
 .difficultyButtons button:active {
   transform: translateY(0);
 }
+
+.light {
+  color: black;
+}
+
+.dark {
+  color: white;
+}

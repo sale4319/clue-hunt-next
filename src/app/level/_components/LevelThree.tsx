@@ -16,7 +16,7 @@ import { getRoute } from "@app/utils";
 
 export default function LevelThree() {
   const router = useRouter();
-  const { settings } = useSettings();
+  const { settings, isTimerStarted } = useSettings();
   const { statistics, refreshStatistics } = useStatistics();
 
   const isCompleted = statistics?.completedLevelsMap?.three || false;
@@ -57,7 +57,9 @@ export default function LevelThree() {
         handleUnlockNavigation={handleSetLock}
         theme={settings?.theme}
       />
-      {settings?.skipMode && <SkipButton onClick={handleSkip} />}
+      {settings?.skipMode && (
+        <SkipButton onClick={handleSkip} disabled={!isTimerStarted} />
+      )}
     </>
   );
 }

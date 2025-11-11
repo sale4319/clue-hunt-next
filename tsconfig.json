@@ -15,7 +15,8 @@
       "@app/context/server": ["src/shared/context/index.server.ts"],
       "@app/utils": ["src/shared/utils"],
       "@app/lib/client": ["src/shared/lib/src/index.client.ts"],
-      "@app/lib/server": ["src/shared/lib/src/index.server.ts"]
+      "@app/lib/server": ["src/shared/lib/src/index.server.ts"],
+      "@app/question-form": ["src/shared/features/question-form/src"]
     }
   },
   "include": [
@@ -51,6 +52,11 @@
     },
     {
       "path": "src/shared/features/countdown-timer/tsconfig.next.json"
+      
+    },
+    {
+      "path": "src/shared/features/question-form/tsconfig.next.json"
+
     },
     {
       "path": "src/shared/context/tsconfig.next.json"
@@ -58,5 +64,6 @@
     {
       "path": "src/shared/utils/tsconfig.next.json"
     }
+
   ]
 }

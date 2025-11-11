@@ -11,7 +11,7 @@ import { getRoute } from "@app/utils";
 
 export default function QuizFour() {
   const router = useRouter();
-  const { settings } = useSettings();
+  const { settings, isTimerStarted } = useSettings();
 
   const handleUnlock = async () => {
     router.push(getRoute("level", "five"));
@@ -31,7 +31,9 @@ export default function QuizFour() {
         handleUnlock={handleUnlock}
         theme={settings?.theme}
       />
-      {settings?.skipMode && <SkipButton onClick={handleSkip} />}
+      {settings?.skipMode && (
+        <SkipButton onClick={handleSkip} disabled={!isTimerStarted} />
+      )}
     </>
   );
 }

@@ -9,4 +9,5 @@ export const QuestionFormMessages = {
   SECOND_Q_PLACEHOLDER: "Write it when you find it",
   SECOND_Q_LABEL:
     "Answer one is now encrypted and hidden on this website. Find it",
+  SUBMIT_BUTTON: "Submit",
 };

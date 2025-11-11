@@ -13,7 +13,7 @@ import styles from "./styles.module.css";
 
 export default function LevelEnd() {
   const router = useRouter();
-  const { settings } = useSettings();
+  const { settings, isTimerStarted } = useSettings();
 
   const [stats, setStats] = useState<UserStatistics | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -138,7 +138,9 @@ export default function LevelEnd() {
         primary={false}
         label="Recycle"
       />
-      {settings?.skipMode && <SkipButton onClick={handleSkip} />}
+      {settings?.skipMode && (
+        <SkipButton onClick={handleSkip} disabled={!isTimerStarted} />
+      )}
     </>
   );
 }

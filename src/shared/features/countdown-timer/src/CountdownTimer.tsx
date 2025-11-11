@@ -76,15 +76,12 @@ export const CountdownTimer = () => {
     if (isGameComplete && endDate) {
       setGameCompleted(true);
 
-      // Calculate remaining time
       const currentTime = Date.now();
       const timeLeft = endDate - currentTime;
 
       if (timeLeft > 0) {
-        // Freeze the timer at this time
         setFrozenTimeLeft(timeLeft);
 
-        // Save the time left
         statisticsApi.setTimeLeft(timeLeft).catch((error) => {
           console.error("Failed to save time left:", error);
         });
@@ -139,7 +136,6 @@ export const CountdownTimer = () => {
     await refreshSettings();
   };
 
-  // Game completed - show frozen time and restart button
   if (gameCompleted && frozenTimeLeft !== null) {
     return (
       <div className={styles.container}>
@@ -147,7 +143,13 @@ export const CountdownTimer = () => {
           <span>{formatTimeFromMs(frozenTimeLeft)}</span>
         </span>
         <div className={styles.difficultyButtons}>
-          <button className={styles.normalButton} onClick={handleRestart}>
+          <button
+            className={[
+              styles.normalButton,
+              styles[settings?.theme || "dark"],
+            ].join(" ")}
+            onClick={handleRestart}
+          >
             Restart
           </button>
         </div>
@@ -155,7 +157,6 @@ export const CountdownTimer = () => {
     );
   }
 
-  // No timer started yet - show initial difficulty selection
   if (!endDate) {
     return (
       <div className={styles.container}>
@@ -164,19 +165,28 @@ export const CountdownTimer = () => {
         </span>
         <div className={styles.difficultyButtons}>
           <button
-            className={styles.easyButton}
+            className={[
+              styles.easyButton,
+              styles[settings?.theme || "dark"],
+            ].join(" ")}
             onClick={() => setDifficulty(4)}
           >
             Easy (4h)
           </button>
           <button
-            className={styles.normalButton}
+            className={[
+              styles.normalButton,
+              styles[settings?.theme || "dark"],
+            ].join(" ")}
             onClick={() => setDifficulty(2)}
           >
             Normal (2h)
           </button>
           <button
-            className={styles.hardButton}
+            className={[
+              styles.hardButton,
+              styles[settings?.theme || "dark"],
+            ].join(" ")}
             onClick={() => setDifficulty(1)}
           >
             Hard (1h)
@@ -186,7 +196,6 @@ export const CountdownTimer = () => {
     );
   }
 
-  // Timer is running
   return (
     <div className={styles.container}>
       <span className={styles.timeCounter}>

@@ -1,0 +1,13 @@
+{
+  "name": "@app/question-form",
+  "version": "0.1.0",
+  "private": true,
+  "keywords": [
+    "component",
+    "shareable"
+  ],
+  "dependencies": {
+    "clue-hunt-ui": "0.4.8"
+  },
+  "main": "./src/index.ts"
+}

@@ -15,7 +15,7 @@ import styles from "./layout.module.css";
 
 export const metadata: Metadata = {
   title: "Clue hunt",
-  description: "Experimental game with next.js",
+  description: "586f6b697e",
 };
 
 export const fontFamily = Audiowide({

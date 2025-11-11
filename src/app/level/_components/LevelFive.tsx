@@ -9,7 +9,7 @@ import { LevelFiveMessages } from "@app/messages-contract";
 import { getRoute, useFeatureToggle } from "@app/utils";
 
 export default function LevelFive() {
-  const { settings } = useSettings();
+  const { settings, isTimerStarted } = useSettings();
   const { refreshStatistics } = useStatistics();
   const router = useRouter();
   const isNewFeatureEnabled = useFeatureToggle("LEVEL_FIVE_UNLOCK");
@@ -39,7 +39,9 @@ export default function LevelFive() {
           onClick={handleUnlock}
         />
       )}
-      {settings?.skipMode && <SkipButton onClick={handleSkip} />}
+      {settings?.skipMode && (
+        <SkipButton onClick={handleSkip} disabled={!isTimerStarted} />
+      )}
     </>
   );
 }

@@ -11,7 +11,7 @@ import { getRoute } from "@app/utils";
 
 export default function QuizTwo() {
   const router = useRouter();
-  const { settings } = useSettings();
+  const { settings, isTimerStarted } = useSettings();
 
   const handleUnlock = async () => {
     router.push(getRoute("level", "three"));
@@ -31,7 +31,9 @@ export default function QuizTwo() {
         handleUnlock={handleUnlock}
         theme={settings?.theme}
       />
-      {settings?.skipMode && <SkipButton onClick={handleSkip} />}
+      {settings?.skipMode && (
+        <SkipButton onClick={handleSkip} disabled={!isTimerStarted} />
+      )}
     </>
   );
 }
