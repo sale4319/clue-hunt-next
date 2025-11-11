@@ -6,10 +6,7 @@ export async function GET(request: NextRequest) {
   try {
     const url = new URL(request.url);
     const limit = parseInt(url.searchParams.get("limit") || "10");
-
-    console.log("Fetching highscores with limit:", limit);
     const highscores = await HighscoreService.getTopHighscores(limit);
-    console.log("Retrieved highscores:", highscores.length, highscores);
 
     return NextResponse.json(highscores);
   } catch (error) {
@@ -42,14 +39,6 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
-    console.log("Saving highscore:", {
-      userId,
-      score,
-      completionTimeInSeconds,
-      incorrectAnswers: incorrectAnswers || 0,
-      skipsUsed: skipsUsed || 0,
-    });
 
     const highscore = await HighscoreService.saveHighscore({
       userId,

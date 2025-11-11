@@ -16,7 +16,8 @@
       "@app/utils": ["src/shared/utils"],
       "@app/lib/client": ["src/shared/lib/src/index.client.ts"],
       "@app/lib/server": ["src/shared/lib/src/index.server.ts"],
-      "@app/question-form": ["src/shared/features/question-form/src"]
+      "@app/question-form": ["src/shared/features/question-form/src"],
+      "@app/highscore-list": ["src/shared/components/highscore-list/src"]
     }
   },
   "include": [
@@ -37,6 +38,9 @@
     },
     {
       "path": "src/shared/components/default-button/tsconfig.next.json"
+    },
+    {
+      "path": "src/shared/components/highscore-list/tsconfig.next.json"
     },
     {
       "path": "src/shared/components/page-component/tsconfig.next.json"

@@ -33,6 +33,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@app/highscore-list@workspace:src/shared/components/highscore-list":
+  version: 0.0.0-use.local
+  resolution: "@app/highscore-list@workspace:src/shared/components/highscore-list"
+  languageName: unknown
+  linkType: soft
+
 "@app/messages-contract@workspace:src/shared/contracts/messages-contract":
   version: 0.0.0-use.local
   resolution: "@app/messages-contract@workspace:src/shared/contracts/messages-contract"
