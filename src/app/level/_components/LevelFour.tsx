@@ -10,7 +10,7 @@ import { getRoute } from "@app/utils";
 
 export default function LevelFour() {
   const router = useRouter();
-  const { settings } = useSettings();
+  const { settings, isTimerStarted } = useSettings();
   const { statistics, refreshStatistics } = useStatistics();
   const isCompleted = statistics?.completedLevelsMap?.four || false;
   const isLocked = !isCompleted && !statistics?.levelLocks?.four;
@@ -50,7 +50,9 @@ export default function LevelFour() {
         theme={settings?.theme}
       />
 
-      {settings?.skipMode && <SkipButton onClick={handleSkip} />}
+      {settings?.skipMode && (
+        <SkipButton onClick={handleSkip} disabled={!isTimerStarted} />
+      )}
     </>
   );
 }

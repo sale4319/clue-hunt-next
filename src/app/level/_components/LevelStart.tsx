@@ -10,7 +10,7 @@ import { LevelStartMessages, TooltipMessages } from "@app/messages-contract";
 import { getRoute } from "@app/utils";
 
 export default function LevelStart() {
-  const { settings } = useSettings();
+  const { settings, isTimerStarted } = useSettings();
   const { statistics, refreshStatistics } = useStatistics();
   const router = useRouter();
 
@@ -71,7 +71,9 @@ export default function LevelStart() {
           onClick={handleCompleteLevel}
         />
       )}
-      {settings?.skipMode && <SkipButton onClick={handleSkip} />}
+      {settings?.skipMode && (
+        <SkipButton onClick={handleSkip} disabled={!isTimerStarted} />
+      )}
     </>
   );
 }

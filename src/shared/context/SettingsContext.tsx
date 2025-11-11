@@ -14,6 +14,7 @@ import { settingsApi, type UserSettings } from "@app/lib/client";
 type SettingsContextType = {
   settings: UserSettings | null;
   isLoading: boolean;
+  isTimerStarted: boolean;
   refreshSettings: () => Promise<void>;
   clearSettings: () => void;
 };
@@ -21,6 +22,7 @@ type SettingsContextType = {
 const SettingsContext = createContext<SettingsContextType>({
   settings: null,
   isLoading: true,
+  isTimerStarted: false,
   refreshSettings: async () => {},
   clearSettings: () => {},
 });
@@ -39,6 +41,9 @@ export function SettingsProvider({
   );
   const [isLoading, setIsLoading] = useState(!initialSettings);
   const pathname = usePathname();
+
+  const isTimerStarted =
+    settings?.timerEndDate !== null && settings?.timerEndDate !== undefined;
 
   const refreshSettings = async () => {
     setIsLoading(true);
@@ -72,7 +77,13 @@ export function SettingsProvider({
 
   return (
     <SettingsContext.Provider
-      value={{ settings, isLoading, refreshSettings, clearSettings }}
+      value={{
+        settings,
+        isLoading,
+        isTimerStarted,
+        refreshSettings,
+        clearSettings,
+      }}
     >
       {children}
     </SettingsContext.Provider>

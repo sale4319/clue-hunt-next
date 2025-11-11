@@ -16,7 +16,7 @@ import { getRoute } from "@app/utils";
 
 export default function LevelTwo() {
   const router = useRouter();
-  const { settings } = useSettings();
+  const { settings, isTimerStarted } = useSettings();
   const { statistics, refreshStatistics } = useStatistics();
 
   const isCompleted = statistics?.completedLevelsMap?.two || false;
@@ -55,7 +55,9 @@ export default function LevelTwo() {
         primary={isLocked}
         onClick={handleCompleteLevel}
       />
-      {settings?.skipMode && <SkipButton onClick={handleSkip} />}
+      {settings?.skipMode && (
+        <SkipButton onClick={handleSkip} disabled={!isTimerStarted} />
+      )}
     </>
   );
 }

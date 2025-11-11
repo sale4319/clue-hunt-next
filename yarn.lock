@@ -45,6 +45,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@app/question-form@workspace:src/shared/features/question-form":
+  version: 0.0.0-use.local
+  resolution: "@app/question-form@workspace:src/shared/features/question-form"
+  dependencies:
+    clue-hunt-ui: "npm:0.4.8"
+  languageName: unknown
+  linkType: soft
+
 "@app/quiz-form@workspace:src/shared/features/quiz-form":
   version: 0.0.0-use.local
   resolution: "@app/quiz-form@workspace:src/shared/features/quiz-form"

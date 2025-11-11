@@ -1,0 +1,95 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  text-align: center;
+  background: transparent;
+  min-width: 600px;
+  min-height: 200px;
+  padding: 20px;
+  font-size: 19px;
+  font-weight: 600;
+  margin-top: 3%;
+  border: 2px solid;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 19px;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+.light {
+  color: black;
+  border-color: #282c34;
+}
+
+.dark {
+  color: white;
+  border-color: white;
+}
+
+.input {
+  padding: 12px 16px;
+  border: 1px solid #282c34;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.input:focus {
+  z-index: 1;
+  border-color: #282c34;
+  background-color: white;
+  box-shadow: 5px 10px 15px #61dafb;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.input::placeholder {
+  font-family: "Audiowide", sans-serif;
+}
+
+.error {
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid red;
+  transition: all 0.3s ease-in-out;
+}
+
+.error:focus {
+  z-index: 1;
+  border-color: transparent;
+  background-color: white;
+  box-shadow: 5px 10px 15px red;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.error::placeholder {
+  color: red;
+  font-family: "Audiowide", sans-serif;
+}
+
+.successMessage {
+  color: #75f8e2;
+  background: transparent;
+  width: 90%;
+  padding: 8px;
+  border: 1px solid;
+  margin-top: 13px;
+  font-size: 19px;
+  font-weight: 600;
+}

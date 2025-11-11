@@ -11,7 +11,7 @@ import { getRoute } from "@app/utils";
 
 export default function QuizSix() {
   const router = useRouter();
-  const { settings } = useSettings();
+  const { settings, isTimerStarted } = useSettings();
 
   const handleUnlock = async () => {
     router.push(getRoute("level", "score"));
@@ -31,7 +31,9 @@ export default function QuizSix() {
         handleUnlock={handleUnlock}
         theme={settings?.theme}
       />
-      {settings?.skipMode && <SkipButton onClick={handleSkip} />}
+      {settings?.skipMode && (
+        <SkipButton onClick={handleSkip} disabled={!isTimerStarted} />
+      )}
     </>
   );
 }

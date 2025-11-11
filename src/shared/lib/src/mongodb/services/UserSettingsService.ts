@@ -7,32 +7,24 @@ export class UserSettingsService {
   static async getSettings(userId: string): Promise<IUserSettings> {
     await connectToDatabase();
 
-    let settings = await UserSettings.findOne({ userId });
-
-    if (!settings) {
-      settings = await UserSettings.create({
-        userId,
-        theme: "dark",
-        quizMode: true,
-        skipMode: true,
-        settingsOpen: false,
-        timerEndDate: null,
-      });
-    } else {
-      const updates: Partial<IUserSettings> = {};
-
-      if (settings.timerEndDate === undefined) {
-        updates.timerEndDate = null;
+    const settings = await UserSettings.findOneAndUpdate(
+      { userId },
+      {
+        $setOnInsert: {
+          userId,
+          theme: "dark",
+          quizMode: true,
+          skipMode: true,
+          settingsOpen: false,
+          timerEndDate: null,
+        },
+      },
+      {
+        upsert: true,
+        new: true,
+        setDefaultsOnInsert: true,
       }
-
-      if (Object.keys(updates).length > 0) {
-        settings = await UserSettings.findOneAndUpdate(
-          { userId },
-          { $set: updates },
-          { new: true }
-        );
-      }
-    }
+    );
 
     const settingsObj = settings!.toObject();
 
