@@ -139,6 +139,10 @@ export class UserStatisticsService {
           completedLevelsMap: {},
           completedQuizzesMap: {},
         },
+        $unset: {
+          gameCompletedAt: "",
+          completionTimeInSeconds: "",
+        },
       },
       { new: true, upsert: true }
     );
@@ -171,5 +175,71 @@ export class UserStatisticsService {
       console.error("Error deleting user statistics:", error);
       return false;
     }
+  }
+
+  static async markGameCompleted(
+    userId: string,
+    timerEndDate?: number
+  ): Promise<IUserStatistics> {
+    await connectToDatabase();
+
+    // Calculate completion time
+    let completionTimeInSeconds = 0;
+    const stats = await this.getStatistics(userId);
+
+    console.log("Service: markGameCompleted called", {
+      userId,
+      timerEndDate,
+      statsTimeLeft: stats.timeLeft,
+      existingGameCompletedAt: stats.gameCompletedAt,
+    });
+
+    if (stats.timeLeft && stats.timeLeft > 0) {
+      // Game was completed with time left
+      const timeUsedMs = Math.max(0, 4 * 60 * 60 * 1000 - stats.timeLeft);
+      completionTimeInSeconds = Math.floor(timeUsedMs / 1000);
+      console.log("Service: Using timeLeft calculation:", {
+        timeUsedMs,
+        completionTimeInSeconds,
+      });
+    } else if (timerEndDate) {
+      // Calculate from timer
+      const currentTime = Date.now();
+      const timeRemainingMs = Math.max(0, timerEndDate - currentTime);
+      const timeUsedMs = 2 * 60 * 60 * 1000 - timeRemainingMs;
+      completionTimeInSeconds = Math.max(0, Math.floor(timeUsedMs / 1000));
+      console.log("Service: Using timerEndDate calculation:", {
+        currentTime,
+        timerEndDate,
+        timeRemainingMs,
+        timeUsedMs,
+        completionTimeInSeconds,
+      });
+    } else {
+      completionTimeInSeconds = 3600; // 1 hour default
+      console.log(
+        "Service: Using default completion time:",
+        completionTimeInSeconds
+      );
+    }
+
+    console.log("Service: Updating database with completion data:", {
+      gameCompletedAt: new Date(),
+      completionTimeInSeconds,
+    });
+
+    const updatedStats = await UserStatistics.findOneAndUpdate(
+      { userId },
+      {
+        $set: {
+          gameCompletedAt: new Date(),
+          completionTimeInSeconds,
+        },
+      },
+      { new: true, upsert: true }
+    );
+
+    console.log("Service: Database update result:", updatedStats?.toObject());
+    return updatedStats!.toObject();
   }
 }

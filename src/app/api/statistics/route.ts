@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
 
     const userId = authCookie.value;
     const body = await request.json();
-    const { action, count } = body;
+    const { action, count, timerEndDate } = body;
 
     let stats;
 
@@ -49,6 +49,19 @@ export async function POST(request: NextRequest) {
         break;
       case "reset":
         stats = await UserStatisticsService.resetStatistics(userId);
+        break;
+      case "markGameCompleted":
+        console.log(
+          "API: Marking game as completed for user:",
+          userId,
+          "with timerEndDate:",
+          timerEndDate
+        );
+        stats = await UserStatisticsService.markGameCompleted(
+          userId,
+          timerEndDate
+        );
+        console.log("API: Game marked as completed, result:", stats);
         break;
       default:
         return NextResponse.json({ error: "Invalid action" }, { status: 400 });
