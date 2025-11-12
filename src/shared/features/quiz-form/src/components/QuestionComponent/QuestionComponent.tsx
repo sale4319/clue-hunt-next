@@ -1,19 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
 
+import { QuestionProps } from "../../types";
+
 import styles from "./QuestionComponent.module.css";
-
-type Question = {
-  question: string;
-  answers: string[];
-  correctAnswerIndex: number;
-};
-
-type QuestionProps = {
-  question: Question;
-  setAnswerStatus: (isCorrect: boolean) => void;
-  savedAnswerIndex?: number | null; // Previously saved answer index
-  onAnswerSelected: (answerIndex: number) => void; // Callback to save answer immediately
-};
 
 export const QuestionComponent = ({
   question,

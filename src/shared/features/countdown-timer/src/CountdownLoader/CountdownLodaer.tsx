@@ -8,6 +8,12 @@ export const CountdownLoader = () => {
   const savedDate = settings?.timerEndDate;
   const showDifficultyButtons =
     savedDate && savedDate !== null && savedDate !== undefined;
+
+  const difficultyButtons = [
+    { label: "Easy (1h)", style: "easyButton" },
+    { label: "Normal (30m)", style: "normalButton" },
+    { label: "Hard (15m)", style: "hardButton" },
+  ];
   return (
     <div className={styles.container}>
       <span className={styles.timeCounter}>
@@ -16,9 +22,17 @@ export const CountdownLoader = () => {
 
       {!showDifficultyButtons && (
         <div className={styles.difficultyButtons}>
-          <button className={styles.easyButton}>Easy (4h)</button>
-          <button className={styles.normalButton}>Normal (2h)</button>
-          <button className={styles.hardButton}>Hard (1h)</button>
+          {difficultyButtons.map(({ label, style }) => (
+            <button
+              key={label}
+              className={[
+                styles[style],
+                styles[settings?.theme || "dark"],
+              ].join(" ")}
+            >
+              {label}
+            </button>
+          ))}
         </div>
       )}
     </div>

@@ -52,7 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(currentUser);
 
       if (currentUser && isPublicPath) {
-        router.push("/");
+        router.push("/level/start");
       } else if (!currentUser && !isPublicPath) {
         router.push("/login");
       }
@@ -114,14 +114,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const response = await authApi.login(username, password);
     setUser(response.user);
     setLastActivity(Date.now());
-    router.push("/");
+    router.push("/level/start");
   };
 
   const register = async (username: string, password: string) => {
     const response = await authApi.register(username, password);
     setUser(response.user);
     setLastActivity(Date.now());
-    router.push("/");
+    router.push("/level/start");
   };
 
   const logout = async () => {

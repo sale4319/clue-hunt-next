@@ -5,24 +5,9 @@ import { ScoreMessages } from "src/shared/contracts/messages-contract/src/scoreM
 
 import { type Highscore, highscoreApi } from "@app/lib/client";
 
-import styles from "./HighscoreList.module.css";
+import { HighscoreListProps } from "../../types";
 
-interface HighscoreListProps {
-  theme?: string;
-  limit?: number;
-  refreshTrigger?: number;
-  showSubmitButton?: boolean;
-  finalScore?: number | null;
-  stats?: {
-    completionTimeInSeconds?: number;
-    timeLeft?: number;
-    incorrectAnswers?: number;
-    skipButtonClicks?: number;
-  } | null;
-  timerEndDate?: number;
-  timeLeftCheck?: boolean;
-  onSubmitSuccess?: () => void;
-}
+import styles from "./HighscoreList.module.css";
 
 export function HighscoreList({
   theme = "dark",

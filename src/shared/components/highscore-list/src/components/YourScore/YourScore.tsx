@@ -3,19 +3,11 @@
 import React, { useState } from "react";
 import { Title } from "clue-hunt-ui";
 
-import type { UserStatistics } from "@app/lib/client";
 import { ScoreMessages } from "@app/messages-contract";
 
-import styles from "./YourScore.module.css";
+import { YourScoreProps } from "../../types";
 
-interface YourScoreProps {
-  finalScore: number;
-  stats: UserStatistics | null;
-  timeLeftCheck?: boolean;
-  theme?: string;
-  timeLeftDisplay?: string;
-  completedLevelsCount?: number;
-}
+import styles from "./YourScore.module.css";
 
 export function YourScore({
   finalScore,
@@ -26,6 +18,10 @@ export function YourScore({
   completedLevelsCount = 0,
 }: YourScoreProps) {
   const [isScoreExpanded, setIsScoreExpanded] = useState(false);
+  const penalty =
+    (stats?.incorrectAnswers || 0) * 0.5 +
+    (stats?.skipButtonClicks || 0) * 0.25;
+  const isMultiplierNegated = penalty >= 14;
 
   return (
     <div className={[styles.scoreContainer, styles[theme || "dark"]].join(" ")}>
@@ -49,10 +45,13 @@ export function YourScore({
             className={styles.noPadding}
           />
           <div className={styles.scoreExplanationText}>
-            Base Score: 14 - (IncorrectAnswers × 0.5 + SkipsUsed × 0.25)
+            1. Base Score = 14 - (0 × 0.5 + 0 × 0.25) = 14
           </div>
           <div className={styles.scoreExplanationText}>
-            Final Score: Base score × Total seconds
+            2. Time Multiplier = 2,700 / 2 = 1,350
+          </div>
+          <div className={styles.scoreExplanationText}>
+            3. Final Score = 14 × 1,350 = 18,900
           </div>
         </div>
       )}
@@ -69,6 +68,7 @@ export function YourScore({
         }`}
         titleSize="small"
         theme={theme}
+        color={isMultiplierNegated ? "red" : undefined}
       />
       <Title
         label={`${ScoreMessages.LEVELS_COMPLETED}${completedLevelsCount}/7`}
@@ -79,6 +79,7 @@ export function YourScore({
         label={`${ScoreMessages.SKIPS_USED}${stats?.skipButtonClicks || 0}`}
         titleSize="small"
         theme={theme}
+        color={isMultiplierNegated ? "red" : undefined}
       />
       <Title
         label={`${
