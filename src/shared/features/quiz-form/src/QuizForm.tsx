@@ -58,7 +58,7 @@ const QuizForm: React.FC<QuizProps> = ({
           setQuizComplete(true);
           setCorrectAnswerCount(progress.correctAnswers);
           setQuestionIndex(progress.currentQuestionIndex);
-          setStatisticsTracked(true);
+          // Don't set statisticsTracked here - let the effect handle it
         } else if (
           progress.currentQuestionIndex >= 0 &&
           (progress.answers?.length > 0 || progress.correctAnswers > 0)
@@ -109,12 +109,9 @@ const QuizForm: React.FC<QuizProps> = ({
             answers,
           });
 
-          // Track statistics when quiz completes
           if (isPerfectScore) {
-            // Perfect score - mark this specific quiz as completed
             await statisticsApi.setQuizCompleted(quizName, true);
           } else {
-            // Track incorrect answers
             const incorrectCount = totalQuestions - correctAnswerCount;
             if (incorrectCount > 0) {
               await statisticsApi.incrementIncorrectAnswers(incorrectCount);
@@ -154,21 +151,51 @@ const QuizForm: React.FC<QuizProps> = ({
       // Check if answer is correct and update count
       const isCorrect =
         answerIndex === questions[questionIndex].correctAnswerIndex;
+      const newCorrectAnswerCount = isCorrect
+        ? correctAnswerCount + 1
+        : correctAnswerCount;
+
       if (isCorrect) {
-        setCorrectAnswerCount((count) => count + 1);
+        setCorrectAnswerCount(newCorrectAnswerCount);
       }
+
+      // Check if this was the last question
+      const isLastQuestionAnswered = questionIndex === totalQuestions - 1;
 
       // Save immediately to database
       try {
         await quizApi.updateProgress(sessionId, {
           currentQuestionIndex: questionIndex,
-          correctAnswers: isCorrect
-            ? correctAnswerCount + 1
-            : correctAnswerCount,
+          correctAnswers: newCorrectAnswerCount,
           totalQuestions,
-          isCompleted: quizComplete,
+          isCompleted: isLastQuestionAnswered, // Mark complete if last question
           answers: newAnswers,
         });
+
+        // If last question, track statistics immediately and mark quiz as complete
+        if (isLastQuestionAnswered) {
+          const isPerfect = newCorrectAnswerCount === totalQuestions;
+
+          // Track statistics when quiz completes
+          if (isPerfect) {
+            // Perfect score - mark this specific quiz as completed
+
+            await statisticsApi.setQuizCompleted(quizName, true);
+          } else {
+            // Track incorrect answers
+            const incorrectCount = totalQuestions - newCorrectAnswerCount;
+            if (incorrectCount > 0) {
+              await statisticsApi.incrementIncorrectAnswers(incorrectCount);
+            }
+          }
+
+          setStatisticsTracked(true);
+
+          // Delay showing completion screen by 1.5 seconds
+          setTimeout(() => {
+            setQuizComplete(true);
+          }, 1500);
+        }
       } catch (error) {
         console.error("Failed to save answer:", error);
       }
@@ -180,7 +207,7 @@ const QuizForm: React.FC<QuizProps> = ({
       correctAnswerCount,
       sessionId,
       totalQuestions,
-      quizComplete,
+      quizName,
     ]
   );
 
@@ -220,7 +247,8 @@ const QuizForm: React.FC<QuizProps> = ({
       setQuestionIndex(null);
       setCorrectAnswerCount(0);
       setAnswerStatus(null);
-      setAnswers([]); // Clear saved answers
+      setAnswers([]);
+      setStatisticsTracked(false);
     } catch (error) {
       console.error("Failed to reset quiz progress:", error);
     }
@@ -301,17 +329,13 @@ const QuizForm: React.FC<QuizProps> = ({
         savedAnswerIndex={answers[questionIndex]}
         onAnswerSelected={handleAnswerSelected}
       />
-      {answerStatus !== null && (
+      {answerStatus !== null && !isLastQuestion && (
         <div>
           <Button
             mode="slide"
             onClick={handleNext}
             size="medium"
-            label={
-              isLastQuestion
-                ? QuizFormMessages.RESULTS_BUTTON
-                : QuizFormMessages.NEXT_BUTTON
-            }
+            label={QuizFormMessages.NEXT_BUTTON}
           />
         </div>
       )}

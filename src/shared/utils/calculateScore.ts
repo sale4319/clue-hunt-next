@@ -75,34 +75,34 @@ export function calculateScore({
 
   if (completionTimeInSeconds > 0) {
     // Determine difficulty from initial timer duration or estimate from remaining time
-    let difficultyHours = initialTimerDuration
-      ? initialTimerDuration / 3600
+    let difficultyMinutes = initialTimerDuration
+      ? initialTimerDuration / 60
       : null;
 
     // If no initial duration provided, estimate from completion data
-    if (!difficultyHours && stats?.gameCompletedAt) {
+    if (!difficultyMinutes && stats?.gameCompletedAt) {
       // Estimate difficulty based on typical completion patterns
-      if (completionTimeInSeconds > 7200) {
-        // > 2 hours remaining suggests 4h game
-        difficultyHours = 4;
-      } else if (completionTimeInSeconds > 3600) {
-        // > 1 hour remaining suggests 2h game
-        difficultyHours = 2;
+      if (completionTimeInSeconds > 1800) {
+        // > 30 minutes remaining suggests 1h (60min) game
+        difficultyMinutes = 60;
+      } else if (completionTimeInSeconds > 900) {
+        // > 15 minutes remaining suggests 30min game
+        difficultyMinutes = 30;
       } else {
-        difficultyHours = 1; // <= 1 hour remaining suggests 1h game
+        difficultyMinutes = 15; // <= 15 minutes remaining suggests 15min game
       }
     }
 
     // Apply difficulty-based time multiplier
-    if (difficultyHours === 4) {
-      // 4 hours: remaining time / 4
-      timeMultiplier = completionTimeInSeconds / 4;
-    } else if (difficultyHours === 2) {
-      // 2 hours: remaining time / 2
+    if (difficultyMinutes === 60) {
+      // 1 hour (Easy): remaining time / 2
       timeMultiplier = completionTimeInSeconds / 2;
-    } else {
-      // 1 hour: remaining time (no division)
+    } else if (difficultyMinutes === 30) {
+      // 30 minutes (Normal): remaining time / 1 (no division)
       timeMultiplier = completionTimeInSeconds;
+    } else {
+      // 15 minutes (Hard): remaining time * 4
+      timeMultiplier = completionTimeInSeconds * 4;
     }
   }
 
@@ -116,7 +116,7 @@ export function calculateScore({
     completionTimeInSeconds,
     initialTimerDuration,
     estimatedDifficulty: initialTimerDuration
-      ? initialTimerDuration / 3600
+      ? `${initialTimerDuration / 60} minutes`
       : "estimated",
     timeMultiplier,
     finalScore,

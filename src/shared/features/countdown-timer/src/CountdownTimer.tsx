@@ -47,16 +47,17 @@ export const CountdownTimer = () => {
       setEndDate(null);
 
       await statisticsApi.resetStatistics();
-
       await quizApi.resetAllProgress();
-
       await settingsApi.clearTimerEndDate();
 
       await refreshSettings();
       await refreshStatistics();
+
+      setGameCompleted(false);
     } catch (error) {
       console.error("Error during restart:", error);
 
+      // Even on error, clear local state to allow retry
       setGameCompleted(false);
       setFrozenTimeLeft(null);
       setEndDate(null);
@@ -191,7 +192,12 @@ export const CountdownTimer = () => {
     return <CountdownLoader />;
   }
 
-  if (gameCompleted || statistics?.gameCompletedAt) {
+  // Show completed state only if gameCompleted is true AND we have completion data
+  // This allows gameCompleted=false to override statistics.gameCompletedAt after restart
+  if (
+    gameCompleted &&
+    (frozenTimeLeft !== null || statistics?.gameCompletedAt)
+  ) {
     let displayFrozenTime = frozenTimeLeft;
     if (
       displayFrozenTime === null &&
@@ -254,27 +260,27 @@ export const CountdownTimer = () => {
               styles.easyButton,
               styles[settings?.theme || "dark"],
             ].join(" ")}
-            onClick={() => setDifficulty(4)}
+            onClick={() => setDifficulty(1)}
           >
-            Easy (4h)
+            Easy (1h)
           </button>
           <button
             className={[
               styles.normalButton,
               styles[settings?.theme || "dark"],
             ].join(" ")}
-            onClick={() => setDifficulty(2)}
+            onClick={() => setDifficulty(0.5)}
           >
-            Normal (2h)
+            Normal (30m)
           </button>
           <button
             className={[
               styles.hardButton,
               styles[settings?.theme || "dark"],
             ].join(" ")}
-            onClick={() => setDifficulty(1)}
+            onClick={() => setDifficulty(0.25)}
           >
-            Hard (1h)
+            Hard (15m)
           </button>
         </div>
       </div>
