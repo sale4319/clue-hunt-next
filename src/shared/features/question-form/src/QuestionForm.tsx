@@ -5,19 +5,15 @@ import {
   FormEvent,
   useCallback,
   useEffect,
-  useMemo,
   useState,
 } from "react";
 import { QuestionIconToolTip, SubmitButton } from "clue-hunt-ui";
 
 import { QuestionFormMessages } from "@app/messages-contract";
 
-import {
-  FormErrors,
-  FormValues,
-  QuestionFormProps,
-  TouchedFields,
-} from "./types";
+import { useFormValidation } from "./hooks/useFormValidation";
+import { FormValues, QuestionFormProps } from "./types";
+import { getInputClassName, getPlaceholder } from "./utils/formHelpers";
 
 import styles from "./QuestionForm.module.css";
 
@@ -33,73 +29,47 @@ export const QuestionForm = ({
   successMessage = "What is your success message?",
   theme = "dark",
 }: QuestionFormProps) => {
-  const [formValues, setFormValues] = useState<FormValues>({
-    answerOne: "",
-    answerTwo: "",
-  });
-  const [formErrors, setFormErrors] = useState<FormErrors>({});
-  const [touched, setTouched] = useState<TouchedFields>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const validate = useCallback((values: FormValues): FormErrors => {
-    const errors: FormErrors = {};
-    const a1 = process.env.NEXT_PUBLIC_ANSWER_ONE;
-    const a2 = process.env.NEXT_PUBLIC_ANSWER_TWO;
-    const regex1 = new RegExp(`^$|^${a1}|^([FG]?\\d{5}|\\d{5}[AB])$`);
-    const regex2 = new RegExp(`^$|^${a2}|^([FG]?\\d{5}|\\d{5}[AB])$`);
+  const {
+    formValues,
+    formErrors,
+    touched,
+    hasErrors,
+    updateField,
+    markTouched,
+    validateField,
+    validateAllFields,
+  } = useFormValidation();
 
-    if (!values.answerOne) {
-      errors.answerOne = QuestionFormMessages.REQUIRED;
-    } else if (values.answerOne.length < 4) {
-      errors.answerOne = QuestionFormMessages.SHORT;
-    } else if (!regex1.test(values.answerOne)) {
-      errors.answerOne = QuestionFormMessages.FIRST_Q_WRONG;
-    }
-
-    if (!values.answerTwo) {
-      errors.answerTwo = QuestionFormMessages.REQUIRED;
-    } else if (values.answerTwo.length < 4) {
-      errors.answerTwo = QuestionFormMessages.SHORT;
-    } else if (!regex2.test(values.answerTwo)) {
-      errors.answerTwo = QuestionFormMessages.SECOND_Q_WRONG;
-    }
-
-    return errors;
-  }, []);
-
-  const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormValues((prev) => ({ ...prev, [name]: value }));
-    setTouched((prev) => ({ ...prev, [name]: true }));
-  }, []);
+  const handleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      updateField(name as keyof FormValues, value);
+    },
+    [updateField]
+  );
 
   const handleOnBlur = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       const { name } = e.target;
-      setTouched((prev) => ({ ...prev, [name]: true }));
-      setFormErrors((prev) => ({ ...prev, ...validate(formValues) }));
+      markTouched(name as keyof FormValues);
+      validateField();
     },
-    [formValues, validate]
+    [markTouched, validateField]
   );
 
   const handleSubmit = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      const errors = validate(formValues);
-      setFormErrors(errors);
-      setTouched({ answerOne: true, answerTwo: true });
+      const errors = validateAllFields();
 
       if (Object.keys(errors).length === 0) {
         setIsSubmitting(true);
       }
     },
-    [formValues, validate]
-  );
-
-  const hasErrors = useMemo(
-    () => Object.keys(formErrors).length > 0,
-    [formErrors]
+    [validateAllFields]
   );
 
   useEffect(() => {
@@ -108,23 +78,7 @@ export const QuestionForm = ({
       setIsSuccess(true);
       handleUnlock?.();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formErrors, isSubmitting, hasErrors]);
-
-  const getInputClassName = (fieldName: keyof FormValues) => {
-    return touched[fieldName] && formErrors[fieldName]
-      ? styles.error
-      : styles.input;
-  };
-
-  const getPlaceholder = (
-    fieldName: keyof FormValues,
-    defaultPlaceholder: string
-  ) => {
-    return touched[fieldName] && formErrors[fieldName]
-      ? formErrors[fieldName]
-      : defaultPlaceholder;
-  };
+  }, [formErrors, isSubmitting, hasErrors, formValues, handleUnlock]);
 
   const themeClassName = [styles.label, styles[theme]].join(" ");
 
@@ -149,7 +103,11 @@ export const QuestionForm = ({
               />
             </label>
             <input
-              placeholder={getPlaceholder("answerOne", firstPlaceholder)}
+              placeholder={getPlaceholder({
+                touched: touched.answerOne || false,
+                error: formErrors.answerOne,
+                defaultPlaceholder: firstPlaceholder,
+              })}
               type="text"
               name="answerOne"
               id="answerOne"
@@ -161,7 +119,12 @@ export const QuestionForm = ({
               autoCapitalize="off"
               spellCheck="false"
               data-form-type="other"
-              className={getInputClassName("answerOne")}
+              className={getInputClassName({
+                touched: touched.answerOne || false,
+                error: formErrors.answerOne,
+                className: styles.input,
+                errorClassName: styles.error,
+              })}
             />
           </div>
 
@@ -174,7 +137,11 @@ export const QuestionForm = ({
               />
             </label>
             <input
-              placeholder={getPlaceholder("answerTwo", secondPlaceholder)}
+              placeholder={getPlaceholder({
+                touched: touched.answerTwo || false,
+                error: formErrors.answerTwo,
+                defaultPlaceholder: secondPlaceholder,
+              })}
               type="password"
               name="answerTwo"
               id="answerTwo"
@@ -186,7 +153,12 @@ export const QuestionForm = ({
               autoCapitalize="off"
               spellCheck="false"
               data-form-type="other"
-              className={getInputClassName("answerTwo")}
+              className={getInputClassName({
+                touched: touched.answerTwo || false,
+                error: formErrors.answerTwo,
+                className: styles.input,
+                errorClassName: styles.error,
+              })}
             />
           </div>
           <SubmitButton
