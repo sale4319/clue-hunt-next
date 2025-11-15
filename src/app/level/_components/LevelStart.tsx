@@ -65,18 +65,20 @@ export default function LevelStart() {
         align="center"
       />
       <CountdownTimer />
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <Title
-          titleSize="medium"
-          label={LevelStartMessages.HINT}
-          theme={theme}
-        />
-        <QuestionIconToolTip
-          size="large"
-          onClick={handleSetLock}
-          content={TooltipMessages.START_HINT}
-        />
-      </div>
+      {isTimerStarted && (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Title
+            titleSize="medium"
+            label={LevelStartMessages.HINT}
+            theme={theme}
+          />
+          <QuestionIconToolTip
+            size="large"
+            onClick={handleSetLock}
+            content={TooltipMessages.START_HINT}
+          />
+        </div>
+      )}
       {shouldShowStartButton && (
         <Button
           size="medium"
