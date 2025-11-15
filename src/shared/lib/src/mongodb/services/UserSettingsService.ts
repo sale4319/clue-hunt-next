@@ -17,6 +17,7 @@ export class UserSettingsService {
           skipMode: true,
           settingsOpen: false,
           timerEndDate: null,
+          isAdmin: false,
         },
       },
       {

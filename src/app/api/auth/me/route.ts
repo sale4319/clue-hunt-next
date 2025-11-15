@@ -19,6 +19,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       user: {
         username: user.username,
+        isAdmin: user.isAdmin || false,
         createdAt: user.createdAt,
       },
     });

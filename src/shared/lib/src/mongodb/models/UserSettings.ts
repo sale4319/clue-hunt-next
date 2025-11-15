@@ -7,6 +7,7 @@ export interface IUserSettings {
   skipMode: boolean;
   settingsOpen: boolean;
   timerEndDate: number | null;
+  isAdmin: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -38,6 +39,10 @@ const UserSettingsSchema = new Schema<IUserSettings>(
     timerEndDate: {
       type: Number,
       default: null,
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false,
     },
   },
   {

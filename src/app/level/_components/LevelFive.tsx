@@ -6,7 +6,11 @@ import { statisticsApi } from "src/shared/lib/src/api/statistics";
 
 import { useSettings, useStatistics } from "@app/context/client";
 import { LevelFiveMessages } from "@app/messages-contract";
-import { getRouteWithSkip, useFeatureToggle } from "@app/utils";
+import {
+  getRouteWithProgress,
+  getRouteWithSkip,
+  useFeatureToggle,
+} from "@app/utils";
 
 export default function LevelFive() {
   const { settings, isTimerStarted } = useSettings();
