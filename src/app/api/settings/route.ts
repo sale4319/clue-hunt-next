@@ -29,7 +29,6 @@ export async function GET(request: NextRequest) {
       theme: themeFromCookie,
       quizMode: settings.quizMode,
       skipMode: settings.skipMode,
-      settingsOpen: settings.settingsOpen,
       timerEndDate: settings.timerEndDate,
       isAdmin: settings.isAdmin || false,
       createdAt: settings.createdAt.toISOString(),

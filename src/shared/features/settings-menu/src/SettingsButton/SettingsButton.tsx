@@ -1,7 +1,7 @@
 "use client";
 
-import { useSettings } from "@app/context/client";
-import { settingsApi } from "@app/lib/client";
+import { useState } from "react";
+import { SettingsModal } from "../SettingsModal";
 
 type SettingsButtonProps = {
   className?: string;
@@ -9,16 +9,22 @@ type SettingsButtonProps = {
 };
 
 export function SettingsButton({ className, children }: SettingsButtonProps) {
-  const { refreshSettings } = useSettings();
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
-  const handleClick = async () => {
-    await settingsApi.toggleSettingsModal();
-    await refreshSettings();
+  const handleClick = () => {
+    setSettingsOpen(!settingsOpen);
+  };
+
+  const handleCloseModal = () => {
+    setSettingsOpen(false);
   };
 
   return (
-    <button className={className} onClick={handleClick} type="button">
-      {children}
-    </button>
+    <>
+      <button className={className} onClick={handleClick} type="button">
+        {children}
+      </button>
+      <SettingsModal isOpen={settingsOpen} onClose={handleCloseModal} />
+    </>
   );
 }

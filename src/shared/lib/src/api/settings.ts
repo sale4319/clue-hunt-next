@@ -3,7 +3,6 @@ export interface UserSettings {
   theme: "light" | "dark";
   quizMode: boolean;
   skipMode: boolean;
-  settingsOpen: boolean;
   timerEndDate: number | null;
   isAdmin: boolean;
   createdAt: Date;
@@ -39,19 +38,6 @@ export const settingsApi = {
     if (!response.ok) {
       throw new Error("Failed to toggle quiz mode");
     }
-  },
-
-  async toggleSettingsModal(): Promise<boolean> {
-    const response = await fetch("/api/settings/modal", {
-      method: "POST",
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to toggle settings modal");
-    }
-
-    const data = await response.json();
-    return data.settingsOpen;
   },
 
   async setTimerEndDate(endDate: number): Promise<void> {

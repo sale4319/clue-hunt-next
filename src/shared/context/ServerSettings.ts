@@ -30,7 +30,6 @@ export async function getServerSettings(): Promise<UserSettings | null> {
       theme: themeFromCookie,
       quizMode: settings.quizMode,
       skipMode: settings.skipMode,
-      settingsOpen: settings.settingsOpen,
       timerEndDate: settings.timerEndDate,
       isAdmin: settings.isAdmin,
       createdAt: settings.createdAt,

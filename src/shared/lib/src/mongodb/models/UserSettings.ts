@@ -5,7 +5,6 @@ export interface IUserSettings {
   theme: "light" | "dark";
   quizMode: boolean;
   skipMode: boolean;
-  settingsOpen: boolean;
   timerEndDate: number | null;
   isAdmin: boolean;
   createdAt: Date;
@@ -31,10 +30,6 @@ const UserSettingsSchema = new Schema<IUserSettings>(
     skipMode: {
       type: Boolean,
       default: true,
-    },
-    settingsOpen: {
-      type: Boolean,
-      default: false,
     },
     timerEndDate: {
       type: Number,

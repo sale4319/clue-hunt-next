@@ -23,12 +23,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Ensure settings modal is closed on login
-    const settings = await UserSettingsService.getSettings(username);
-    if (settings.settingsOpen) {
-      await UserSettingsService.toggleSettingsOpen(username);
-    }
-
     // Create response with user data (excluding password)
     const response = NextResponse.json({
       success: true,

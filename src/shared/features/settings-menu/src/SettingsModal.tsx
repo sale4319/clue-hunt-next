@@ -12,13 +12,13 @@ import { ToggleSwitch } from "./ToggleSwitch";
 
 import styles from "./SettingsModal.module.css";
 
-export const SettingsModal = () => {
-  const { settings, refreshSettings } = useSettings();
+type SettingsModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+};
 
-  const handleClose = async () => {
-    await settingsApi.toggleSettingsModal();
-    await refreshSettings();
-  };
+export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
+  const { settings, refreshSettings } = useSettings();
 
   const handleToggleQuiz = async () => {
     await settingsApi.toggleQuizMode();
@@ -30,12 +30,18 @@ export const SettingsModal = () => {
     await refreshSettings();
   };
 
-  if (!settings || !settings.settingsOpen) {
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
+  if (!isOpen || !settings) {
     return null;
   }
 
   return (
-    <div className={styles.modalBackdrop}>
+    <div className={styles.modalBackdrop} onMouseDown={handleBackdropClick}>
       <div
         className={[styles.modalContainer, styles[settings.theme]].join(" ")}
       >
@@ -62,12 +68,7 @@ export const SettingsModal = () => {
             />
           </div>
         </div>
-        <Button
-          size={"medium"}
-          onClick={handleClose}
-          label="Close"
-          mode="close"
-        />
+        <Button size={"medium"} onClick={onClose} label="Close" mode="close" />
       </div>
     </div>
   );
