@@ -3,8 +3,8 @@ import "server-only";
 import { AppMenu, Container } from "clue-hunt-ui";
 
 import { getServerSettings, getServerUserId } from "@app/context/server";
-import { DarkModeButton } from "@app/dark-mode-button";
 import { MiniCountdownTimer } from "@app/countdown-timer";
+import { DarkModeButton } from "@app/dark-mode-button";
 import { SettingsButton } from "@app/settings-menu";
 
 import styles from "./Page.module.css";

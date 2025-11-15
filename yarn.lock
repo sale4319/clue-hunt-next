@@ -33,12 +33,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@app/highscore-list@workspace:src/shared/components/highscore-list":
-  version: 0.0.0-use.local
-  resolution: "@app/highscore-list@workspace:src/shared/components/highscore-list"
-  languageName: unknown
-  linkType: soft
-
 "@app/messages-contract@workspace:src/shared/contracts/messages-contract":
   version: 0.0.0-use.local
   resolution: "@app/messages-contract@workspace:src/shared/contracts/messages-contract"
@@ -70,6 +64,12 @@ __metadata:
 "@app/quiz-sets-contract@workspace:src/shared/contracts/quiz-sets-contract":
   version: 0.0.0-use.local
   resolution: "@app/quiz-sets-contract@workspace:src/shared/contracts/quiz-sets-contract"
+  languageName: unknown
+  linkType: soft
+
+"@app/score-board@workspace:src/shared/components/score-board":
+  version: 0.0.0-use.local
+  resolution: "@app/score-board@workspace:src/shared/components/score-board"
   languageName: unknown
   linkType: soft
 

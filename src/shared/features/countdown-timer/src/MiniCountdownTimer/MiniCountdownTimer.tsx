@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
 import Countdown, { CountdownRenderProps } from "react-countdown";
+import { usePathname } from "next/navigation";
 import { useIsClient } from "src/shared/hooks/useIsClient";
 
 import { useSettings } from "@app/context/client";
@@ -28,8 +28,7 @@ export const MiniCountdownTimer = ({ className, theme }: Props) => {
   const [endDate, setEndDate] = useState<number | null>(null);
   const [gameCompleted, setGameCompleted] = useState(false);
 
-  const shouldHide =
-    pathname?.includes("/level/start") || pathname?.includes("/level/score");
+  const shouldHide = pathname?.includes("/level/start");
 
   useEffect(() => {
     if (isLoading || !settings) {

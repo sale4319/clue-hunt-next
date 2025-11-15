@@ -5,7 +5,7 @@ import { Button, SkipButton, Title } from "clue-hunt-ui";
 import { useRouter } from "next/navigation";
 
 import { useSettings } from "@app/context/client";
-import { ScoreBoard } from "@app/highscore-list";
+import { ScoreBoard } from "@app/score-board";
 import {
   settingsApi,
   statisticsApi,

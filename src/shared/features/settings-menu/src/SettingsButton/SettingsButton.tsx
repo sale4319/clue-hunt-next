@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+
 import { SettingsModal } from "../SettingsModal";
 
 type SettingsButtonProps = {

@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { SubmitButton } from "clue-hunt-ui";
 
 import { authApi } from "@app/lib/client";
 import { LoginMessages } from "@app/messages-contract";
 
 import styles from "./Login.module.css";
-import { Button, SubmitButton } from "clue-hunt-ui";
 
 export default function LoginPage() {
   const [isLogin, setIsLogin] = useState(true);
