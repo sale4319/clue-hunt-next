@@ -63,7 +63,11 @@ export default function LevelFive() {
         )
       )}
       {settings?.skipMode && (
-        <SkipButton onClick={handleSkip} disabled={!isTimerStarted} />
+        <SkipButton
+          onClick={handleSkip}
+          disabled={!isTimerStarted}
+          theme={settings?.theme}
+        />
       )}
     </>
   );

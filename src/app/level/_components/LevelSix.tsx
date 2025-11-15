@@ -11,7 +11,7 @@ import {
   TooltipMessages,
 } from "@app/messages-contract";
 import { QuestionForm } from "@app/question-form";
-import { getRouteWithProgress,getRouteWithSkip } from "@app/utils";
+import { getRouteWithProgress, getRouteWithSkip } from "@app/utils";
 
 import styles from "./styles.module.css";
 
@@ -85,7 +85,11 @@ export default function LevelSix() {
         />
       )}
       {settings?.skipMode && (
-        <SkipButton onClick={handleSkip} disabled={!isTimerStarted} />
+        <SkipButton
+          onClick={handleSkip}
+          disabled={!isTimerStarted}
+          theme={settings?.theme}
+        />
       )}
     </>
   );

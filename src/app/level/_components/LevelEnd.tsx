@@ -152,9 +152,6 @@ export default function LevelEnd() {
         primary={false}
         label="Recycle"
       />
-      {settings?.skipMode && (
-        <SkipButton onClick={handleSkip} disabled={!isTimerStarted} />
-      )}
     </>
   );
 }

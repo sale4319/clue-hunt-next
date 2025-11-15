@@ -7,7 +7,7 @@
     "shareable"
   ],
   "dependencies": {
-    "clue-hunt-ui": "^0.4.20"
+    "clue-hunt-ui": "^0.4.22"
   },
   "main": "./src/index.ts"
 }
