@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { useSettings, useStatistics } from "@app/context/client";
 import { statisticsApi } from "@app/lib/client";
 import { LevelThreeMessages } from "@app/messages-contract";
-import { getRoute } from "@app/utils";
+import { getRouteWithProgress,getRouteWithSkip } from "@app/utils";
 
 export default function LevelThree() {
   const router = useRouter();
@@ -31,12 +31,12 @@ export default function LevelThree() {
 
   const handleCompleteLevel = async () => {
     await statisticsApi.setLevelCompleted("three", true);
-    router.push(getRoute(isQuizMode, isQuizRoute));
+    router.push(getRouteWithProgress(isQuizMode, isQuizRoute));
   };
 
   const handleSkip = async () => {
     await statisticsApi.incrementSkipButtonClicks();
-    router.push(getRoute(isQuizMode, isQuizRoute));
+    router.push(getRouteWithSkip(isQuizMode, isQuizRoute));
   };
 
   return (

@@ -222,6 +222,15 @@ export const CountdownTimer = () => {
           renderer={renderer}
           onComplete={handleComplete}
         />
+        {/* <button
+          className={[
+            styles.normalButton,
+            styles[settings?.theme || "dark"],
+          ].join(" ")}
+          onClick={handleRestart}
+        >
+          Restart
+        </button> */}
       </span>
     </div>
   );

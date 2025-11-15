@@ -11,7 +11,7 @@ import {
   TooltipMessages,
 } from "@app/messages-contract";
 import { QuestionForm } from "@app/question-form";
-import { getRoute } from "@app/utils";
+import { getRouteWithProgress,getRouteWithSkip } from "@app/utils";
 
 import styles from "./styles.module.css";
 
@@ -24,17 +24,17 @@ export default function LevelSix() {
 
   const handleUnlock = async () => {
     await statisticsApi.setLevelCompleted("six", true);
-    router.push(getRoute(isQuizMode, isQuizRoute));
+    router.push(getRouteWithProgress(isQuizMode, isQuizRoute));
     await refreshStatistics();
   };
 
   const handleContinue = async () => {
-    router.push(getRoute(isQuizMode, isQuizRoute));
+    router.push(getRouteWithProgress(isQuizMode, isQuizRoute));
   };
 
   const handleSkip = async () => {
     await statisticsApi.incrementSkipButtonClicks();
-    router.push(getRoute(isQuizMode, isQuizRoute));
+    router.push(getRouteWithSkip(isQuizMode, isQuizRoute));
   };
 
   const isQuizMode = settings?.quizMode ? "quiz" : "level";

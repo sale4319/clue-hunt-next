@@ -6,7 +6,7 @@ import { statisticsApi } from "src/shared/lib/src/api/statistics";
 
 import { useSettings, useStatistics } from "@app/context/client";
 import { LevelFiveMessages } from "@app/messages-contract";
-import { getRoute, useFeatureToggle } from "@app/utils";
+import { getRouteWithSkip, useFeatureToggle } from "@app/utils";
 
 export default function LevelFive() {
   const { settings, isTimerStarted } = useSettings();
@@ -20,16 +20,16 @@ export default function LevelFive() {
   const handleUnlock = async () => {
     await statisticsApi.setLevelCompleted("five", true);
     await refreshStatistics();
-    router.push(getRoute(isQuizMode, isQuizRoute));
+    router.push(getRouteWithProgress(isQuizMode, isQuizRoute));
   };
 
   const handleContinue = async () => {
-    router.push(getRoute(isQuizMode, isQuizRoute));
+    router.push(getRouteWithProgress(isQuizMode, isQuizRoute));
   };
 
   const handleSkip = async () => {
     await statisticsApi.incrementSkipButtonClicks();
-    router.push(getRoute(isQuizMode, isQuizRoute));
+    router.push(getRouteWithSkip(isQuizMode, isQuizRoute));
   };
 
   return (

@@ -7,19 +7,19 @@ import { statisticsApi } from "src/shared/lib/src/api/statistics";
 import { useSettings } from "@app/context/client";
 import { QuizForm } from "@app/quiz-form";
 import { questionSetSix } from "@app/quiz-sets-contract";
-import { getRoute } from "@app/utils";
+import { getRouteWithProgress,getRouteWithSkip } from "@app/utils";
 
 export default function QuizSix() {
   const router = useRouter();
   const { settings, isTimerStarted } = useSettings();
 
   const handleUnlock = async () => {
-    router.push(getRoute("level", "score"));
+    router.push(getRouteWithProgress("level", "score"));
   };
 
   const handleSkip = async () => {
     await statisticsApi.incrementSkipButtonClicks();
-    router.push(getRoute("level", "score"));
+    router.push(getRouteWithSkip("level", "score"));
   };
 
   return (

@@ -90,6 +90,28 @@ export class UserStatisticsService {
     );
   }
 
+  static async isLevelAccessible(
+    userId: string,
+    level: "start" | "one" | "two" | "three" | "four" | "five" | "six"
+  ): Promise<boolean> {
+    await connectToDatabase();
+
+    const stats = await UserStatistics.findOne({ userId });
+
+    if (!stats) {
+      // New user can only access "start" level
+      return level === "start";
+    }
+
+    const levelLocks = stats.levelLocks || {};
+
+    // "start" is always accessible
+    if (level === "start") return true;
+
+    // A level is accessible if it's explicitly unlocked (true in levelLocks)
+    return levelLocks[level] === true;
+  }
+
   static async setQuizCompleted(
     userId: string,
     quiz: "start" | "one" | "two" | "three" | "four" | "five" | "six",
@@ -174,25 +196,6 @@ export class UserStatisticsService {
       console.error("Error deleting user statistics:", error);
       return false;
     }
-  }
-
-  static async isLevelAccessible(
-    userId: string,
-    level: "start" | "one" | "two" | "three" | "four" | "five" | "six"
-  ): Promise<boolean> {
-    await connectToDatabase();
-
-    const stats = await UserStatistics.findOne({ userId });
-
-    if (!stats) {
-      return level === "start";
-    }
-
-    const levelLocks = stats.levelLocks || {};
-
-    if (level === "start") return true;
-
-    return levelLocks[level] !== false;
   }
 
   static async markGameCompleted(
