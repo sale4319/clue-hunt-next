@@ -28,8 +28,11 @@ export const CountdownTimer = () => {
   const [frozenTimeLeft, setFrozenTimeLeft] = useState<number | null>(null);
 
   const handleComplete = useCallback(async () => {
+    if (settings?.isAdmin) {
+      return;
+    }
     await deleteAccount();
-  }, [deleteAccount]);
+  }, [deleteAccount, settings?.isAdmin]);
 
   const handleRestart = async () => {
     try {

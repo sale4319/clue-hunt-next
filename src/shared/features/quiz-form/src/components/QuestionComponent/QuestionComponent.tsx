@@ -9,6 +9,7 @@ export const QuestionComponent = ({
   setAnswerStatus,
   savedAnswerIndex = null,
   onAnswerSelected,
+  theme,
 }: QuestionProps) => {
   const [selectedAnswerIndex, setSelectedAnswerIndex] = useState<number | null>(
     null
@@ -78,7 +79,9 @@ export const QuestionComponent = ({
         {question.answers.map((answer, index) => (
           <div
             key={index}
-            className={`${styles.answer} ${getAnswerClasses(index)}`}
+            className={`${[styles.answer, styles[theme]].join(
+              " "
+            )} ${getAnswerClasses(index)}`}
             onClick={() => handleAnswerClick(index)}
             role="button"
             tabIndex={0}

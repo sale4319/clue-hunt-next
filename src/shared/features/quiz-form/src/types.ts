@@ -7,8 +7,9 @@ export type Question = {
 export type QuestionProps = {
   question: Question;
   setAnswerStatus: (isCorrect: boolean) => void;
-  savedAnswerIndex?: number | null; // Previously saved answer index
-  onAnswerSelected: (answerIndex: number) => void; // Callback to save answer immediately
+  savedAnswerIndex?: number | null;
+  onAnswerSelected: (answerIndex: number) => void;
+  theme: string;
 };
 
 export type QuizProps = {
@@ -58,4 +59,5 @@ export type QuizName =
 export type ProgressBarProps = {
   currentQuestionIndex: number;
   totalQuestionsCount: number;
+  theme: string;
 };

@@ -6,6 +6,7 @@ import { authApi } from "@app/lib/client";
 import { LoginMessages } from "@app/messages-contract";
 
 import styles from "./Login.module.css";
+import { Button, SubmitButton } from "clue-hunt-ui";
 
 export default function LoginPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -81,13 +82,12 @@ export default function LoginPage() {
 
         {error && <div className={styles.error}>{error}</div>}
 
-        <button
-          type="submit"
-          className={styles.submitButton}
+        <SubmitButton
+          submit
+          size="medium"
           disabled={loading}
-        >
-          {loading ? "Loading..." : isLogin ? "Login" : "Register"}
-        </button>
+          label={loading ? "Loading..." : isLogin ? "Login" : "Register"}
+        />
       </form>
 
       <div className={styles.toggleContainer}>

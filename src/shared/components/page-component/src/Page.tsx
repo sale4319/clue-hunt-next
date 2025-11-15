@@ -4,6 +4,7 @@ import { AppMenu, Container } from "clue-hunt-ui";
 
 import { getServerSettings, getServerUserId } from "@app/context/server";
 import { DarkModeButton } from "@app/dark-mode-button";
+import { MiniCountdownTimer } from "@app/countdown-timer";
 import { SettingsButton } from "@app/settings-menu";
 
 import styles from "./Page.module.css";
@@ -26,6 +27,7 @@ export default async function Home({ children }: PageProps) {
             <DarkModeButton />
           </AppMenu>
         )}
+        <MiniCountdownTimer className={styles.miniCountdown} theme={theme} />
         {children}
         {isAuthenticated && (
           <SettingsButton className={styles.settingsButton}>

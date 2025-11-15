@@ -19,6 +19,15 @@
   border: none;
 }
 
+.miniCountdown {
+  position: absolute;
+  top: 30px;
+  margin-top: 0;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+}
+
 .settingsIcon {
   background: transparent no-repeat center;
   content: url("../../../assets/settings.svg");

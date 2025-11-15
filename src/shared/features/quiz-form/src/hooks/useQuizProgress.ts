@@ -11,7 +11,9 @@ export const useQuizProgress = (sessionId: string, questions: Question[]) => {
   const [quizComplete, setQuizComplete] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [answers, setAnswers] = useState<number[]>([]);
-  const [wasLoadedAsComplete, setWasLoadedAsComplete] = useState<boolean>(false);
+  const [wasLoadedAsComplete, setWasLoadedAsComplete] =
+    useState<boolean>(false);
+  const [reloadTrigger, setReloadTrigger] = useState<number>(0);
 
   const totalQuestions = questions.length;
   const isLastQuestion = questionIndex === totalQuestions - 1;
@@ -44,7 +46,7 @@ export const useQuizProgress = (sessionId: string, questions: Question[]) => {
     };
 
     loadProgress();
-  }, [sessionId]);
+  }, [sessionId, reloadTrigger]);
 
   // Update answer status when question changes
   useEffect(() => {
@@ -94,9 +96,8 @@ export const useQuizProgress = (sessionId: string, questions: Question[]) => {
         ? correctAnswerCount + 1
         : correctAnswerCount;
 
-      if (isCorrect) {
-        setCorrectAnswerCount(newCorrectAnswerCount);
-      }
+      // Always update the state to ensure consistency
+      setCorrectAnswerCount(newCorrectAnswerCount);
 
       const isLastQuestionAnswered = questionIndex === totalQuestions - 1;
 
@@ -150,6 +151,7 @@ export const useQuizProgress = (sessionId: string, questions: Question[]) => {
       setAnswerStatus(null);
       setAnswers([]);
       setWasLoadedAsComplete(false);
+      setReloadTrigger((prev) => prev + 1);
     } catch (error) {
       console.error("Failed to reset quiz progress:", error);
     }

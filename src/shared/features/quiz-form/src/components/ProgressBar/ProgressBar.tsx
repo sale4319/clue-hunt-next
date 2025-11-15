@@ -7,11 +7,12 @@ import styles from "./ProgressBar.module.css";
 export const ProgressBar: React.FC<ProgressBarProps> = ({
   currentQuestionIndex,
   totalQuestionsCount,
+  theme,
 }) => {
   const progressPercentage = (currentQuestionIndex / totalQuestionsCount) * 100;
 
   return (
-    <div className={styles.progressBar}>
+    <div className={[styles.progressBar, styles[theme]].join(" ")}>
       <div className={styles.text}>
         {currentQuestionIndex} answered (
         {totalQuestionsCount - currentQuestionIndex} remaining)
