@@ -27,10 +27,7 @@ export default function LoginPage() {
         await authApi.register(username, password);
       }
 
-      const redirectPath = localStorage.getItem("redirectAfterLogin") || "/";
-      localStorage.removeItem("redirectAfterLogin");
-
-      window.location.href = redirectPath;
+      window.location.href = "/level/start";
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
