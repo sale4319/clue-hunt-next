@@ -75,7 +75,6 @@ export class UserStatisticsService {
   ): Promise<void> {
     await connectToDatabase();
 
-    // When completing a level, also unlock it
     const updates: Record<string, boolean> = {
       [`completedLevelsMap.${level}`]: completed,
     };
@@ -175,6 +174,25 @@ export class UserStatisticsService {
       console.error("Error deleting user statistics:", error);
       return false;
     }
+  }
+
+  static async isLevelAccessible(
+    userId: string,
+    level: "start" | "one" | "two" | "three" | "four" | "five" | "six"
+  ): Promise<boolean> {
+    await connectToDatabase();
+
+    const stats = await UserStatistics.findOne({ userId });
+
+    if (!stats) {
+      return level === "start";
+    }
+
+    const levelLocks = stats.levelLocks || {};
+
+    if (level === "start") return true;
+
+    return levelLocks[level] !== false;
   }
 
   static async markGameCompleted(
