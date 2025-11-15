@@ -44,19 +44,24 @@ export const SettingsModal = () => {
           label={SettingsModalMessages.TITLE}
           theme={settings.theme}
         />
-        <LogoutButton />
-        <RestartButton />
-        <ToggleSwitch
-          onChange={handleToggleQuiz}
-          toggle={settings.quizMode}
-          label="Quiz mode"
-        />
-        <ToggleSwitch
-          onChange={handleToggleSkip}
-          toggle={settings.skipMode}
-          label="Skip mode"
-        />
-
+        <div className={styles.modalWrapper}>
+          <div className={styles.modalContentColumn}>
+            <LogoutButton />
+            <RestartButton />
+          </div>
+          <div className={styles.modalContentColumn}>
+            <ToggleSwitch
+              onChange={handleToggleQuiz}
+              toggle={settings.quizMode}
+              label="Quiz mode"
+            />
+            <ToggleSwitch
+              onChange={handleToggleSkip}
+              toggle={settings.skipMode}
+              label="Skip mode"
+            />
+          </div>
+        </div>
         <Button
           size={"medium"}
           onClick={handleClose}

@@ -28,9 +28,9 @@ export const ToggleSwitch = ({
         </label>
         <br />
         {toggle ? (
-          <span className={styles.toggleText}>on</span>
+          <label className={styles.toggleText}>on</label>
         ) : (
-          <span className={styles.toggleText}>off</span>
+          <label className={styles.toggleText}>off</label>
         )}
       </div>
     </div>

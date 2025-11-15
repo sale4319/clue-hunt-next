@@ -2,11 +2,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
 }
 
 .username {
-  font-size: 14px;
-  font-weight: 600;
+  font-size: medium;
+  font-weight: bold;
   color: inherit;
 }
