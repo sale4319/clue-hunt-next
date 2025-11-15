@@ -1,8 +1,9 @@
-import mongoose, { Model,Schema } from "mongoose";
+import mongoose, { Model, Schema } from "mongoose";
 
 export interface IUser {
   username: string;
   password: string;
+  isAdmin: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -21,6 +22,10 @@ const UserSchema = new Schema<IUser>(
       type: String,
       required: true,
       minlength: 6,
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false,
     },
   },
   {

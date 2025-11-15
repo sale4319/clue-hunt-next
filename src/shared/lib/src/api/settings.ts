@@ -1,12 +1,13 @@
 export interface UserSettings {
   userId: string;
-  theme: string;
+  theme: "light" | "dark";
   quizMode: boolean;
   skipMode: boolean;
   settingsOpen: boolean;
   timerEndDate: number | null;
-  createdAt: string;
-  updatedAt: string;
+  isAdmin: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export const settingsApi = {

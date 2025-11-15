@@ -75,7 +75,6 @@ export class UserStatisticsService {
   ): Promise<void> {
     await connectToDatabase();
 
-    // When completing a level, also unlock it
     const updates: Record<string, boolean> = {
       [`completedLevelsMap.${level}`]: completed,
     };
@@ -89,6 +88,28 @@ export class UserStatisticsService {
       { $set: updates },
       { upsert: true }
     );
+  }
+
+  static async isLevelAccessible(
+    userId: string,
+    level: "start" | "one" | "two" | "three" | "four" | "five" | "six"
+  ): Promise<boolean> {
+    await connectToDatabase();
+
+    const stats = await UserStatistics.findOne({ userId });
+
+    if (!stats) {
+      // New user can only access "start" level
+      return level === "start";
+    }
+
+    const levelLocks = stats.levelLocks || {};
+
+    // "start" is always accessible
+    if (level === "start") return true;
+
+    // A level is accessible if it's explicitly unlocked (true in levelLocks)
+    return levelLocks[level] === true;
   }
 
   static async setQuizCompleted(

@@ -1,5 +1,5 @@
 import { connectToDatabase } from "../connection";
-import { IUser,User } from "../models/User";
+import { IUser, User } from "../models/User";
 
 type CreateUserResult =
   | { success: true; user: IUser }
@@ -27,6 +27,7 @@ export class AuthService {
       const user = await User.create({
         username,
         password,
+        isAdmin: false,
       });
 
       return { success: true, user: user.toObject() };

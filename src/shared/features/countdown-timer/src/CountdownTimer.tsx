@@ -6,20 +6,11 @@ import { useIsClient } from "src/shared/hooks/useIsClient";
 
 import { useAuth, useSettings, useStatistics } from "@app/context/client";
 import { quizApi, settingsApi, statisticsApi } from "@app/lib/client";
+import { formatTimeFromMs, twoDigits } from "@app/utils";
 
 import { CountdownLoader } from "./CountdownLoader/CountdownLodaer";
 
 import styles from "./CountdownTimer.module.css";
-
-const twoDigits = (num: number) => String(num).padStart(2, "0");
-
-const formatTimeFromMs = (milliseconds: number): string => {
-  const totalSeconds = Math.floor(milliseconds / 1000);
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-  return `${twoDigits(hours)}:${twoDigits(minutes)}:${twoDigits(seconds)}`;
-};
 
 const renderer = ({ hours, minutes, seconds }: CountdownRenderProps) => (
   <span>
@@ -47,16 +38,17 @@ export const CountdownTimer = () => {
       setEndDate(null);
 
       await statisticsApi.resetStatistics();
-
       await quizApi.resetAllProgress();
-
       await settingsApi.clearTimerEndDate();
 
       await refreshSettings();
       await refreshStatistics();
+
+      setGameCompleted(false);
     } catch (error) {
       console.error("Error during restart:", error);
 
+      // Even on error, clear local state to allow retry
       setGameCompleted(false);
       setFrozenTimeLeft(null);
       setEndDate(null);
@@ -68,107 +60,66 @@ export const CountdownTimer = () => {
 
     if (statistics.gameCompletedAt) {
       setGameCompleted(true);
-
       setEndDate(null);
 
-      if (statistics.timeLeft && statistics.timeLeft > 0) {
-        setFrozenTimeLeft(statistics.timeLeft);
-      } else if (
-        statistics.completionTimeInSeconds &&
-        statistics.completionTimeInSeconds > 0
-      ) {
-        const estimatedOriginalSeconds = 2 * 3600;
-        const remainingSeconds = Math.max(
-          0,
-          estimatedOriginalSeconds - statistics.completionTimeInSeconds
-        );
-        const frozenMs = remainingSeconds * 1000;
-        setFrozenTimeLeft(frozenMs);
-      } else {
-        setFrozenTimeLeft(0);
-      }
+      // Calculate frozen time from saved data
+      const timeLeft =
+        statistics.timeLeft && statistics.timeLeft > 0
+          ? statistics.timeLeft
+          : statistics.completionTimeInSeconds &&
+            statistics.completionTimeInSeconds > 0
+          ? Math.max(0, 2 * 3600 - statistics.completionTimeInSeconds) * 1000
+          : 0;
+
+      setFrozenTimeLeft(timeLeft);
 
       if (settings?.timerEndDate) {
-        settingsApi.clearTimerEndDate().catch((error) => {
-          console.error("Failed to clear timer end date:", error);
-        });
+        settingsApi.clearTimerEndDate().catch(console.error);
       }
       return;
     }
 
     if (gameCompleted) return;
 
-    const completedLevelsCount = statistics.completedLevelsMap
-      ? Object.values(statistics.completedLevelsMap).filter(
-          (val) => val === true
-        ).length
-      : 0;
-
+    const completedLevelsCount = Object.values(
+      statistics.completedLevelsMap || {}
+    ).filter(Boolean).length;
     const completedQuizzesCount = statistics.correctlyCompletedQuizzes || 0;
-
     const isGameComplete =
       completedLevelsCount === 7 && completedQuizzesCount === 7;
 
     if (isGameComplete && endDate && !statistics.gameCompletedAt) {
       setGameCompleted(true);
-
-      const currentTime = Date.now();
-      const timeLeft = endDate - currentTime;
+      const timeLeft = Math.max(0, endDate - Date.now());
       setEndDate(null);
+      setFrozenTimeLeft(timeLeft);
 
       if (timeLeft > 0) {
-        setFrozenTimeLeft(timeLeft);
-
-        statisticsApi.setTimeLeft(timeLeft).catch((error) => {
-          console.error("Failed to save time left:", error);
-        });
-      } else if (timeLeft <= 0) {
-        setFrozenTimeLeft(0);
+        statisticsApi.setTimeLeft(timeLeft).catch(console.error);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statistics, endDate, gameCompleted]);
 
   useEffect(() => {
-    if (isLoading) {
-      return;
-    }
-
-    if (!settings) {
-      setEndDate(null);
-      return;
-    }
-
-    if (!statistics) {
+    if (isLoading || !settings || !statistics) {
       setEndDate(null);
       return;
     }
 
     if (gameCompleted || statistics?.gameCompletedAt) {
       setEndDate(null);
-
       if (settings?.timerEndDate) {
-        settingsApi.clearTimerEndDate().catch((error) => {
-          console.error("Failed to clear timer end date:", error);
-        });
+        settingsApi.clearTimerEndDate().catch(console.error);
       }
       return;
     }
 
     const savedDate = settings.timerEndDate;
+    if (endDate === savedDate && savedDate != null) return;
 
-    if (
-      endDate === savedDate &&
-      savedDate !== null &&
-      savedDate !== undefined
-    ) {
-      return;
-    }
-
-    if (savedDate != null && savedDate !== undefined) {
-      const currentTime = Date.now();
-      const delta = savedDate - currentTime;
-
+    if (savedDate != null) {
+      const delta = savedDate - Date.now();
       if (delta <= 0) {
         handleComplete();
       } else {
@@ -191,34 +142,24 @@ export const CountdownTimer = () => {
     return <CountdownLoader />;
   }
 
-  if (gameCompleted || statistics?.gameCompletedAt) {
-    let displayFrozenTime = frozenTimeLeft;
-    if (
-      displayFrozenTime === null &&
-      statistics?.gameCompletedAt &&
-      statistics
-    ) {
-      if (statistics.timeLeft && statistics.timeLeft > 0) {
-        displayFrozenTime = statistics.timeLeft;
-      } else if (
-        statistics.completionTimeInSeconds &&
-        statistics.completionTimeInSeconds > 0
-      ) {
-        const estimatedOriginalSeconds = 2 * 3600;
-        const remainingSeconds = Math.max(
-          0,
-          estimatedOriginalSeconds - statistics.completionTimeInSeconds
-        );
-        displayFrozenTime = remainingSeconds * 1000;
-      } else {
-        displayFrozenTime = 0;
-      }
-    }
+  // Show completed state only if gameCompleted is true AND we have completion data
+  if (
+    gameCompleted &&
+    (frozenTimeLeft !== null || statistics?.gameCompletedAt)
+  ) {
+    const displayFrozenTime =
+      frozenTimeLeft ??
+      (statistics?.timeLeft && statistics.timeLeft > 0
+        ? statistics.timeLeft
+        : statistics?.completionTimeInSeconds &&
+          statistics.completionTimeInSeconds > 0
+        ? Math.max(0, 2 * 3600 - statistics.completionTimeInSeconds) * 1000
+        : 0);
 
     return (
       <div className={styles.container}>
         <span className={styles.timeCounter}>
-          <span>{formatTimeFromMs(displayFrozenTime ?? 0)}</span>
+          <span>{formatTimeFromMs(displayFrozenTime)}</span>
         </span>
         <div className={styles.difficultyButtons}>
           <button
@@ -243,39 +184,30 @@ export const CountdownTimer = () => {
   };
 
   if (!endDate) {
+    const difficultyButtons = [
+      { hours: 1, label: "Easy (1h)", style: "easyButton" },
+      { hours: 0.5, label: "Normal (30m)", style: "normalButton" },
+      { hours: 0.25, label: "Hard (15m)", style: "hardButton" },
+    ];
+
     return (
       <div className={styles.container}>
         <span className={styles.timeCounter}>
           <span>00:00:00</span>
         </span>
         <div className={styles.difficultyButtons}>
-          <button
-            className={[
-              styles.easyButton,
-              styles[settings?.theme || "dark"],
-            ].join(" ")}
-            onClick={() => setDifficulty(4)}
-          >
-            Easy (4h)
-          </button>
-          <button
-            className={[
-              styles.normalButton,
-              styles[settings?.theme || "dark"],
-            ].join(" ")}
-            onClick={() => setDifficulty(2)}
-          >
-            Normal (2h)
-          </button>
-          <button
-            className={[
-              styles.hardButton,
-              styles[settings?.theme || "dark"],
-            ].join(" ")}
-            onClick={() => setDifficulty(1)}
-          >
-            Hard (1h)
-          </button>
+          {difficultyButtons.map(({ hours, label, style }) => (
+            <button
+              key={label}
+              className={[
+                styles[style],
+                styles[settings?.theme || "dark"],
+              ].join(" ")}
+              onClick={() => setDifficulty(hours)}
+            >
+              {label}
+            </button>
+          ))}
         </div>
       </div>
     );

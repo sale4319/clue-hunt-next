@@ -7,7 +7,7 @@ import { useSettings, useStatistics } from "@app/context/client";
 import { CountdownTimer } from "@app/countdown-timer";
 import { statisticsApi } from "@app/lib/client";
 import { LevelStartMessages, TooltipMessages } from "@app/messages-contract";
-import { getRoute } from "@app/utils";
+import { getRouteWithProgress,getRouteWithSkip } from "@app/utils";
 
 export default function LevelStart() {
   const { settings, isTimerStarted } = useSettings();
@@ -41,12 +41,12 @@ export default function LevelStart() {
 
   const handleSkip = async () => {
     await statisticsApi.incrementSkipButtonClicks();
-    router.push(getRoute(isQuizMode, isQuizRoute));
+    router.push(getRouteWithSkip(isQuizMode, isQuizRoute));
   };
 
   const handleCompleteLevel = async () => {
     await statisticsApi.setLevelCompleted("start", true);
-    router.push(getRoute(isQuizMode, isQuizRoute));
+    router.push(getRouteWithProgress(isQuizMode, isQuizRoute));
   };
 
   return (

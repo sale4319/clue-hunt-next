@@ -7,19 +7,19 @@ import { statisticsApi } from "src/shared/lib/src/api/statistics";
 import { useSettings } from "@app/context/client";
 import { QuizForm } from "@app/quiz-form";
 import { questionSetFour } from "@app/quiz-sets-contract";
-import { getRoute } from "@app/utils";
+import { getRouteWithProgress,getRouteWithSkip } from "@app/utils";
 
 export default function QuizFour() {
   const router = useRouter();
   const { settings, isTimerStarted } = useSettings();
 
   const handleUnlock = async () => {
-    router.push(getRoute("level", "five"));
+    router.push(getRouteWithProgress("level", "five"));
   };
 
   const handleSkip = async () => {
     await statisticsApi.incrementSkipButtonClicks();
-    router.push(getRoute("level", "five"));
+    router.push(getRouteWithSkip("level", "five"));
   };
 
   return (

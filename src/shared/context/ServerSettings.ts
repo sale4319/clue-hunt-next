@@ -32,8 +32,9 @@ export async function getServerSettings(): Promise<UserSettings | null> {
       skipMode: settings.skipMode,
       settingsOpen: settings.settingsOpen,
       timerEndDate: settings.timerEndDate,
-      createdAt: settings.createdAt.toISOString(),
-      updatedAt: settings.updatedAt.toISOString(),
+      isAdmin: settings.isAdmin,
+      createdAt: settings.createdAt,
+      updatedAt: settings.updatedAt,
     };
   } catch (error) {
     console.error("Error fetching server settings:", error);

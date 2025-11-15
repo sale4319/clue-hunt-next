@@ -2,6 +2,7 @@
 
 export interface AuthUser {
   username: string;
+  isAdmin: boolean;
   createdAt: Date;
 }
 

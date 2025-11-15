@@ -1,11 +1,8 @@
 import React from "react";
 
-import styles from "./ProgressBar.module.css";
+import { ProgressBarProps } from "../../types";
 
-type ProgressBarProps = {
-  currentQuestionIndex: number;
-  totalQuestionsCount: number;
-};
+import styles from "./ProgressBar.module.css";
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({
   currentQuestionIndex,

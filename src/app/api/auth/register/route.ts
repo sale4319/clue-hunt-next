@@ -48,6 +48,7 @@ export async function POST(request: NextRequest) {
       success: true,
       user: {
         username: result.user.username,
+        isAdmin: result.user.isAdmin || false,
         createdAt: result.user.createdAt,
       },
     });

@@ -11,7 +11,12 @@ import {
   statisticsApi,
   type UserStatistics,
 } from "@app/lib/client";
-import { calculateScore, getRoute, getTimeLeftDisplay } from "@app/utils";
+import {
+  calculateScore,
+  getRoute,
+  getRouteWithSkip,
+  getTimeLeftDisplay,
+} from "@app/utils";
 
 export default function LevelEnd() {
   const router = useRouter();
@@ -77,7 +82,7 @@ export default function LevelEnd() {
   }, [stats, isLoading, settings?.timerEndDate, refreshSettings]);
 
   const handleSkip = async () => {
-    router.push(getRoute("level", "start"));
+    router.push(getRouteWithSkip("level", "start"));
   };
 
   if (isLoading) {

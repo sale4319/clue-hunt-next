@@ -7,6 +7,7 @@ import { settingsApi } from "@app/lib/client";
 import { SettingsModalMessages } from "@app/messages-contract";
 
 import { LogoutButton } from "./LogoutButton/LogoutButton";
+import { RestartButton } from "./RestartButton";
 import { ToggleSwitch } from "./ToggleSwitch";
 
 import styles from "./SettingsModal.module.css";
@@ -44,7 +45,7 @@ export const SettingsModal = () => {
           theme={settings.theme}
         />
         <LogoutButton />
-
+        <RestartButton />
         <ToggleSwitch
           onChange={handleToggleQuiz}
           toggle={settings.quizMode}

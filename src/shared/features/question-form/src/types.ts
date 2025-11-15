@@ -8,6 +8,15 @@ export type FormErrors = {
   answerTwo?: string;
 };
 
+export type FormFieldProps = {
+  fieldName: keyof FormValues;
+  touched: boolean;
+  error?: string;
+  defaultPlaceholder: string;
+  className: string;
+  errorClassName: string;
+};
+
 export type TouchedFields = {
   answerOne?: boolean;
   answerTwo?: boolean;
