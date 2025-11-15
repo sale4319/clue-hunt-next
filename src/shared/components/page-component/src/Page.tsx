@@ -29,11 +29,7 @@ export default async function Home({ children }: PageProps) {
         )}
         <MiniCountdownTimer className={styles.miniCountdown} theme={theme} />
         {children}
-        {isAuthenticated && (
-          <SettingsButton className={styles.settingsButton}>
-            <i className={styles.settingsIcon} />
-          </SettingsButton>
-        )}
+        {isAuthenticated && <SettingsButton />}
       </div>
     </Container>
   );

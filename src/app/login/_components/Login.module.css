@@ -37,6 +37,7 @@
   border: 2px solid #75f8e2;
   font-size: 16px;
   transition: all 0.3s ease;
+  font-family: inherit;
 }
 
 .input:focus {
@@ -59,6 +60,7 @@
 }
 
 .toggleButton {
+  font-family: inherit;
   background: none;
   border: none;
   color: #75f8e2;

@@ -1,16 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import { SettingsIcon } from "src/shared/assets/SettingsIcon";
+
+import { useSettings } from "@app/context/client";
 
 import { SettingsModal } from "../SettingsModal";
 
-type SettingsButtonProps = {
-  className?: string;
-  children: React.ReactNode;
-};
+import styles from "./SettingsButton.module.css";
 
-export function SettingsButton({ className, children }: SettingsButtonProps) {
+export function SettingsButton({}) {
+  const { settings } = useSettings();
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const theme = settings?.theme || "dark";
 
   const handleClick = () => {
     setSettingsOpen(!settingsOpen);
@@ -22,8 +24,12 @@ export function SettingsButton({ className, children }: SettingsButtonProps) {
 
   return (
     <>
-      <button className={className} onClick={handleClick} type="button">
-        {children}
+      <button
+        className={[styles.settingsButton, styles[theme]].join(" ")}
+        onClick={handleClick}
+        type="button"
+      >
+        <SettingsIcon />
       </button>
       <SettingsModal isOpen={settingsOpen} onClose={handleCloseModal} />
     </>

@@ -69,7 +69,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     checkAuth();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+  }, []);
+
+  useEffect(() => {
+    if (isLoading) {
+      return;
+    }
+
+    // Handle route protection based on auth state
+    if (user && isPublicPath) {
+      router.push("/level/start");
+    } else if (!user && !isPublicPath) {
+      router.push("/login");
+    }
+  }, [user, isPublicPath, isLoading, router]);
 
   useEffect(() => {
     if (!user || isPublicPath) {

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Countdown, { CountdownRenderProps } from "react-countdown";
+import { useRouter } from "next/navigation";
 import { useIsClient } from "src/shared/hooks/useIsClient";
 
 import { useAuth, useSettings, useStatistics } from "@app/context/client";
@@ -20,6 +21,7 @@ const renderer = ({ hours, minutes, seconds }: CountdownRenderProps) => (
 
 export const CountdownTimer = () => {
   const isClient = useIsClient();
+  const router = useRouter();
   const { settings, isLoading, refreshSettings } = useSettings();
   const { statistics, refreshStatistics } = useStatistics();
   const { deleteAccount } = useAuth();
@@ -27,14 +29,7 @@ export const CountdownTimer = () => {
   const [gameCompleted, setGameCompleted] = useState(false);
   const [frozenTimeLeft, setFrozenTimeLeft] = useState<number | null>(null);
 
-  const handleComplete = useCallback(async () => {
-    if (settings?.isAdmin) {
-      return;
-    }
-    await deleteAccount();
-  }, [deleteAccount, settings?.isAdmin]);
-
-  const handleRestart = async () => {
+  const handleRestart = useCallback(async () => {
     try {
       setGameCompleted(false);
       setFrozenTimeLeft(null);
@@ -48,6 +43,7 @@ export const CountdownTimer = () => {
       await refreshStatistics();
 
       setGameCompleted(false);
+      router.push("/level/start");
     } catch (error) {
       console.error("Error during restart:", error);
 
@@ -56,7 +52,15 @@ export const CountdownTimer = () => {
       setFrozenTimeLeft(null);
       setEndDate(null);
     }
-  };
+  }, [refreshSettings, refreshStatistics, router]);
+
+  const handleComplete = useCallback(async () => {
+    if (settings?.isAdmin) {
+      await handleRestart();
+      return;
+    }
+    await deleteAccount();
+  }, [deleteAccount, settings?.isAdmin, handleRestart]);
 
   useEffect(() => {
     if (!statistics) return;
@@ -123,10 +127,10 @@ export const CountdownTimer = () => {
 
     if (savedDate != null) {
       const delta = savedDate - Date.now();
-      if (delta <= 0) {
-        handleComplete();
-      } else {
+      if (delta > 0) {
         setEndDate(savedDate);
+      } else {
+        setEndDate(null);
       }
     } else {
       setEndDate(null);
