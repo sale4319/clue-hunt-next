@@ -84,7 +84,7 @@ export const questionSetOne = [
       "Outside the React app root",
       "As deep as possible in the component tree",
       "At any random location",
-      "High up in the component tree to wrap components that need access",
+      "On top of component tree to wrap components that need access",
     ],
     correctAnswerIndex: 3,
   },
@@ -93,7 +93,7 @@ export const questionSetOne = [
     answers: [
       "Handle client-side state more efficiently",
       "Replace all server-side logic",
-      "Render components on the server and send serialized HTML/JS to the client",
+      "Render components on the server and send HTML/JS to the client",
       "Enable browser-only rendering",
     ],
     correctAnswerIndex: 2,

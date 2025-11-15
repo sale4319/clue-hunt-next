@@ -17,6 +17,7 @@ export async function GET(request: NextRequest) {
 
     const userId = authCookie.value;
     const settings = await UserSettingsService.getSettings(userId);
+    const user = await AuthService.getUserByUsername(userId);
 
     // Get theme from cookie (primary source)
     const themeCookie = request.cookies.get(`clue_hunt_theme_${userId}`);
@@ -30,7 +31,7 @@ export async function GET(request: NextRequest) {
       quizMode: settings.quizMode,
       skipMode: settings.skipMode,
       timerEndDate: settings.timerEndDate,
-      isAdmin: settings.isAdmin || false,
+      isAdmin: user?.isAdmin || false,
       createdAt: settings.createdAt.toISOString(),
       updatedAt: settings.updatedAt.toISOString(),
     });
@@ -52,7 +53,16 @@ export async function POST(request: NextRequest) {
     }
 
     const userId = authCookie.value;
-    const body = await request.json();
+
+    let body;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json(
+        { error: "Invalid request body" },
+        { status: 400 }
+      );
+    }
 
     if (body.action === "restart") {
       // Verify user is admin by checking User document

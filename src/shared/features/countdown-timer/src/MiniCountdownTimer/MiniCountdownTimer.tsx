@@ -28,7 +28,7 @@ export const MiniCountdownTimer = ({ className, theme }: Props) => {
   const [endDate, setEndDate] = useState<number | null>(null);
   const [gameCompleted, setGameCompleted] = useState(false);
 
-  const shouldHide = pathname?.includes("/level/start");
+  const shouldHide = pathname?.includes("/level/start") || pathname === "/";
 
   useEffect(() => {
     if (isLoading || !settings) {

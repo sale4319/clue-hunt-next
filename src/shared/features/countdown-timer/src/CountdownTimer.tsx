@@ -1,11 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Countdown, { CountdownRenderProps } from "react-countdown";
 import { useRouter } from "next/navigation";
 import { useIsClient } from "src/shared/hooks/useIsClient";
 
-import { useAuth, useSettings, useStatistics } from "@app/context/client";
+import { useSettings, useStatistics } from "@app/context/client";
+import { useAuth } from "@app/context/client";
 import { quizApi, settingsApi, statisticsApi } from "@app/lib/client";
 import { formatTimeFromMs, twoDigits } from "@app/utils";
 
@@ -28,40 +29,75 @@ export const CountdownTimer = () => {
   const [endDate, setEndDate] = useState<number | null>(null);
   const [gameCompleted, setGameCompleted] = useState(false);
   const [frozenTimeLeft, setFrozenTimeLeft] = useState<number | null>(null);
+  const [shouldCompleteGame, setShouldCompleteGame] = useState(false);
+  const isRestartingRef = useRef(false);
 
   const handleRestart = useCallback(async () => {
+    if (isRestartingRef.current) return;
+    isRestartingRef.current = true;
+
     try {
-      setGameCompleted(false);
+      if (!settings?.isAdmin) {
+        await deleteAccount();
+        return;
+      }
+
+      // Admin: restart game
+      const response = await fetch("/api/settings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ action: "restart" }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.error || `Failed to restart game (${response.status})`
+        );
+      }
+
+      await settingsApi.clearTimerEndDate();
+      await quizApi.resetAllProgress();
+      await refreshStatistics();
+      await refreshSettings();
+
       setFrozenTimeLeft(null);
       setEndDate(null);
-
-      await statisticsApi.resetStatistics();
-      await quizApi.resetAllProgress();
-      await settingsApi.clearTimerEndDate();
-
-      await refreshSettings();
-      await refreshStatistics();
-
       setGameCompleted(false);
+
       router.push("/level/start");
     } catch (error) {
       console.error("Error during restart:", error);
-
-      // Even on error, clear local state to allow retry
-      setGameCompleted(false);
-      setFrozenTimeLeft(null);
-      setEndDate(null);
+    } finally {
+      isRestartingRef.current = false;
     }
-  }, [refreshSettings, refreshStatistics, router]);
+  }, [
+    settings?.isAdmin,
+    deleteAccount,
+    refreshSettings,
+    refreshStatistics,
+    router,
+  ]);
 
-  const handleComplete = useCallback(async () => {
-    if (settings?.isAdmin) {
-      await handleRestart();
-      return;
+  useEffect(() => {
+    if (shouldCompleteGame || !settings?.timerEndDate || isLoading) return;
+
+    const delta = settings.timerEndDate - Date.now();
+    if (delta <= 0) {
+      setShouldCompleteGame(true);
     }
-    await deleteAccount();
-  }, [deleteAccount, settings?.isAdmin, handleRestart]);
+  }, [shouldCompleteGame, settings?.timerEndDate, isLoading]);
 
+  useEffect(() => {
+    if (!shouldCompleteGame) return;
+
+    if (isRestartingRef.current) return;
+
+    handleRestart();
+    setShouldCompleteGame(false);
+  }, [shouldCompleteGame, handleRestart]);
   useEffect(() => {
     if (!statistics) return;
 
@@ -84,6 +120,11 @@ export const CountdownTimer = () => {
         settingsApi.clearTimerEndDate().catch(console.error);
       }
       return;
+    }
+
+    if (gameCompleted && !statistics.gameCompletedAt) {
+      setGameCompleted(false);
+      setFrozenTimeLeft(null);
     }
 
     if (gameCompleted) return;
@@ -142,14 +183,12 @@ export const CountdownTimer = () => {
     statistics?.gameCompletedAt,
     statistics,
     endDate,
-    handleComplete,
   ]);
 
   if (!isClient) {
     return <CountdownLoader />;
   }
 
-  // Show completed state only if gameCompleted is true AND we have completion data
   if (
     gameCompleted &&
     (frozenTimeLeft !== null || statistics?.gameCompletedAt)
@@ -174,7 +213,9 @@ export const CountdownTimer = () => {
               styles.normalButton,
               styles[settings?.theme || "dark"],
             ].join(" ")}
-            onClick={handleRestart}
+            onClick={() => {
+              handleRestart();
+            }}
           >
             Restart
           </button>
@@ -195,6 +236,9 @@ export const CountdownTimer = () => {
       { hours: 1, label: "Easy (1h)", style: "easyButton" },
       { hours: 0.5, label: "Normal (30m)", style: "normalButton" },
       { hours: 0.25, label: "Hard (15m)", style: "hardButton" },
+      ...(settings?.isAdmin
+        ? [{ hours: 0.01, label: "Test (30s)", style: "hardButton" }]
+        : []),
     ];
 
     return (
@@ -227,7 +271,7 @@ export const CountdownTimer = () => {
           key={endDate}
           date={endDate}
           renderer={renderer}
-          onComplete={handleComplete}
+          onComplete={() => setShouldCompleteGame(true)}
         />
       </span>
     </div>
