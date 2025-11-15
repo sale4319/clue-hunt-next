@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { Button, Title } from "clue-hunt-ui";
-import { useRouter } from "next/navigation";
 
 import { useSettings } from "@app/context/client";
 import {
@@ -11,15 +10,9 @@ import {
   type UserStatistics,
 } from "@app/lib/client";
 import { ScoreBoard } from "@app/score-board";
-import {
-  calculateScore,
-  getRoute,
-  getRouteWithSkip,
-  getTimeLeftDisplay,
-} from "@app/utils";
+import { calculateScore, getRoute, getTimeLeftDisplay } from "@app/utils";
 
 export default function LevelEnd() {
-  const router = useRouter();
   const { settings, isTimerStarted, refreshSettings } = useSettings();
 
   const [stats, setStats] = useState<UserStatistics | null>(null);
