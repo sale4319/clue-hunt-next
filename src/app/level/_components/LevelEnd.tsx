@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Button, SkipButton, Title } from "clue-hunt-ui";
+import { Button, Title } from "clue-hunt-ui";
 import { useRouter } from "next/navigation";
 
 import { useSettings } from "@app/context/client";
@@ -80,10 +80,6 @@ export default function LevelEnd() {
       markCompleted();
     }
   }, [stats, isLoading, settings?.timerEndDate, refreshSettings]);
-
-  const handleSkip = async () => {
-    router.push(getRouteWithSkip("level", "start"));
-  };
 
   if (isLoading) {
     return (
