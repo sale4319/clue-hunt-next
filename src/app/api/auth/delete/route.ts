@@ -20,6 +20,15 @@ export async function DELETE() {
     // The auth cookie contains just the username string
     const username = authCookie.value;
 
+    // Check if user is admin - admin accounts cannot be deleted
+    const user = await AuthService.getUserByUsername(username);
+    if (user?.isAdmin) {
+      return NextResponse.json(
+        { error: "Admin accounts cannot be deleted" },
+        { status: 403 }
+      );
+    }
+
     // Delete user settings, quiz progress, and statistics
     await UserSettingsService.deleteUserSettings(username);
     await QuizProgressService.deleteAllProgress(username);

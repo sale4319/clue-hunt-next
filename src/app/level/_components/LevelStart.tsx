@@ -7,7 +7,7 @@ import { useSettings, useStatistics } from "@app/context/client";
 import { CountdownTimer } from "@app/countdown-timer";
 import { statisticsApi } from "@app/lib/client";
 import { LevelStartMessages, TooltipMessages } from "@app/messages-contract";
-import { getRouteWithProgress,getRouteWithSkip } from "@app/utils";
+import { getRouteWithProgress, getRouteWithSkip } from "@app/utils";
 
 export default function LevelStart() {
   const { settings, isTimerStarted } = useSettings();
@@ -22,6 +22,7 @@ export default function LevelStart() {
   const isLocked = !isCompleted && !statistics?.levelLocks?.start;
   const isQuizMode = settings?.quizMode ? "quiz" : "level";
   const isQuizRoute = settings?.quizMode ? "start" : "one";
+  const theme = settings?.theme || "dark";
 
   const completedLevelsCount = statistics?.completedLevelsMap
     ? Object.values(statistics.completedLevelsMap).filter((val) => val === true)
@@ -54,28 +55,30 @@ export default function LevelStart() {
       <Title
         titleSize="medium"
         label={LevelStartMessages.TITLE}
-        theme={settings?.theme}
+        theme={theme}
         align="center"
       />
       <Title
         titleSize="small"
-        color="#75F8E2"
+        color={theme === "dark" ? "#75F8E2" : "#e91e63"}
         label={LevelStartMessages.INSTRUCTION}
         align="center"
       />
       <CountdownTimer />
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <Title
-          titleSize="medium"
-          label={LevelStartMessages.HINT}
-          theme={settings?.theme}
-        />
-        <QuestionIconToolTip
-          size="large"
-          onClick={handleSetLock}
-          content={TooltipMessages.START_HINT}
-        />
-      </div>
+      {isTimerStarted && (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Title
+            titleSize="medium"
+            label={LevelStartMessages.HINT}
+            theme={theme}
+          />
+          <QuestionIconToolTip
+            size="large"
+            onClick={handleSetLock}
+            content={TooltipMessages.START_HINT}
+          />
+        </div>
+      )}
       {shouldShowStartButton && (
         <Button
           size="medium"
@@ -85,7 +88,11 @@ export default function LevelStart() {
         />
       )}
       {settings?.skipMode && (
-        <SkipButton onClick={handleSkip} disabled={!isTimerStarted} />
+        <SkipButton
+          onClick={handleSkip}
+          disabled={!isTimerStarted}
+          theme={settings?.theme}
+        />
       )}
     </>
   );

@@ -81,15 +81,13 @@ export function YourScore({
         theme={theme}
         color={isMultiplierNegated ? "red" : undefined}
       />
-      <Title
-        label={`${
-          timeLeftCheck
-            ? ScoreMessages.COMPLETION_TIME
-            : ScoreMessages.TIME_LEFT
-        }${timeLeftDisplay}`}
-        titleSize="small"
-        theme={theme}
-      />
+      {timeLeftCheck && (
+        <Title
+          label={`${ScoreMessages.COMPLETION_TIME}${timeLeftDisplay}`}
+          titleSize="small"
+          theme={theme}
+        />
+      )}
     </div>
   );
 }

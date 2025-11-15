@@ -6,8 +6,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 2px solid #75f8e2;
   font-size: 20px;
+}
+
+.light {
+  border: 2px solid #e91e63;
+}
+
+.dark {
+  border: 2px solid #75f8e2;
 }
 
 .progressBar .inner {

@@ -37,6 +37,7 @@
   border: 2px solid #75f8e2;
   font-size: 16px;
   transition: all 0.3s ease;
+  font-family: inherit;
 }
 
 .input:focus {
@@ -53,33 +54,13 @@
   text-align: center;
 }
 
-.submitButton {
-  padding: 14px;
-  background: linear-gradient(135deg, #667eea 0%, #75f8e2 100%);
-  color: white;
-  border: none;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.submitButton:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px #667eea66;
-}
-
-.submitButton:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
 .toggleContainer {
   margin-top: 20px;
   text-align: center;
 }
 
 .toggleButton {
+  font-family: inherit;
   background: none;
   border: none;
   color: #75f8e2;

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { SubmitButton } from "clue-hunt-ui";
 
 import { authApi } from "@app/lib/client";
 import { LoginMessages } from "@app/messages-contract";
@@ -26,10 +27,7 @@ export default function LoginPage() {
         await authApi.register(username, password);
       }
 
-      const redirectPath = localStorage.getItem("redirectAfterLogin") || "/";
-      localStorage.removeItem("redirectAfterLogin");
-
-      window.location.href = redirectPath;
+      window.location.href = "/level/start";
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
@@ -81,13 +79,12 @@ export default function LoginPage() {
 
         {error && <div className={styles.error}>{error}</div>}
 
-        <button
-          type="submit"
-          className={styles.submitButton}
+        <SubmitButton
+          submit
+          size="medium"
           disabled={loading}
-        >
-          {loading ? "Loading..." : isLogin ? "Login" : "Register"}
-        </button>
+          label={loading ? "Loading..." : isLogin ? "Login" : "Register"}
+        />
       </form>
 
       <div className={styles.toggleContainer}>

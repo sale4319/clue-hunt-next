@@ -24,6 +24,13 @@
   font-size: 18px;
   min-width: 80px;
   min-height: 35px;
+}
+
+.light {
+  border: 2px solid #e91e63;
+}
+
+.dark {
   border: 2px solid #75f8e2;
 }
 

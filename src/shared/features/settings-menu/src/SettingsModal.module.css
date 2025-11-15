@@ -18,6 +18,23 @@
   padding: 20px;
   width: 460px;
 }
+
+.modalWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 40px;
+  padding: 20px;
+}
+
+.modalContentColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
 .light {
   background: white;
   color: black;

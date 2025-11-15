@@ -13,7 +13,7 @@ export function LogoutButton() {
     <>
       {user && (
         <div className={styles.userInfo}>
-          <span className={styles.username}>{user.username}</span>
+          <label className={styles.username}>{user.username}</label>
           <Button onClick={logout} mode="close" size="small" label="Logout" />
         </div>
       )}

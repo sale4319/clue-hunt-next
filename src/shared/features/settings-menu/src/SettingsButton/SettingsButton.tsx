@@ -1,24 +1,37 @@
 "use client";
 
+import { useState } from "react";
+import { SettingsIcon } from "src/shared/assets/SettingsIcon";
+
 import { useSettings } from "@app/context/client";
-import { settingsApi } from "@app/lib/client";
 
-type SettingsButtonProps = {
-  className?: string;
-  children: React.ReactNode;
-};
+import { SettingsModal } from "../SettingsModal";
 
-export function SettingsButton({ className, children }: SettingsButtonProps) {
-  const { refreshSettings } = useSettings();
+import styles from "./SettingsButton.module.css";
 
-  const handleClick = async () => {
-    await settingsApi.toggleSettingsModal();
-    await refreshSettings();
+export function SettingsButton({}) {
+  const { settings } = useSettings();
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const theme = settings?.theme || "dark";
+
+  const handleClick = () => {
+    setSettingsOpen(!settingsOpen);
+  };
+
+  const handleCloseModal = () => {
+    setSettingsOpen(false);
   };
 
   return (
-    <button className={className} onClick={handleClick} type="button">
-      {children}
-    </button>
+    <>
+      <button
+        className={[styles.settingsButton, styles[theme]].join(" ")}
+        onClick={handleClick}
+        type="button"
+      >
+        <SettingsIcon />
+      </button>
+      <SettingsModal isOpen={settingsOpen} onClose={handleCloseModal} />
+    </>
   );
 }

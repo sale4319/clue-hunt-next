@@ -16,7 +16,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@app/countdown-timer@workspace:src/shared/features/countdown-timer"
   dependencies:
-    clue-hunt-ui: "npm:^0.4.18"
+    clue-hunt-ui: "npm:^0.4.22"
     react-countdown: "npm:^2.3.6"
   languageName: unknown
   linkType: soft
@@ -30,12 +30,6 @@ __metadata:
 "@app/default-button@workspace:src/shared/components/default-button":
   version: 0.0.0-use.local
   resolution: "@app/default-button@workspace:src/shared/components/default-button"
-  languageName: unknown
-  linkType: soft
-
-"@app/highscore-list@workspace:src/shared/components/highscore-list":
-  version: 0.0.0-use.local
-  resolution: "@app/highscore-list@workspace:src/shared/components/highscore-list"
   languageName: unknown
   linkType: soft
 
@@ -55,7 +49,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@app/question-form@workspace:src/shared/features/question-form"
   dependencies:
-    clue-hunt-ui: "npm:^0.4.18"
+    clue-hunt-ui: "npm:^0.4.22"
   languageName: unknown
   linkType: soft
 
@@ -63,7 +57,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@app/quiz-form@workspace:src/shared/features/quiz-form"
   dependencies:
-    clue-hunt-ui: "npm:^0.4.18"
+    clue-hunt-ui: "npm:^0.4.22"
   languageName: unknown
   linkType: soft
 
@@ -73,11 +67,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@app/score-board@workspace:src/shared/components/score-board":
+  version: 0.0.0-use.local
+  resolution: "@app/score-board@workspace:src/shared/components/score-board"
+  languageName: unknown
+  linkType: soft
+
 "@app/settings-menu@workspace:src/shared/features/settings-menu":
   version: 0.0.0-use.local
   resolution: "@app/settings-menu@workspace:src/shared/features/settings-menu"
   dependencies:
-    clue-hunt-ui: "npm:^0.4.18"
+    clue-hunt-ui: "npm:^0.4.22"
   languageName: unknown
   linkType: soft
 
@@ -1202,7 +1202,7 @@ __metadata:
     "@types/node": "npm:^20"
     "@types/react": "npm:^19"
     "@types/react-dom": "npm:^19"
-    clue-hunt-ui: "npm:^0.4.18"
+    clue-hunt-ui: "npm:^0.4.22"
     eslint: "npm:^8"
     eslint-config-next: "npm:15.0.3"
     eslint-plugin-package-json: "npm:^0.59.0"
@@ -1218,13 +1218,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"clue-hunt-ui@npm:^0.4.18":
-  version: 0.4.18
-  resolution: "clue-hunt-ui@npm:0.4.18"
+"clue-hunt-ui@npm:^0.4.22":
+  version: 0.4.22
+  resolution: "clue-hunt-ui@npm:0.4.22"
   peerDependencies:
     react: ^18.2.0
     react-dom: ^18.2.0
-  checksum: 10c0/570aa63ba15afa5ea631a8303250f622bdaef1edf41675ce83df5ae504801e92d3400f62c699027a2b376c1903f5c5cafeaec83e0416483393f43d7f45f66301
+  checksum: 10c0/117af393248718bbef7f024e360806567f7b7ad823dc422cb1bccbe3401fbca16cb62ded61dcdea0ab1720f51010803b42ba815abd98788845494532701c768d
   languageName: node
   linkType: hard
 

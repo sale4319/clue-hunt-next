@@ -114,7 +114,6 @@ Stores user preferences and game state:
   quizMode: boolean; // Quiz mode enabled/disabled
   skipMode: boolean; // Skip mode enabled/disabled
   isLocked: boolean; // Lock state
-  settingsOpen: boolean; // Settings modal state
   timerEndDate: number | null; // 24-hour countdown timer end timestamp
   createdAt: Date; // Auto-generated
   updatedAt: Date; // Auto-generated

@@ -17,7 +17,7 @@ export const QuizStartScreen: React.FC<QuizStartScreenProps> = ({
       <p>{QuizFormMessages.DESCRIPTION}</p>
       <p>
         <Button
-          mode="up"
+          mode={theme === "dark" ? "up" : "fill"}
           onClick={onStart}
           label={QuizFormMessages.START_BUTTON}
           size="medium"

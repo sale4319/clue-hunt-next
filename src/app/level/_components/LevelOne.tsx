@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { useSettings, useStatistics } from "@app/context/client";
 import { statisticsApi } from "@app/lib/client";
 import { LevelOneMessages } from "@app/messages-contract";
-import { getRouteWithProgress,getRouteWithSkip } from "@app/utils";
+import { getRouteWithProgress, getRouteWithSkip } from "@app/utils";
 
 export default function LevelOne() {
   const router = useRouter();
@@ -62,7 +62,11 @@ export default function LevelOne() {
         onClick={handleCompleteLevel}
       />
       {skipMode && (
-        <SkipButton onClick={handleSkip} disabled={!isTimerStarted} />
+        <SkipButton
+          onClick={handleSkip}
+          disabled={!isTimerStarted}
+          theme={settings?.theme}
+        />
       )}
     </>
   );

@@ -100,6 +100,9 @@ export const authApi = {
     });
 
     if (!response.ok) {
+      if (response.status === 403) {
+        return;
+      }
       throw new Error("Failed to delete account");
     }
   },

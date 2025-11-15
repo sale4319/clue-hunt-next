@@ -7,7 +7,7 @@ import { statisticsApi } from "src/shared/lib/src/api/statistics";
 import { useSettings } from "@app/context/client";
 import { QuizForm } from "@app/quiz-form";
 import { questionSetSix } from "@app/quiz-sets-contract";
-import { getRouteWithProgress,getRouteWithSkip } from "@app/utils";
+import { getRouteWithProgress, getRouteWithSkip } from "@app/utils";
 
 export default function QuizSix() {
   const router = useRouter();
@@ -32,7 +32,11 @@ export default function QuizSix() {
         theme={settings?.theme}
       />
       {settings?.skipMode && (
-        <SkipButton onClick={handleSkip} disabled={!isTimerStarted} />
+        <SkipButton
+          onClick={handleSkip}
+          disabled={!isTimerStarted}
+          theme={settings?.theme}
+        />
       )}
     </>
   );

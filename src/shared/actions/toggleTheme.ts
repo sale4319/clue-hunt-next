@@ -3,6 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
+import { UserSettingsService } from "@app/lib/server";
+
 export async function toggleTheme() {
   const cookieStore = await cookies();
   const authCookie = cookieStore.get("clue_hunt_auth");
@@ -22,6 +24,12 @@ export async function toggleTheme() {
     sameSite: "lax",
     maxAge: 60 * 60 * 24 * 365, // 1 year
   });
+
+  try {
+    await UserSettingsService.toggleTheme(userId);
+  } catch (error) {
+    console.error("Failed to sync theme to database:", error);
+  }
 
   revalidatePath("/", "layout");
 }

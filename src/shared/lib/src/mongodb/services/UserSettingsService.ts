@@ -15,7 +15,6 @@ export class UserSettingsService {
           theme: "dark",
           quizMode: true,
           skipMode: true,
-          settingsOpen: false,
           timerEndDate: null,
           isAdmin: false,
         },
@@ -93,21 +92,6 @@ export class UserSettingsService {
     );
 
     return newSkipMode;
-  }
-
-  static async toggleSettingsOpen(userId: string): Promise<boolean> {
-    await connectToDatabase();
-
-    const settings = await this.getSettings(userId);
-    const newSettingsOpen = !settings.settingsOpen;
-
-    await UserSettings.findOneAndUpdate(
-      { userId },
-      { settingsOpen: newSettingsOpen },
-      { upsert: true, new: true }
-    );
-
-    return newSettingsOpen;
   }
 
   static async setTimerEndDate(userId: string, endDate: number): Promise<void> {

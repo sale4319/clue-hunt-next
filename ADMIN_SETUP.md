@@ -30,9 +30,8 @@ Added `isAdmin` field to track admin status in user settings:
   theme: "light" | "dark";
   quizMode: boolean;
   skipMode: boolean;
-  settingsOpen: boolean;
   timerEndDate: number | null;
-  isAdmin: boolean; // NEW - defaults to false
+  isAdmin: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

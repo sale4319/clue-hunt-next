@@ -1,2 +1,1 @@
-export { CountdownTimer } from "./CountdownTimer";
 export { MiniCountdownTimer } from "./MiniCountdownTimer";

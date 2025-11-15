@@ -5,9 +5,7 @@ import styles from "../CountdownTimer.module.css";
 export const CountdownLoader = () => {
   const { settings } = useSettings();
 
-  const savedDate = settings?.timerEndDate;
-  const showDifficultyButtons =
-    savedDate && savedDate !== null && savedDate !== undefined;
+  const hasActiveTimer = settings?.timerEndDate != null;
 
   const difficultyButtons = [
     { label: "Easy (1h)", style: "easyButton" },
@@ -20,7 +18,7 @@ export const CountdownLoader = () => {
         <span>Loading</span>
       </span>
 
-      {!showDifficultyButtons && (
+      {!hasActiveTimer && (
         <div className={styles.difficultyButtons}>
           {difficultyButtons.map(({ label, style }) => (
             <button

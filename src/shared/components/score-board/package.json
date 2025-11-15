@@ -1,5 +1,5 @@
 {
-  "name": "@app/highscore-list",
+  "name": "@app/score-board",
   "version": "0.1.0",
   "private": true,
   "keywords": [

@@ -1,25 +1,18 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Button, SkipButton, Title } from "clue-hunt-ui";
-import { useRouter } from "next/navigation";
+import { Button, Title } from "clue-hunt-ui";
 
 import { useSettings } from "@app/context/client";
-import { ScoreBoard } from "@app/highscore-list";
 import {
   settingsApi,
   statisticsApi,
   type UserStatistics,
 } from "@app/lib/client";
-import {
-  calculateScore,
-  getRoute,
-  getRouteWithSkip,
-  getTimeLeftDisplay,
-} from "@app/utils";
+import { ScoreBoard } from "@app/score-board";
+import { calculateScore, getRoute, getTimeLeftDisplay } from "@app/utils";
 
 export default function LevelEnd() {
-  const router = useRouter();
   const { settings, isTimerStarted, refreshSettings } = useSettings();
 
   const [stats, setStats] = useState<UserStatistics | null>(null);
@@ -80,10 +73,6 @@ export default function LevelEnd() {
       markCompleted();
     }
   }, [stats, isLoading, settings?.timerEndDate, refreshSettings]);
-
-  const handleSkip = async () => {
-    router.push(getRouteWithSkip("level", "start"));
-  };
 
   if (isLoading) {
     return (
@@ -152,9 +141,6 @@ export default function LevelEnd() {
         primary={false}
         label="Recycle"
       />
-      {settings?.skipMode && (
-        <SkipButton onClick={handleSkip} disabled={!isTimerStarted} />
-      )}
     </>
   );
 }

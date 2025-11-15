@@ -6,11 +6,12 @@ import { useSettings } from "@app/context/client";
 
 import { toggleTheme } from "../../../actions/toggleTheme";
 
-import "./DarkModeButton.css";
+import styles from "./DarkModeButton.module.css";
 
 export const DarkModeButton = () => {
   const router = useRouter();
-  const { refreshSettings } = useSettings();
+  const { refreshSettings, settings } = useSettings();
+  const theme = settings?.theme || "dark";
 
   const handleToggle = async () => {
     await toggleTheme();
@@ -18,5 +19,10 @@ export const DarkModeButton = () => {
     router.refresh();
   };
 
-  return <button id={"darkMode"} onClick={handleToggle} />;
+  return (
+    <button
+      className={[styles.darkMode, styles[theme]].join(" ")}
+      onClick={handleToggle}
+    />
+  );
 };
