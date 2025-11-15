@@ -10,17 +10,6 @@
     filter 0.3s ease-in-out;
 }
 
-#noStyle {
-  position: relative;
-  width: 2.3em;
-  height: 2.3em;
-  background: #f9f8f8;
-  border: 1px solid #ddd;
-  border-radius: 50%;
-  left: 0em;
-  transition: left 0.3s ease-out;
-}
-
 .darkMode:hover,
 .darkMode:focus {
   filter: none;
@@ -34,9 +23,11 @@
 }
 
 .light {
-  color: #e91e63;
+  filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(1248%)
+    hue-rotate(314deg);
 }
 
 .dark {
-  color: #61dafb;
+  filter: brightness(0) saturate(100%) invert(74%) sepia(76%) saturate(358%)
+    hue-rotate(174deg);
 }
