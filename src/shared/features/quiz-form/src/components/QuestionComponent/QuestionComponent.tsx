@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import cx from "classnames";
 
 import { QuestionProps } from "../../types";
 
@@ -50,7 +51,7 @@ export const QuestionComponent = ({
         );
       }
 
-      return classes.join(" ");
+      return cx(classes);
     },
     [selectedAnswerIndex, question.correctAnswerIndex]
   );
@@ -79,9 +80,9 @@ export const QuestionComponent = ({
         {question.answers.map((answer, index) => (
           <div
             key={index}
-            className={`${[styles.answer, styles[theme]].join(
-              " "
-            )} ${getAnswerClasses(index)}`}
+            className={`${cx(styles.answer, styles[theme])} ${getAnswerClasses(
+              index
+            )}`}
             onClick={() => handleAnswerClick(index)}
             role="button"
             tabIndex={0}

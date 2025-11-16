@@ -1,5 +1,6 @@
 "use client";
 
+import cx from "classnames";
 import { Button, SkipButton, Title } from "clue-hunt-ui";
 import { useRouter } from "next/navigation";
 
@@ -51,10 +52,7 @@ export default function LevelSix() {
 
       {isCompleted ? (
         <div
-          className={[
-            styles.contentBox,
-            styles[settings?.theme || "dark"],
-          ].join(" ")}
+          className={cx(styles.contentBox, styles[settings?.theme || "dark"])}
         >
           <Title
             label="Level completed! You can continue."

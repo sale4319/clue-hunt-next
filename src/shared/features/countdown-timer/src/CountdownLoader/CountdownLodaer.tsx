@@ -1,3 +1,5 @@
+import cx from "classnames";
+
 import { useSettings } from "@app/context/client";
 
 import styles from "../CountdownTimer.module.css";
@@ -23,10 +25,7 @@ export const CountdownLoader = () => {
           {difficultyButtons.map(({ label, style }) => (
             <button
               key={label}
-              className={[
-                styles[style],
-                styles[settings?.theme || "dark"],
-              ].join(" ")}
+              className={cx(styles[style], styles[settings?.theme || "dark"])}
             >
               {label}
             </button>

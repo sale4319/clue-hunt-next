@@ -1,4 +1,5 @@
 import React from "react";
+import cx from "classnames";
 
 import { ProgressBarProps } from "../../types";
 
@@ -12,7 +13,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   const progressPercentage = (currentQuestionIndex / totalQuestionsCount) * 100;
 
   return (
-    <div className={[styles.progressBar, styles[theme]].join(" ")}>
+    <div className={cx(styles.progressBar, styles[theme])}>
       <div className={styles.text}>
         {currentQuestionIndex} answered (
         {totalQuestionsCount - currentQuestionIndex} remaining)

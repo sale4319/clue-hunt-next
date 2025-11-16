@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Countdown, { CountdownRenderProps } from "react-countdown";
+import cx from "classnames";
 import { usePathname } from "next/navigation";
 import { useIsClient } from "src/shared/hooks/useIsClient";
 
@@ -65,9 +66,7 @@ export const MiniCountdownTimer = ({ className, theme }: Props) => {
 
   return (
     <div className={className}>
-      <span
-        className={[styles.miniTimeCounter, styles[theme || "dark"]].join(" ")}
-      >
+      <span className={cx(styles.miniTimeCounter, styles[theme || "dark"])}>
         <Countdown
           key={endDate}
           date={endDate}

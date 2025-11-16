@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import cx from "classnames";
 
 import {
   QuizCompleteScreen,
@@ -64,7 +65,7 @@ const QuizForm: React.FC<QuizProps> = ({
 
   if (isLoading) {
     return (
-      <div className={[styles.quiz, styles[theme]].join(" ")}>
+      <div className={cx(styles.quiz, styles[theme])}>
         <p>Loading quiz...</p>
       </div>
     );

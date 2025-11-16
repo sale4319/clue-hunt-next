@@ -1,4 +1,5 @@
 import React from "react";
+import cx from "classnames";
 import { Button } from "clue-hunt-ui";
 
 import { QuizFormMessages } from "@app/messages-contract";
@@ -16,7 +17,7 @@ export const QuizCompleteScreen: React.FC<QuizCompleteScreenProps> = ({
   onRestart,
 }) => {
   return (
-    <div className={[styles.quiz, styles[theme]].join(" ")}>
+    <div className={cx(styles.quiz, styles[theme])}>
       <h1>{QuizFormMessages.TITLE_COMPLETE}</h1>
       <p>
         {QuizFormMessages.CORRECT_ANSWERS} {correctAnswerCount}{" "}

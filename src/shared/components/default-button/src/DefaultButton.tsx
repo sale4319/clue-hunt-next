@@ -1,4 +1,5 @@
 'use client"';
+import cx from "classnames";
 import Link from "next/link";
 
 import styles from "./DefaultButton.module.css";
@@ -33,7 +34,7 @@ export function DefaultButton({
   return (
     <Link
       href={href}
-      className={[styles.primaryButton, styles[size], toggleColor].join(" ")}
+      className={cx(styles.primaryButton, styles[size], toggleColor)}
       style={{ backgroundColor }}
       {...props}
     >

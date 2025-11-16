@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import cx from "classnames";
 import { Button } from "clue-hunt-ui";
 
 import { QuizFormMessages } from "@app/messages-contract";
@@ -57,7 +58,7 @@ export const QuizInProgressScreen: React.FC<QuizInProgressScreenProps> = ({
   }, [isLastQuestion, answerStatus, onNext]);
 
   return (
-    <div className={[styles.quiz, styles[theme]].join(" ")}>
+    <div className={cx(styles.quiz, styles[theme])}>
       <ProgressBar
         currentQuestionIndex={questionIndex}
         totalQuestionsCount={totalQuestions}

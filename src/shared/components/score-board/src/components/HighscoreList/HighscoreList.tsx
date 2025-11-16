@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import cx from "classnames";
 import { Button, Title } from "clue-hunt-ui";
 import { ScoreMessages } from "src/shared/contracts/messages-contract/src/scoreMessages";
 
@@ -85,9 +86,7 @@ export function HighscoreList({
   if (highscores.length === 0) {
     return (
       <div className={styles.highscoreWrapper}>
-        <div
-          className={[styles.scoreContainer, styles[theme || "dark"]].join(" ")}
-        >
+        <div className={cx(styles.scoreContainer, styles[theme || "dark"])}>
           <Title
             label={ScoreMessages.HIGH_SCORES}
             theme={theme}
@@ -113,9 +112,7 @@ export function HighscoreList({
 
   return (
     <div className={styles.highscoreWrapper}>
-      <div
-        className={[styles.scoreContainer, styles[theme || "dark"]].join(" ")}
-      >
+      <div className={cx(styles.scoreContainer, styles[theme || "dark"])}>
         <Title
           label={ScoreMessages.HIGH_SCORES}
           theme={theme}
@@ -125,7 +122,7 @@ export function HighscoreList({
           {highscores.map((score, index) => (
             <div
               key={score.userId}
-              className={[styles.highscoreEntry, styles[theme]].join(" ")}
+              className={cx(styles.highscoreEntry, styles[theme || "dark"])}
             >
               <div className={styles.userInfo}>
                 <span className={styles.rank}>{index + 1}.</span>

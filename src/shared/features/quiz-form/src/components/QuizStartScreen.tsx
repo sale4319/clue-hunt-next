@@ -1,4 +1,5 @@
 import React from "react";
+import cx from "classnames";
 import { Button } from "clue-hunt-ui";
 
 import { QuizFormMessages } from "@app/messages-contract";
@@ -12,7 +13,7 @@ export const QuizStartScreen: React.FC<QuizStartScreenProps> = ({
   onStart,
 }) => {
   return (
-    <div className={[styles.quiz, styles[theme]].join(" ")}>
+    <div className={cx(styles.quiz, styles[theme])}>
       <h1>{QuizFormMessages.TITLE}</h1>
       <p>{QuizFormMessages.DESCRIPTION}</p>
       <p>

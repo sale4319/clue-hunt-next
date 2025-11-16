@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Countdown, { CountdownRenderProps } from "react-countdown";
+import cx from "classnames";
 import { useRouter } from "next/navigation";
 import { useIsClient } from "src/shared/hooks/useIsClient";
 
@@ -209,10 +210,10 @@ export const CountdownTimer = () => {
         </span>
         <div className={styles.difficultyButtons}>
           <button
-            className={[
+            className={cx(
               styles.normalButton,
-              styles[settings?.theme || "dark"],
-            ].join(" ")}
+              styles[settings?.theme || "dark"]
+            )}
             onClick={() => {
               handleRestart();
             }}
@@ -250,10 +251,7 @@ export const CountdownTimer = () => {
           {difficultyButtons.map(({ hours, label, style }) => (
             <button
               key={label}
-              className={[
-                styles[style],
-                styles[settings?.theme || "dark"],
-              ].join(" ")}
+              className={cx(styles[style], styles[settings?.theme || "dark"])}
               onClick={() => setDifficulty(hours)}
             >
               {label}
