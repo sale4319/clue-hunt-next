@@ -1,5 +1,6 @@
 "use client";
 
+import cx from "classnames";
 import { useRouter } from "next/navigation";
 
 import { useSettings } from "@app/context/client";
@@ -21,7 +22,7 @@ export const DarkModeButton = () => {
 
   return (
     <button
-      className={[styles.darkMode, styles[theme]].join(" ")}
+      className={cx(styles.darkMode, styles[theme])}
       onClick={handleToggle}
     />
   );

@@ -18,6 +18,7 @@
     "lint:fix": "next lint --fix"
   },
   "dependencies": {
+    "classnames": "^2.5.1",
     "clue-hunt-ui": "^0.4.22",
     "mongoose": "^8.19.2",
     "next": "15.0.3",

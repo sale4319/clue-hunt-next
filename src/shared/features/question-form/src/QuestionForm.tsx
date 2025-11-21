@@ -7,6 +7,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import cx from "classnames";
 import { QuestionIconToolTip, SubmitButton } from "clue-hunt-ui";
 
 import { QuestionFormMessages } from "@app/messages-contract";
@@ -80,14 +81,14 @@ export const QuestionForm = ({
     }
   }, [formErrors, isSubmitting, hasErrors, formValues, handleUnlock]);
 
-  const themeClassName = [styles.label, styles[theme]].join(" ");
+  const themeClassName = cx(styles.label, styles[theme]);
 
   return (
     <>
       {isSuccess && (
         <span className={styles.successMessage}>{successMessage}</span>
       )}
-      <div className={[styles.card, styles[theme]].join(" ")}>
+      <div className={cx(styles.card, styles[theme])}>
         <form
           className={styles.form}
           onSubmit={handleSubmit}

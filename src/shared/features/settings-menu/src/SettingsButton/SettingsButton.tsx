@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import cx from "classnames";
 import { SettingsIcon } from "src/shared/assets/SettingsIcon";
 
 import { useSettings } from "@app/context/client";
@@ -25,7 +26,7 @@ export function SettingsButton({}) {
   return (
     <>
       <button
-        className={[styles.settingsButton, styles[theme]].join(" ")}
+        className={cx(styles.settingsButton, styles[theme])}
         onClick={handleClick}
         type="button"
       >

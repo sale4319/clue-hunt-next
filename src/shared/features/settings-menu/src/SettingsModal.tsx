@@ -1,5 +1,6 @@
 "use client";
 
+import cx from "classnames";
 import { Button, Title } from "clue-hunt-ui";
 
 import { useSettings } from "@app/context/client";
@@ -42,9 +43,7 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
 
   return (
     <div className={styles.modalBackdrop} onMouseDown={handleBackdropClick}>
-      <div
-        className={[styles.modalContainer, styles[settings.theme]].join(" ")}
-      >
+      <div className={cx(styles.modalContainer, styles[settings.theme])}>
         <Title
           titleSize="medium"
           label={SettingsModalMessages.TITLE}

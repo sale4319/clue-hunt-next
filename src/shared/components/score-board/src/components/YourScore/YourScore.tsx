@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import cx from "classnames";
 import { Title } from "clue-hunt-ui";
 
 import { ScoreMessages } from "@app/messages-contract";
@@ -24,7 +25,7 @@ export function YourScore({
   const isMultiplierNegated = penalty >= 14;
 
   return (
-    <div className={[styles.scoreContainer, styles[theme || "dark"]].join(" ")}>
+    <div className={cx(styles.scoreContainer, styles[theme || "dark"])}>
       <div onClick={() => setIsScoreExpanded(!isScoreExpanded)}>
         <Title
           label={`${ScoreMessages.TITLE} ${finalScore.toLocaleString()} ${
