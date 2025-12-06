@@ -40,11 +40,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [lastActivity, setLastActivity] = useState<number>(Date.now());
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const { clearSettings } = useSettings();
 
-  const isPublicPath = PUBLIC_PATHS.includes(pathname);
+  const isPublicPath = PUBLIC_PATHS.includes(pathname || "/");
 
   const checkAuth = async () => {
     try {
@@ -114,16 +115,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const now = Date.now();
       const timeSinceLastActivity = now - lastActivity;
 
-      if (timeSinceLastActivity >= INACTIVITY_TIMEOUT) {
+      if (timeSinceLastActivity >= INACTIVITY_TIMEOUT && !isLoggingOut) {
         logout();
       }
     }, 60000);
 
     return () => clearInterval(checkInactivity);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, isPublicPath, lastActivity]);
+  }, [user, isPublicPath, lastActivity, isLoggingOut]);
 
   const login = async (username: string, password: string) => {
+    setIsLoggingOut(false);
     const response = await authApi.login(username, password);
     setUser(response.user);
     setLastActivity(Date.now());
@@ -131,6 +133,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const register = async (username: string, password: string) => {
+    setIsLoggingOut(false);
     const response = await authApi.register(username, password);
     setUser(response.user);
     setLastActivity(Date.now());
@@ -138,8 +141,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = async () => {
+    setIsLoggingOut(true);
     if (!isPublicPath) {
-      localStorage.setItem("redirectAfterLogin", pathname);
+      localStorage.setItem("redirectAfterLogin", pathname || "/");
     }
 
     clearSettings();
@@ -150,6 +154,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const deleteAccount = async () => {
+    setIsLoggingOut(true);
     clearSettings();
     await authApi.deleteAccount();
     setUser(null);

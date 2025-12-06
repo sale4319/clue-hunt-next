@@ -25,20 +25,35 @@ export const CountdownTimer = () => {
   const isClient = useIsClient();
   const router = useRouter();
   const { settings, isLoading, refreshSettings } = useSettings();
-  const { statistics, refreshStatistics } = useStatistics();
+  const {
+    statistics,
+    refreshStatistics,
+    isLoading: statisticsLoading,
+  } = useStatistics();
   const { deleteAccount } = useAuth();
   const [endDate, setEndDate] = useState<number | null>(null);
   const [gameCompleted, setGameCompleted] = useState(false);
   const [frozenTimeLeft, setFrozenTimeLeft] = useState<number | null>(null);
   const [shouldCompleteGame, setShouldCompleteGame] = useState(false);
   const isRestartingRef = useRef(false);
+  const lastCompletedTimeRef = useRef<number | null>(null);
+  const hasHandledExpiredTimerRef = useRef(false);
 
   const handleRestart = useCallback(async () => {
     if (isRestartingRef.current) return;
     isRestartingRef.current = true;
 
     try {
-      if (!settings?.isAdmin) {
+      // Only delete non-admin accounts
+      const isAdmin = settings?.isAdmin === true;
+
+      if (!isAdmin) {
+        try {
+          await settingsApi.clearTimerEndDate();
+          lastCompletedTimeRef.current = Date.now();
+        } catch (error) {
+          console.error("Error clearing timer:", error);
+        }
         await deleteAccount();
         return;
       }
@@ -60,6 +75,7 @@ export const CountdownTimer = () => {
       }
 
       await settingsApi.clearTimerEndDate();
+      lastCompletedTimeRef.current = Date.now();
       await quizApi.resetAllProgress();
       await refreshStatistics();
       await refreshSettings();
@@ -80,25 +96,84 @@ export const CountdownTimer = () => {
     refreshSettings,
     refreshStatistics,
     router,
+    settings,
   ]);
 
   useEffect(() => {
-    if (shouldCompleteGame || !settings?.timerEndDate || isLoading) return;
+    if (isLoading || !settings) return;
+
+    // If timer has already expired when we load settings, clear it immediately
+    // This prevents the timer from triggering on login if it expired during previous session
+    if (
+      settings.timerEndDate &&
+      settings.timerEndDate - Date.now() <= 0 &&
+      !hasHandledExpiredTimerRef.current
+    ) {
+      hasHandledExpiredTimerRef.current = true;
+      lastCompletedTimeRef.current = Date.now();
+      settingsApi
+        .clearTimerEndDate()
+        .then(() => {
+          refreshSettings();
+        })
+        .catch(console.error);
+      return;
+    }
+  }, [isLoading, settings, refreshSettings]);
+
+  useEffect(() => {
+    if (
+      shouldCompleteGame ||
+      !settings?.timerEndDate ||
+      isLoading ||
+      statisticsLoading
+    )
+      return;
+
+    // Prevent re-triggering if we just completed game within last 3 seconds
+    if (
+      lastCompletedTimeRef.current &&
+      Date.now() - lastCompletedTimeRef.current < 3000
+    ) {
+      return;
+    }
 
     const delta = settings.timerEndDate - Date.now();
     if (delta <= 0) {
+      lastCompletedTimeRef.current = Date.now();
       setShouldCompleteGame(true);
     }
-  }, [shouldCompleteGame, settings?.timerEndDate, isLoading]);
+  }, [
+    shouldCompleteGame,
+    settings?.timerEndDate,
+    isLoading,
+    statisticsLoading,
+  ]);
 
   useEffect(() => {
     if (!shouldCompleteGame) return;
 
     if (isRestartingRef.current) return;
 
+    // Only proceed if BOTH settings AND statistics are fully loaded with admin flag defined
+    if (
+      isLoading ||
+      statisticsLoading ||
+      !settings ||
+      settings.isAdmin === undefined
+    ) {
+      return;
+    }
+
     handleRestart();
     setShouldCompleteGame(false);
-  }, [shouldCompleteGame, handleRestart]);
+  }, [
+    shouldCompleteGame,
+    handleRestart,
+    isLoading,
+    statisticsLoading,
+    settings,
+  ]);
   useEffect(() => {
     if (!statistics) return;
 
