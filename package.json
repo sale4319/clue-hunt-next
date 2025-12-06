@@ -21,7 +21,7 @@
     "classnames": "^2.5.1",
     "clue-hunt-ui": "^0.4.22",
     "mongoose": "^8.19.2",
-    "next": "15.0.3",
+    "next": "^16.0.7",
     "react": "^19.0.0",
     "react-countdown": "^2.3.6",
     "react-dom": "^19.0.0",
