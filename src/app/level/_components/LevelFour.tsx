@@ -7,6 +7,7 @@ import { useSettings, useStatistics } from "@app/context/client";
 import { statisticsApi } from "@app/lib/client";
 import { LevelFourMessages } from "@app/messages-contract";
 import { getRouteWithProgress, getRouteWithSkip } from "@app/utils";
+import { LevelCompleted } from "@app/level-completed";
 
 export default function LevelFour() {
   const router = useRouter();
@@ -33,23 +34,29 @@ export default function LevelFour() {
   };
   return (
     <>
-      <Title
-        titleSize="medium"
-        label={LevelFourMessages.HINT}
-        theme={settings?.theme}
-        align="center"
-      />
-      <Button
-        size="medium"
-        isLocked={isLocked}
-        primary={isLocked}
-        onClick={handleCompleteLevel}
-      />
+      {isCompleted ? (
+        <LevelCompleted handleContinue={handleCompleteLevel} />
+      ) : (
+        <>
+          <Title
+            titleSize="medium"
+            label={LevelFourMessages.HINT}
+            theme={settings?.theme}
+            align="center"
+          />
+          <Button
+            size="medium"
+            isLocked={isLocked}
+            primary={isLocked}
+            onClick={handleCompleteLevel}
+          />
 
-      <ShiftingCircles
-        handleUnlockNavigation={handleSetLock}
-        theme={settings?.theme}
-      />
+          <ShiftingCircles
+            handleUnlockNavigation={handleSetLock}
+            theme={settings?.theme}
+          />
+        </>
+      )}
 
       {settings?.skipMode && (
         <SkipButton

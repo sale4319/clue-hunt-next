@@ -33,6 +33,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@app/level-completed@workspace:src/shared/components/level-completed":
+  version: 0.0.0-use.local
+  resolution: "@app/level-completed@workspace:src/shared/components/level-completed"
+  languageName: unknown
+  linkType: soft
+
 "@app/messages-contract@workspace:src/shared/contracts/messages-contract":
   version: 0.0.0-use.local
   resolution: "@app/messages-contract@workspace:src/shared/contracts/messages-contract"

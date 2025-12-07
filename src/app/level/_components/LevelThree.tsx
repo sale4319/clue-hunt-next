@@ -13,6 +13,7 @@ import { useSettings, useStatistics } from "@app/context/client";
 import { statisticsApi } from "@app/lib/client";
 import { LevelThreeMessages } from "@app/messages-contract";
 import { getRouteWithProgress, getRouteWithSkip } from "@app/utils";
+import { LevelCompleted } from "@app/level-completed";
 
 export default function LevelThree() {
   const router = useRouter();
@@ -41,23 +42,29 @@ export default function LevelThree() {
 
   return (
     <>
-      <SpacerElement size="small" />
-      <Title
-        titleSize="medium"
-        label={LevelThreeMessages.HINT}
-        theme={settings?.theme}
-        align="center"
-      />
-      <Button
-        size="medium"
-        isLocked={isLocked}
-        primary={isLocked}
-        onClick={handleCompleteLevel}
-      />
-      <DraggingPuzzle
-        handleUnlockNavigation={handleSetLock}
-        theme={settings?.theme}
-      />
+      {isCompleted ? (
+        <LevelCompleted handleContinue={handleCompleteLevel} />
+      ) : (
+        <>
+          <SpacerElement size="small" />
+          <Title
+            titleSize="medium"
+            label={LevelThreeMessages.HINT}
+            theme={settings?.theme}
+            align="center"
+          />
+          <Button
+            size="medium"
+            isLocked={isLocked}
+            primary={isLocked}
+            onClick={handleCompleteLevel}
+          />
+          <DraggingPuzzle
+            handleUnlockNavigation={handleSetLock}
+            theme={settings?.theme}
+          />
+        </>
+      )}
       {settings?.skipMode && (
         <SkipButton
           onClick={handleSkip}

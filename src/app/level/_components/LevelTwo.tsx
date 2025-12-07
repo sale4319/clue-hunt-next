@@ -13,6 +13,7 @@ import { useSettings, useStatistics } from "@app/context/client";
 import { statisticsApi } from "@app/lib/client";
 import { LevelTwoMessages, TooltipMessages } from "@app/messages-contract";
 import { getRouteWithProgress, getRouteWithSkip } from "@app/utils";
+import { LevelCompleted } from "@app/level-completed";
 
 export default function LevelTwo() {
   const router = useRouter();
@@ -41,24 +42,31 @@ export default function LevelTwo() {
 
   return (
     <>
-      <SpacerElement size="medium">
-        <UnlockToolTip
-          content={TooltipMessages.LEVEL_TWO_CONGRATS}
-          onClick={handleSetLock}
-          data-testid="unlockButton"
-        />
-      </SpacerElement>
-      <Title
-        label={LevelTwoMessages.HINT}
-        theme={settings?.theme}
-        align="center"
-      />
-      <Button
-        size="medium"
-        isLocked={isLocked}
-        primary={isLocked}
-        onClick={handleCompleteLevel}
-      />
+      {isCompleted ? (
+        <LevelCompleted handleContinue={handleCompleteLevel} />
+      ) : (
+        <>
+          <SpacerElement size="medium">
+            <UnlockToolTip
+              content={TooltipMessages.LEVEL_TWO_CONGRATS}
+              onClick={handleSetLock}
+              data-testid="unlockButton"
+            />
+          </SpacerElement>
+          <Title
+            label={LevelTwoMessages.HINT}
+            theme={settings?.theme}
+            align="center"
+          />
+          <Button
+            size="medium"
+            isLocked={isLocked}
+            primary={isLocked}
+            onClick={handleCompleteLevel}
+          />
+        </>
+      )}
+
       {settings?.skipMode && (
         <SkipButton
           onClick={handleSkip}

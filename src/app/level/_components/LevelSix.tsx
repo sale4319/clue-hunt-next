@@ -1,10 +1,10 @@
 "use client";
 
-import cx from "classnames";
-import { Button, SkipButton, Title } from "clue-hunt-ui";
+import { SkipButton, Title } from "clue-hunt-ui";
 import { useRouter } from "next/navigation";
 
 import { useSettings, useStatistics } from "@app/context/client";
+import { LevelCompleted } from "@app/level-completed";
 import { statisticsApi } from "@app/lib/client";
 import {
   LevelSixMessages,
@@ -13,8 +13,6 @@ import {
 } from "@app/messages-contract";
 import { QuestionForm } from "@app/question-form";
 import { getRouteWithProgress, getRouteWithSkip } from "@app/utils";
-
-import styles from "./styles.module.css";
 
 export default function LevelSix() {
   const router = useRouter();
@@ -43,44 +41,30 @@ export default function LevelSix() {
 
   return (
     <>
-      <Title
-        titleSize="small"
-        label={LevelSixMessages.HINT}
-        theme={settings?.theme}
-        align="center"
-      />
-
       {isCompleted ? (
-        <div
-          className={cx(styles.contentBox, styles[settings?.theme || "dark"])}
-        >
+        <LevelCompleted handleContinue={handleContinue} />
+      ) : (
+        <>
           <Title
-            label="Level completed! You can continue."
             titleSize="small"
-            color="#75f8e2"
+            label={LevelSixMessages.HINT}
+            theme={settings?.theme}
             align="center"
           />
-          <Button
-            size="medium"
-            isLocked={false}
-            primary={false}
-            onClick={handleContinue}
-            label="Continue"
+
+          <QuestionForm
+            questionIconSize="small"
+            handleUnlock={handleUnlock}
+            successMessage={QuestionFormMessages.WOW}
+            firstQuestion={QuestionFormMessages.FIRST_Q_LABEL}
+            firstHint={TooltipMessages.FIRST_Q_HINT}
+            firstPlaceholder={QuestionFormMessages.FIRST_Q_PLACEHOLDER}
+            secondQuestion={QuestionFormMessages.SECOND_Q_LABEL}
+            secondHint={TooltipMessages.SECOND_Q_HINT}
+            secondPlaceholder={QuestionFormMessages.SECOND_Q_PLACEHOLDER}
+            theme={settings?.theme}
           />
-        </div>
-      ) : (
-        <QuestionForm
-          questionIconSize="small"
-          handleUnlock={handleUnlock}
-          successMessage={QuestionFormMessages.WOW}
-          firstQuestion={QuestionFormMessages.FIRST_Q_LABEL}
-          firstHint={TooltipMessages.FIRST_Q_HINT}
-          firstPlaceholder={QuestionFormMessages.FIRST_Q_PLACEHOLDER}
-          secondQuestion={QuestionFormMessages.SECOND_Q_LABEL}
-          secondHint={TooltipMessages.SECOND_Q_HINT}
-          secondPlaceholder={QuestionFormMessages.SECOND_Q_PLACEHOLDER}
-          theme={settings?.theme}
-        />
+        </>
       )}
       {settings?.skipMode && (
         <SkipButton

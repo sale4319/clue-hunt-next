@@ -13,6 +13,7 @@ import { useSettings, useStatistics } from "@app/context/client";
 import { statisticsApi } from "@app/lib/client";
 import { LevelOneMessages } from "@app/messages-contract";
 import { getRouteWithProgress, getRouteWithSkip } from "@app/utils";
+import { LevelCompleted } from "@app/level-completed";
 
 export default function LevelOne() {
   const router = useRouter();
@@ -43,24 +44,30 @@ export default function LevelOne() {
 
   return (
     <>
-      <SpacerElement size="medium">
-        <UnlockButton
-          data-testid="unlockButton"
-          onClick={handleSetLock}
-          label={LevelOneMessages.UNLOCK}
-        />
-      </SpacerElement>
-      <Title
-        label={LevelOneMessages.HINT}
-        theme={settings?.theme}
-        align="center"
-      />
-      <Button
-        size="medium"
-        isLocked={isLocked}
-        primary={isLocked}
-        onClick={handleCompleteLevel}
-      />
+      {isCompleted ? (
+        <LevelCompleted handleContinue={handleCompleteLevel} />
+      ) : (
+        <>
+          <SpacerElement size="medium">
+            <UnlockButton
+              data-testid="unlockButton"
+              onClick={handleSetLock}
+              label={LevelOneMessages.UNLOCK}
+            />
+          </SpacerElement>
+          <Title
+            label={LevelOneMessages.HINT}
+            theme={settings?.theme}
+            align="center"
+          />
+          <Button
+            size="medium"
+            isLocked={isLocked}
+            primary={isLocked}
+            onClick={handleCompleteLevel}
+          />
+        </>
+      )}
       {skipMode && (
         <SkipButton
           onClick={handleSkip}

@@ -7,6 +7,7 @@
       "@app/dark-mode-button": ["src/shared/components/dark-mode-button/src"],
       "@app/default-button": ["src/shared/components/default-button/src"],
       "@app/page-component:": ["src/shared/components/page-component/src"],
+      "@app/level-completed": ["src/shared/components/level-completed/src"],
       "@app/quiz-set-contract": ["src/shared/contracts/quiz-sets-contract/src"],
       "@app/messages-contract": ["src/shared/contracts/messages-contract/src"],
       "@app/settings-menu": ["src/shared/features/settings-menu/src"],
@@ -27,11 +28,7 @@
     ".next/types/**/*.ts",
     "next.config.js"
   ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    ".next"
-  ],
+  "exclude": ["node_modules", "dist", ".next"],
   "references": [
     {
       "path": "src/shared/components/dark-mode-button/tsconfig.next.json"
@@ -46,6 +43,9 @@
       "path": "src/shared/components/page-component/tsconfig.next.json"
     },
     {
+      "path": "src/shared/components/level-completed/tsconfig.next.json"
+    },
+    {
       "path": "src/shared/contracts/quiz-sets-contract/tsconfig.next.json"
     },
     {
@@ -56,11 +56,9 @@
     },
     {
       "path": "src/shared/features/countdown-timer/tsconfig.next.json"
-      
     },
     {
       "path": "src/shared/features/question-form/tsconfig.next.json"
-
     },
     {
       "path": "src/shared/context/tsconfig.next.json"
@@ -68,6 +66,5 @@
     {
       "path": "src/shared/utils/tsconfig.next.json"
     }
-
   ]
 }

@@ -11,6 +11,7 @@ import {
   getRouteWithSkip,
   useFeatureToggle,
 } from "@app/utils";
+import { LevelCompleted } from "@app/level-completed";
 
 export default function LevelFive() {
   const { settings, isTimerStarted } = useSettings();
@@ -38,29 +39,26 @@ export default function LevelFive() {
 
   return (
     <>
-      <SpacerElement size="large" />
-      <Title
-        label={LevelFiveMessages.HINT}
-        theme={settings?.theme}
-        align="center"
-      />
       {isCompleted ? (
-        <Button
-          size="medium"
-          isLocked={false}
-          primary={false}
-          onClick={handleContinue}
-          label="Continue"
-        />
+        <LevelCompleted handleContinue={handleContinue} />
       ) : (
-        isNewFeatureEnabled && (
-          <Button
-            size="medium"
-            isLocked={false}
-            primary={false}
-            onClick={handleUnlock}
+        <>
+          <SpacerElement size="large" />
+          <Title
+            label={LevelFiveMessages.HINT}
+            theme={settings?.theme}
+            align="center"
           />
-        )
+
+          {isNewFeatureEnabled && (
+            <Button
+              size="medium"
+              isLocked={false}
+              primary={false}
+              onClick={handleUnlock}
+            />
+          )}
+        </>
       )}
       {settings?.skipMode && (
         <SkipButton
