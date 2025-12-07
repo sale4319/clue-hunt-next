@@ -14,8 +14,18 @@ import { getRouteWithProgress, getRouteWithSkip } from "@app/utils";
 export default function LevelStart() {
   const router = useRouter();
   const [isLocked, setIsLocked] = useState(true);
-  const { settings, isTimerStarted } = useSettings();
-  const { statistics, refreshStatistics } = useStatistics();
+  const {
+    settings,
+    isTimerStarted,
+    isLoading: settingsLoading,
+  } = useSettings();
+  const {
+    statistics,
+    refreshStatistics,
+    isLoading: statisticsLoading,
+  } = useStatistics();
+
+  const isLoading = settingsLoading || statisticsLoading;
 
   const savedDate = settings?.timerEndDate;
   const showStartButton =
@@ -72,30 +82,36 @@ export default function LevelStart() {
             label={LevelStartMessages.INSTRUCTION}
             align="center"
           />
-          <CountdownTimer />
+          <CountdownTimer isLoading={isLoading} />
 
-          {isTimerStarted && (
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <Title
-                titleSize="medium"
-                label={LevelStartMessages.HINT}
-                theme={theme}
-              />
-              <QuestionIconToolTip
-                size="large"
-                onClick={handleSetLock}
-                content={TooltipMessages.START_HINT}
-              />
-            </div>
-          )}
-          {shouldShowStartButton && (
+          <div
+            style={{
+              display: isTimerStarted ? "flex" : "none",
+              alignItems: "center",
+            }}
+          >
+            <Title
+              titleSize="medium"
+              label={LevelStartMessages.HINT}
+              theme={theme}
+            />
+            <QuestionIconToolTip
+              size="large"
+              onClick={handleSetLock}
+              content={TooltipMessages.START_HINT}
+            />
+          </div>
+
+          <div
+            style={{ visibility: shouldShowStartButton ? "visible" : "hidden" }}
+          >
             <Button
               size="medium"
               isLocked={isLocked}
               primary={isLocked}
               onClick={handleCompleteLevel}
             />
-          )}
+          </div>
         </>
       )}
       {settings?.skipMode && (

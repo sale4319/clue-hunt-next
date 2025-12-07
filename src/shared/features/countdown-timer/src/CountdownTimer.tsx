@@ -21,7 +21,13 @@ const renderer = ({ hours, minutes, seconds }: CountdownRenderProps) => (
   </span>
 );
 
-export const CountdownTimer = () => {
+export interface CountdownTimerProps {
+  isLoading?: boolean;
+}
+
+export const CountdownTimer = ({
+  isLoading: externalIsLoading,
+}: CountdownTimerProps = {}) => {
   const isClient = useIsClient();
   const router = useRouter();
   const { settings, isLoading, refreshSettings } = useSettings();
@@ -38,6 +44,12 @@ export const CountdownTimer = () => {
   const isRestartingRef = useRef(false);
   const lastCompletedTimeRef = useRef<number | null>(null);
   const hasHandledExpiredTimerRef = useRef(false);
+
+  // Use external loading state if provided, otherwise use local loading states
+  const isComponentLoading =
+    externalIsLoading !== undefined
+      ? externalIsLoading
+      : isLoading || statisticsLoading;
 
   const handleRestart = useCallback(async () => {
     if (isRestartingRef.current) return;
@@ -244,7 +256,7 @@ export const CountdownTimer = () => {
     setEndDate(savedDate && savedDate - Date.now() > 0 ? savedDate : null);
   }, [settings, isLoading, gameCompleted, statistics, endDate]);
 
-  if (!isClient) {
+  if (!isClient || (isComponentLoading && !gameCompleted)) {
     return <CountdownLoader />;
   }
 
