@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { quizApi } from "@app/lib/client";
 
@@ -15,6 +15,9 @@ export const useQuizProgress = (sessionId: string, questions: Question[]) => {
     useState<boolean>(false);
   const [reloadTrigger, setReloadTrigger] = useState<number>(0);
 
+  // Store the completion timeout ID so we can cancel it on restart
+  const completionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   const totalQuestions = questions.length;
   const isLastQuestion = questionIndex === totalQuestions - 1;
 
@@ -24,19 +27,41 @@ export const useQuizProgress = (sessionId: string, questions: Question[]) => {
       try {
         const progress = await quizApi.getProgress(sessionId);
         const loadedAnswers = progress.answers || [];
+
         setAnswers(loadedAnswers);
 
-        if (progress.isCompleted) {
+        // Use the answers array to determine completion
+        // If all questions have answers saved, it was completed
+        const isFullyAnswered =
+          totalQuestions > 0 &&
+          loadedAnswers.length === totalQuestions &&
+          loadedAnswers.length > 0;
+
+        if (isFullyAnswered) {
+          // Quiz was completed - restore completion state
+          // Recalculate correctAnswers from loaded answers
+          let calculatedCorrectAnswers = 0;
+          for (let i = 0; i < loadedAnswers.length; i++) {
+            if (loadedAnswers[i] === questions[i]?.correctAnswerIndex) {
+              calculatedCorrectAnswers++;
+            }
+          }
+
           setQuizComplete(true);
-          setCorrectAnswerCount(progress.correctAnswers);
+          setCorrectAnswerCount(calculatedCorrectAnswers);
           setQuestionIndex(progress.currentQuestionIndex);
           setWasLoadedAsComplete(true);
         } else if (
           progress.currentQuestionIndex >= 0 &&
-          (progress.answers?.length > 0 || progress.correctAnswers > 0)
+          loadedAnswers.length > 0
         ) {
+          // Quiz in progress - restore to last question
           setQuestionIndex(progress.currentQuestionIndex);
           setCorrectAnswerCount(progress.correctAnswers);
+        } else {
+          // Fresh quiz
+          setQuestionIndex(null);
+          setCorrectAnswerCount(0);
         }
       } catch (error) {
         console.error("Failed to load quiz progress:", error);
@@ -46,7 +71,7 @@ export const useQuizProgress = (sessionId: string, questions: Question[]) => {
     };
 
     loadProgress();
-  }, [sessionId, reloadTrigger]);
+  }, [sessionId, reloadTrigger, totalQuestions, questions]);
 
   // Update answer status when question changes
   useEffect(() => {
@@ -96,7 +121,6 @@ export const useQuizProgress = (sessionId: string, questions: Question[]) => {
         ? correctAnswerCount + 1
         : correctAnswerCount;
 
-      // Always update the state to ensure consistency
       setCorrectAnswerCount(newCorrectAnswerCount);
 
       const isLastQuestionAnswered = questionIndex === totalQuestions - 1;
@@ -104,12 +128,12 @@ export const useQuizProgress = (sessionId: string, questions: Question[]) => {
       await saveProgress(
         questionIndex,
         newCorrectAnswerCount,
-        isLastQuestionAnswered,
+        false,
         newAnswers
       );
 
       if (isLastQuestionAnswered) {
-        setTimeout(() => {
+        completionTimeoutRef.current = setTimeout(() => {
           setQuizComplete(true);
         }, 1500);
       }
@@ -128,7 +152,11 @@ export const useQuizProgress = (sessionId: string, questions: Question[]) => {
 
   const handleNext = useCallback(async () => {
     if (isLastQuestion) {
-      setQuizComplete(true);
+      // Only mark complete if we have fully answered all questions
+      // Check both that answers exist AND that we're actually at the last question with data
+      if (answers.length === totalQuestions && totalQuestions > 0) {
+        setQuizComplete(true);
+      }
     } else {
       const nextIndex = questionIndex === null ? 0 : questionIndex + 1;
       setQuestionIndex(nextIndex);
@@ -140,17 +168,28 @@ export const useQuizProgress = (sessionId: string, questions: Question[]) => {
     correctAnswerCount,
     answers,
     saveProgress,
+    totalQuestions,
   ]);
 
   const handleRestart = useCallback(async () => {
     try {
+      // Cancel any pending completion timeout from the previous quiz
+      if (completionTimeoutRef.current) {
+        clearTimeout(completionTimeoutRef.current);
+        completionTimeoutRef.current = null;
+      }
+
+      // Reset database
       await quizApi.resetProgress(sessionId);
+
+      // Clear all state
       setQuizComplete(false);
       setQuestionIndex(null);
       setCorrectAnswerCount(0);
       setAnswerStatus(null);
       setAnswers([]);
       setWasLoadedAsComplete(false);
+      // Force reload to get fresh state from database
       setReloadTrigger((prev) => prev + 1);
     } catch (error) {
       console.error("Failed to reset quiz progress:", error);

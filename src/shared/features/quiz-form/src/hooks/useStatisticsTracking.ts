@@ -16,13 +16,22 @@ export const useStatisticsTracking = (
 
   const isPerfectScore = correctAnswerCount === totalQuestions;
 
+  // Reset statistics tracking when quiz is restarted (when questionIndex becomes null in parent)
+  useEffect(() => {
+    // Reset tracking if quiz is not complete and not loading - indicates a restart
+    if (!quizComplete && !isLoading) {
+      setStatisticsTracked(false);
+    }
+  }, [quizComplete, isLoading]);
+
   useEffect(() => {
     const trackStatistics = async () => {
       if (
         quizComplete &&
         !isLoading &&
         !statisticsTracked &&
-        totalQuestions > 0
+        totalQuestions > 0 &&
+        correctAnswerCount > 0
       ) {
         try {
           // Always mark quiz as completed

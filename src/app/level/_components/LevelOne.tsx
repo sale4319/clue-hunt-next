@@ -58,7 +58,6 @@ export default function LevelOne() {
     );
   };
 
-  // Wrapper for LevelCompleted component which expects async function
   const handleCompleteLevelAsync = async () => {
     handleCompleteLevel();
   };

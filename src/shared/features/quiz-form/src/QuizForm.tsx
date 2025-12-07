@@ -58,8 +58,8 @@ const QuizForm: React.FC<QuizProps> = ({
     }
   };
 
+  // Note: resetTracking is called automatically when quiz resets via useEffect in useStatisticsTracking
   const handleRestart = async () => {
-    resetTracking();
     await onRestart();
   };
 

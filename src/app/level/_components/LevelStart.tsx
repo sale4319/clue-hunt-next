@@ -87,7 +87,7 @@ export default function LevelStart() {
 
   return (
     <>
-      {isCompleted ? (
+      {isCompleted && !isGameComplete ? (
         <>
           <LevelCompleted handleContinue={handleCompleteLevelAsync} />
         </>
