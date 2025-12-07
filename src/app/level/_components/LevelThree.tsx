@@ -17,6 +17,11 @@ import { statisticsApi } from "@app/lib/client";
 import { LevelThreeMessages } from "@app/messages-contract";
 import { getRouteWithProgress, getRouteWithSkip } from "@app/utils";
 
+import {
+  completeAndNavigate,
+  skipAndNavigate,
+} from "../_utils/optimizedNavigation";
+
 export default function LevelThree() {
   const router = useRouter();
   const [isLocked, setIsLocked] = useState(true);
@@ -33,20 +38,31 @@ export default function LevelThree() {
     await refreshStatistics();
   };
 
-  const handleCompleteLevel = async () => {
-    await statisticsApi.setLevelCompleted("three", true);
-    router.push(getRouteWithProgress(isQuizMode, isQuizRoute));
+  const handleCompleteLevel = () => {
+    completeAndNavigate(
+      "three",
+      () => statisticsApi.setLevelCompleted("three", true),
+      router.push,
+      getRouteWithProgress(isQuizMode, isQuizRoute)
+    );
   };
 
-  const handleSkip = async () => {
-    await statisticsApi.incrementSkipButtonClicks();
-    router.push(getRouteWithSkip(isQuizMode, isQuizRoute));
+  const handleCompleteLevelAsync = async () => {
+    handleCompleteLevel();
+  };
+
+  const handleSkip = () => {
+    skipAndNavigate(
+      () => statisticsApi.incrementSkipButtonClicks(),
+      router.push,
+      getRouteWithSkip(isQuizMode, isQuizRoute)
+    );
   };
 
   return (
     <>
       {isCompleted ? (
-        <LevelCompleted handleContinue={handleCompleteLevel} />
+        <LevelCompleted handleContinue={handleCompleteLevelAsync} />
       ) : (
         <>
           <SpacerElement size="small" />

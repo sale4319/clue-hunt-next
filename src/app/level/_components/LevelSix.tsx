@@ -15,6 +15,11 @@ import {
 import { QuestionForm } from "@app/question-form";
 import { getRouteWithProgress, getRouteWithSkip } from "@app/utils";
 
+import {
+  completeAndNavigate,
+  skipAndNavigate,
+} from "../_utils/optimizedNavigation";
+
 export default function LevelSix() {
   const router = useRouter();
   const { settings, isTimerStarted } = useSettings();
@@ -23,23 +28,34 @@ export default function LevelSix() {
 
   const isCompleted = statistics?.completedLevelsMap?.six || false;
 
-  const handleUnlock = async () => {
-    await statisticsApi.setLevelCompleted("six", true);
-    router.push(getRouteWithProgress(isQuizMode, isQuizRoute));
-    await refreshStatistics();
+  const handleUnlock = () => {
+    const isQuizMode = settings?.quizMode ? "quiz" : "level";
+    const isQuizRoute = settings?.quizMode ? "six" : "score";
+
+    completeAndNavigate(
+      "six",
+      () => statisticsApi.setLevelCompleted("six", true),
+      router.push,
+      getRouteWithProgress(isQuizMode, isQuizRoute)
+    );
   };
 
   const handleContinue = async () => {
+    const isQuizMode = settings?.quizMode ? "quiz" : "level";
+    const isQuizRoute = settings?.quizMode ? "six" : "score";
     router.push(getRouteWithProgress(isQuizMode, isQuizRoute));
   };
 
-  const handleSkip = async () => {
-    await statisticsApi.incrementSkipButtonClicks();
-    router.push(getRouteWithSkip(isQuizMode, isQuizRoute));
-  };
+  const handleSkip = () => {
+    const isQuizMode = settings?.quizMode ? "quiz" : "level";
+    const isQuizRoute = settings?.quizMode ? "six" : "score";
 
-  const isQuizMode = settings?.quizMode ? "quiz" : "level";
-  const isQuizRoute = settings?.quizMode ? "six" : "score";
+    skipAndNavigate(
+      () => statisticsApi.incrementSkipButtonClicks(),
+      router.push,
+      getRouteWithSkip(isQuizMode, isQuizRoute)
+    );
+  };
 
   return (
     <>

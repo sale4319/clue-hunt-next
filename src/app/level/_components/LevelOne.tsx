@@ -17,6 +17,11 @@ import { statisticsApi } from "@app/lib/client";
 import { LevelOneMessages } from "@app/messages-contract";
 import { getRouteWithProgress, getRouteWithSkip } from "@app/utils";
 
+import {
+  completeAndNavigate,
+  skipAndNavigate,
+} from "../_utils/optimizedNavigation";
+
 export default function LevelOne() {
   const router = useRouter();
 
@@ -36,20 +41,32 @@ export default function LevelOne() {
     await refreshStatistics();
   };
 
-  const handleSkip = async () => {
-    await statisticsApi.incrementSkipButtonClicks();
-    router.push(getRouteWithSkip(isQuizMode, isQuizRoute));
+  const handleSkip = () => {
+    skipAndNavigate(
+      () => statisticsApi.incrementSkipButtonClicks(),
+      router.push,
+      getRouteWithSkip(isQuizMode, isQuizRoute)
+    );
   };
 
-  const handleCompleteLevel = async () => {
-    await statisticsApi.setLevelCompleted("one", true);
-    router.push(getRouteWithProgress(isQuizMode, isQuizRoute));
+  const handleCompleteLevel = () => {
+    completeAndNavigate(
+      "one",
+      () => statisticsApi.setLevelCompleted("one", true),
+      router.push,
+      getRouteWithProgress(isQuizMode, isQuizRoute)
+    );
+  };
+
+  // Wrapper for LevelCompleted component which expects async function
+  const handleCompleteLevelAsync = async () => {
+    handleCompleteLevel();
   };
 
   return (
     <>
       {isCompleted ? (
-        <LevelCompleted handleContinue={handleCompleteLevel} />
+        <LevelCompleted handleContinue={handleCompleteLevelAsync} />
       ) : (
         <>
           <SpacerElement size="medium">

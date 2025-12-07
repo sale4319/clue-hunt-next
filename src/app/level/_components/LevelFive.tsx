@@ -14,6 +14,11 @@ import {
   useFeatureToggle,
 } from "@app/utils";
 
+import {
+  completeAndNavigate,
+  skipAndNavigate,
+} from "../_utils/optimizedNavigation";
+
 export default function LevelFive() {
   const router = useRouter();
   const { settings, isTimerStarted } = useSettings();
@@ -25,19 +30,29 @@ export default function LevelFive() {
   const isQuizMode = settings?.quizMode ? "quiz" : "level";
   const isQuizRoute = settings?.quizMode ? "five" : "six";
 
-  const handleUnlock = async () => {
-    await statisticsApi.setLevelCompleted("five", true);
-    router.push(getRouteWithProgress(isQuizMode, isQuizRoute));
-    await refreshStatistics();
+  const handleUnlock = () => {
+    completeAndNavigate(
+      "five",
+      () => statisticsApi.setLevelCompleted("five", true),
+      router.push,
+      getRouteWithProgress(isQuizMode, isQuizRoute)
+    );
+  };
+
+  const handleUnlockAsync = async () => {
+    handleUnlock();
   };
 
   const handleContinue = async () => {
     router.push(getRouteWithProgress(isQuizMode, isQuizRoute));
   };
 
-  const handleSkip = async () => {
-    await statisticsApi.incrementSkipButtonClicks();
-    router.push(getRouteWithSkip(isQuizMode, isQuizRoute));
+  const handleSkip = () => {
+    skipAndNavigate(
+      () => statisticsApi.incrementSkipButtonClicks(),
+      router.push,
+      getRouteWithSkip(isQuizMode, isQuizRoute)
+    );
   };
 
   return (
@@ -58,7 +73,7 @@ export default function LevelFive() {
               size="medium"
               isLocked={false}
               primary={false}
-              onClick={handleUnlock}
+              onClick={handleUnlockAsync}
             />
           )}
         </>

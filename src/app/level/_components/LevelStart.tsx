@@ -12,6 +12,11 @@ import { statisticsApi } from "@app/lib/client";
 import { LevelStartMessages, TooltipMessages } from "@app/messages-contract";
 import { getRouteWithProgress, getRouteWithSkip } from "@app/utils";
 
+import {
+  completeAndNavigate,
+  skipAndNavigate,
+} from "../_utils/optimizedNavigation";
+
 export default function LevelStart() {
   const router = useRouter();
   const [isLocked, setIsLocked] = useState(true);
@@ -59,21 +64,32 @@ export default function LevelStart() {
     await refreshStatistics();
   };
 
-  const handleSkip = async () => {
-    await statisticsApi.incrementSkipButtonClicks();
-    router.push(getRouteWithSkip(isQuizMode, isQuizRoute));
+  const handleSkip = () => {
+    skipAndNavigate(
+      () => statisticsApi.incrementSkipButtonClicks(),
+      router.push,
+      getRouteWithSkip(isQuizMode, isQuizRoute)
+    );
   };
 
-  const handleCompleteLevel = async () => {
-    await statisticsApi.setLevelCompleted("start", true);
-    router.push(getRouteWithProgress(isQuizMode, isQuizRoute));
+  const handleCompleteLevel = () => {
+    completeAndNavigate(
+      "start",
+      () => statisticsApi.setLevelCompleted("start", true),
+      router.push,
+      getRouteWithProgress(isQuizMode, isQuizRoute)
+    );
+  };
+
+  const handleCompleteLevelAsync = async () => {
+    handleCompleteLevel();
   };
 
   return (
     <>
       {isCompleted ? (
         <>
-          <LevelCompleted handleContinue={handleCompleteLevel} />
+          <LevelCompleted handleContinue={handleCompleteLevelAsync} />
         </>
       ) : (
         <>
