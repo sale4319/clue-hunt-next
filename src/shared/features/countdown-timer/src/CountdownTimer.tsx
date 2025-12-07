@@ -30,7 +30,7 @@ export const CountdownTimer = () => {
     refreshStatistics,
     isLoading: statisticsLoading,
   } = useStatistics();
-  const { deleteAccount } = useAuth();
+  const { deleteAccount, user } = useAuth();
   const [endDate, setEndDate] = useState<number | null>(null);
   const [gameCompleted, setGameCompleted] = useState(false);
   const [frozenTimeLeft, setFrozenTimeLeft] = useState<number | null>(null);
@@ -45,7 +45,7 @@ export const CountdownTimer = () => {
 
     try {
       // Only delete non-admin accounts
-      const isAdmin = settings?.isAdmin === true;
+      const isAdmin = user?.isAdmin === true;
 
       if (!isAdmin) {
         try {
@@ -91,7 +91,7 @@ export const CountdownTimer = () => {
       isRestartingRef.current = false;
     }
   }, [
-    settings?.isAdmin,
+    user?.isAdmin,
     deleteAccount,
     refreshSettings,
     refreshStatistics,
@@ -160,7 +160,8 @@ export const CountdownTimer = () => {
       isLoading ||
       statisticsLoading ||
       !settings ||
-      settings.isAdmin === undefined
+      !user ||
+      user.isAdmin === undefined
     ) {
       return;
     }
@@ -173,6 +174,7 @@ export const CountdownTimer = () => {
     isLoading,
     statisticsLoading,
     settings,
+    user,
   ]);
   useEffect(() => {
     if (!statistics) return;
@@ -312,7 +314,7 @@ export const CountdownTimer = () => {
       { hours: 1, label: "Easy (1h)", style: "easyButton" },
       { hours: 0.5, label: "Normal (30m)", style: "normalButton" },
       { hours: 0.25, label: "Hard (15m)", style: "hardButton" },
-      ...(settings?.isAdmin
+      ...(user?.isAdmin
         ? [{ hours: 0.01, label: "Test (30s)", style: "hardButton" }]
         : []),
     ];
