@@ -27,8 +27,8 @@ export default function LevelFive() {
 
   const handleUnlock = async () => {
     await statisticsApi.setLevelCompleted("five", true);
-    await refreshStatistics();
     router.push(getRouteWithProgress(isQuizMode, isQuizRoute));
+    await refreshStatistics();
   };
 
   const handleContinue = async () => {
