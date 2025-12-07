@@ -47,6 +47,10 @@ export default function LevelStart() {
 
   const shouldShowStartButton = showStartButton && !isGameComplete;
 
+  if (isLoading) {
+    return null;
+  }
+
   const handleSetLock = async () => {
     setIsLocked(false);
     await refreshStatistics();
@@ -82,7 +86,7 @@ export default function LevelStart() {
             label={LevelStartMessages.INSTRUCTION}
             align="center"
           />
-          <CountdownTimer isLoading={isLoading} />
+          <CountdownTimer />
 
           <div
             style={{

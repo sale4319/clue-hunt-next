@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import Countdown, { CountdownRenderProps } from "react-countdown";
 import cx from "classnames";
-import { useIsClient } from "src/shared/hooks/useIsClient";
 
 import { useSettings } from "@app/context/client";
+import { useIsClient } from "@app/hooks";
 import { twoDigits } from "@app/utils";
 
 import styles from "./MiniCountdownTimer.module.css";

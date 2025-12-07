@@ -15,6 +15,7 @@
       "@app/context/client": ["src/shared/context/index.client.ts"],
       "@app/context/server": ["src/shared/context/index.server.ts"],
       "@app/utils": ["src/shared/utils"],
+      "@app/hooks": ["src/shared/hooks"],
       "@app/lib/client": ["src/shared/lib/src/index.client.ts"],
       "@app/lib/server": ["src/shared/lib/src/index.server.ts"],
       "@app/question-form": ["src/shared/features/question-form/src"],
@@ -65,6 +66,9 @@
     },
     {
       "path": "src/shared/utils/tsconfig.next.json"
+    },
+    {
+      "path": "src/shared/hooks/tsconfig.next.json"
     }
   ]
 }

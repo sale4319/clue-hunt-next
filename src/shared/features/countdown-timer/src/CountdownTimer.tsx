@@ -4,14 +4,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Countdown, { CountdownRenderProps } from "react-countdown";
 import cx from "classnames";
 import { useRouter } from "next/navigation";
-import { useIsClient } from "src/shared/hooks/useIsClient";
 
 import { useSettings, useStatistics } from "@app/context/client";
 import { useAuth } from "@app/context/client";
 import { quizApi, settingsApi, statisticsApi } from "@app/lib/client";
 import { calculateFrozenTime, formatTimeFromMs, twoDigits } from "@app/utils";
-
-import { CountdownLoader } from "./CountdownLoader/CountdownLodaer";
 
 import styles from "./CountdownTimer.module.css";
 
@@ -21,14 +18,7 @@ const renderer = ({ hours, minutes, seconds }: CountdownRenderProps) => (
   </span>
 );
 
-export interface CountdownTimerProps {
-  isLoading?: boolean;
-}
-
-export const CountdownTimer = ({
-  isLoading: externalIsLoading,
-}: CountdownTimerProps = {}) => {
-  const isClient = useIsClient();
+export const CountdownTimer = () => {
   const router = useRouter();
   const { settings, isLoading, refreshSettings } = useSettings();
   const {
@@ -44,12 +34,6 @@ export const CountdownTimer = ({
   const isRestartingRef = useRef(false);
   const lastCompletedTimeRef = useRef<number | null>(null);
   const hasHandledExpiredTimerRef = useRef(false);
-
-  // Use external loading state if provided, otherwise use local loading states
-  const isComponentLoading =
-    externalIsLoading !== undefined
-      ? externalIsLoading
-      : isLoading || statisticsLoading;
 
   const handleRestart = useCallback(async () => {
     if (isRestartingRef.current) return;
@@ -255,10 +239,6 @@ export const CountdownTimer = ({
 
     setEndDate(savedDate && savedDate - Date.now() > 0 ? savedDate : null);
   }, [settings, isLoading, gameCompleted, statistics, endDate]);
-
-  if (!isClient || (isComponentLoading && !gameCompleted)) {
-    return <CountdownLoader />;
-  }
 
   if (
     gameCompleted &&
