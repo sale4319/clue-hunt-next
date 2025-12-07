@@ -11,6 +11,7 @@ import {
 import { useRouter } from "next/navigation";
 
 import { useSettings, useStatistics } from "@app/context/client";
+import { useRefreshOnPageShow } from "@app/hooks";
 import { LevelCompleted } from "@app/level-completed";
 import { statisticsApi } from "@app/lib/client";
 import { LevelTwoMessages, TooltipMessages } from "@app/messages-contract";
@@ -21,6 +22,7 @@ export default function LevelTwo() {
   const [isLocked, setIsLocked] = useState(true);
   const { settings, isTimerStarted } = useSettings();
   const { statistics, refreshStatistics } = useStatistics();
+  useRefreshOnPageShow(refreshStatistics);
 
   const isCompleted = statistics?.completedLevelsMap?.two || false;
   const isQuizMode = settings?.quizMode ? "quiz" : "level";

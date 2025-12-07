@@ -11,6 +11,7 @@ import {
 import { useRouter } from "next/navigation";
 
 import { useSettings, useStatistics } from "@app/context/client";
+import { useRefreshOnPageShow } from "@app/hooks";
 import { LevelCompleted } from "@app/level-completed";
 import { statisticsApi } from "@app/lib/client";
 import { LevelOneMessages } from "@app/messages-contract";
@@ -18,9 +19,11 @@ import { getRouteWithProgress, getRouteWithSkip } from "@app/utils";
 
 export default function LevelOne() {
   const router = useRouter();
+
   const [isLocked, setIsLocked] = useState(true);
   const { settings, isTimerStarted } = useSettings();
   const { statistics, refreshStatistics } = useStatistics();
+  useRefreshOnPageShow(refreshStatistics);
 
   const isCompleted = statistics?.completedLevelsMap?.one || false;
   const quizMode = settings?.quizMode;

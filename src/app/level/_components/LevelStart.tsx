@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 import { useSettings, useStatistics } from "@app/context/client";
 import { CountdownTimer } from "@app/countdown-timer";
+import { useRefreshOnPageShow } from "@app/hooks";
 import { LevelCompleted } from "@app/level-completed";
 import { statisticsApi } from "@app/lib/client";
 import { LevelStartMessages, TooltipMessages } from "@app/messages-contract";
@@ -24,6 +25,8 @@ export default function LevelStart() {
     refreshStatistics,
     isLoading: statisticsLoading,
   } = useStatistics();
+
+  useRefreshOnPageShow(refreshStatistics);
 
   const isLoading = settingsLoading || statisticsLoading;
 
