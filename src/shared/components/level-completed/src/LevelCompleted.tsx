@@ -1,5 +1,5 @@
 import cx from "classnames";
-import { Button, SpacerElement, Title } from "clue-hunt-ui";
+import { Button, Title } from "clue-hunt-ui";
 import { useSettings } from "src/shared/context/SettingsContext";
 
 import styles from "./LevelCompleted.module.css";
