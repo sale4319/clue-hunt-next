@@ -1,5 +1,5 @@
 export { calculateScore, getCompletionTimeInSeconds } from "./calculateScore";
-export { formatTimeFromMs, twoDigits } from "./formatTimeFromMs";
+export { formatTimeFromMs, twoDigits, calculateFrozenTime } from "./formatTime";
 export { getRoute } from "./getRoute";
 export { getRouteWithProgress } from "./getRouteWithProgress";
 export { getRouteWithSkip } from "./getRouteWithSkip";

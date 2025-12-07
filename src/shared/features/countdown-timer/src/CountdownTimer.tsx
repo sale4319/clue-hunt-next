@@ -9,7 +9,7 @@ import { useIsClient } from "src/shared/hooks/useIsClient";
 import { useSettings, useStatistics } from "@app/context/client";
 import { useAuth } from "@app/context/client";
 import { quizApi, settingsApi, statisticsApi } from "@app/lib/client";
-import { formatTimeFromMs, twoDigits } from "@app/utils";
+import { formatTimeFromMs, twoDigits, calculateFrozenTime } from "@app/utils";
 
 import { CountdownLoader } from "./CountdownLoader/CountdownLodaer";
 
@@ -44,10 +44,11 @@ export const CountdownTimer = () => {
     isRestartingRef.current = true;
 
     try {
-      // Only delete non-admin accounts
       const isAdmin = user?.isAdmin === true;
+      const gameWasCompleted = statistics?.gameCompletedAt !== undefined;
 
-      if (!isAdmin) {
+      if (!isAdmin && !gameWasCompleted) {
+        // Non-admin user timed out without completing the game - delete account
         try {
           await settingsApi.clearTimerEndDate();
           lastCompletedTimeRef.current = Date.now();
@@ -58,25 +59,30 @@ export const CountdownTimer = () => {
         return;
       }
 
-      // Admin: restart game
-      const response = await fetch("/api/settings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ action: "restart" }),
-      });
+      if (isAdmin) {
+        // Admin: use the admin restart endpoint
+        const response = await fetch("/api/settings", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ action: "restart" }),
+        });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(
-          errorData.error || `Failed to restart game (${response.status})`
-        );
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(
+            errorData.error || `Failed to restart game (${response.status})`
+          );
+        }
+      } else {
+        // Non-admin: successfully completed game - reset game progress manually
+        await quizApi.resetAllProgress();
+        await statisticsApi.resetStatistics();
       }
 
       await settingsApi.clearTimerEndDate();
       lastCompletedTimeRef.current = Date.now();
-      await quizApi.resetAllProgress();
       await refreshStatistics();
       await refreshSettings();
 
@@ -92,11 +98,11 @@ export const CountdownTimer = () => {
     }
   }, [
     user?.isAdmin,
+    statistics?.gameCompletedAt,
     deleteAccount,
     refreshSettings,
     refreshStatistics,
     router,
-    settings,
   ]);
 
   useEffect(() => {
@@ -155,13 +161,13 @@ export const CountdownTimer = () => {
 
     if (isRestartingRef.current) return;
 
-    // Only proceed if BOTH settings AND statistics are fully loaded with admin flag defined
+    // Only proceed if settings and statistics are fully loaded
     if (
       isLoading ||
       statisticsLoading ||
       !settings ||
-      !user ||
-      user.isAdmin === undefined
+      !statistics ||
+      user?.isAdmin === undefined
     ) {
       return;
     }
@@ -174,7 +180,8 @@ export const CountdownTimer = () => {
     isLoading,
     statisticsLoading,
     settings,
-    user,
+    statistics,
+    user?.isAdmin,
   ]);
   useEffect(() => {
     if (!statistics) return;
@@ -182,17 +189,7 @@ export const CountdownTimer = () => {
     if (statistics.gameCompletedAt) {
       setGameCompleted(true);
       setEndDate(null);
-
-      // Calculate frozen time from saved data
-      const timeLeft =
-        statistics.timeLeft && statistics.timeLeft > 0
-          ? statistics.timeLeft
-          : statistics.completionTimeInSeconds &&
-            statistics.completionTimeInSeconds > 0
-          ? Math.max(0, 2 * 3600 - statistics.completionTimeInSeconds) * 1000
-          : 0;
-
-      setFrozenTimeLeft(timeLeft);
+      setFrozenTimeLeft(calculateFrozenTime(null, statistics));
 
       if (settings?.timerEndDate) {
         settingsApi.clearTimerEndDate().catch(console.error);
@@ -244,22 +241,12 @@ export const CountdownTimer = () => {
     const savedDate = settings.timerEndDate;
     if (endDate === savedDate && savedDate != null) return;
 
-    if (savedDate != null) {
-      const delta = savedDate - Date.now();
-      if (delta > 0) {
-        setEndDate(savedDate);
-      } else {
-        setEndDate(null);
-      }
-    } else {
-      setEndDate(null);
-    }
+    setEndDate(savedDate && savedDate - Date.now() > 0 ? savedDate : null);
   }, [
     settings,
     isLoading,
     gameCompleted,
     statistics?.gameCompletedAt,
-    statistics,
     endDate,
   ]);
 
@@ -271,14 +258,7 @@ export const CountdownTimer = () => {
     gameCompleted &&
     (frozenTimeLeft !== null || statistics?.gameCompletedAt)
   ) {
-    const displayFrozenTime =
-      frozenTimeLeft ??
-      (statistics?.timeLeft && statistics.timeLeft > 0
-        ? statistics.timeLeft
-        : statistics?.completionTimeInSeconds &&
-          statistics.completionTimeInSeconds > 0
-        ? Math.max(0, 2 * 3600 - statistics.completionTimeInSeconds) * 1000
-        : 0);
+    const displayFrozenTime = calculateFrozenTime(frozenTimeLeft, statistics);
 
     return (
       <div className={styles.container}>
