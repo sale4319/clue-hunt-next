@@ -3,10 +3,9 @@
 import { useEffect, useState } from "react";
 import Countdown, { CountdownRenderProps } from "react-countdown";
 import cx from "classnames";
-import { usePathname } from "next/navigation";
-import { useIsClient } from "src/shared/hooks/useIsClient";
 
 import { useSettings } from "@app/context/client";
+import { useIsClient } from "@app/hooks";
 import { twoDigits } from "@app/utils";
 
 import styles from "./MiniCountdownTimer.module.css";
@@ -24,12 +23,9 @@ const renderer = ({ hours, minutes, seconds }: CountdownRenderProps) => (
 
 export const MiniCountdownTimer = ({ className, theme }: Props) => {
   const isClient = useIsClient();
-  const pathname = usePathname();
   const { settings, isLoading } = useSettings();
   const [endDate, setEndDate] = useState<number | null>(null);
   const [gameCompleted, setGameCompleted] = useState(false);
-
-  const shouldHide = pathname?.includes("/level/start") || pathname === "/";
 
   useEffect(() => {
     if (isLoading || !settings) {
@@ -56,7 +52,7 @@ export const MiniCountdownTimer = ({ className, theme }: Props) => {
     }
   }, [settings, isLoading, gameCompleted, endDate]);
 
-  if (!isClient || isLoading || shouldHide) {
+  if (!isClient || isLoading) {
     return null;
   }
 

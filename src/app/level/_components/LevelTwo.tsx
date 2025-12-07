@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   Button,
   SkipButton,
@@ -10,55 +11,81 @@ import {
 import { useRouter } from "next/navigation";
 
 import { useSettings, useStatistics } from "@app/context/client";
+import { useRefreshOnPageShow } from "@app/hooks";
+import { LevelCompleted } from "@app/level-completed";
 import { statisticsApi } from "@app/lib/client";
 import { LevelTwoMessages, TooltipMessages } from "@app/messages-contract";
 import { getRouteWithProgress, getRouteWithSkip } from "@app/utils";
 
+import {
+  completeAndNavigate,
+  skipAndNavigate,
+} from "../_utils/optimizedNavigation";
+
 export default function LevelTwo() {
   const router = useRouter();
+  const [isLocked, setIsLocked] = useState(true);
   const { settings, isTimerStarted } = useSettings();
   const { statistics, refreshStatistics } = useStatistics();
+  useRefreshOnPageShow(refreshStatistics);
 
   const isCompleted = statistics?.completedLevelsMap?.two || false;
-  const isLocked = !isCompleted && !statistics?.levelLocks?.two;
   const isQuizMode = settings?.quizMode ? "quiz" : "level";
   const isQuizRoute = settings?.quizMode ? "two" : "three";
 
   const handleSetLock = async () => {
-    await statisticsApi.setLevelLock("two", true);
+    setIsLocked(false);
     await refreshStatistics();
   };
 
-  const handleCompleteLevel = async () => {
-    await statisticsApi.setLevelCompleted("two", true);
-    router.push(getRouteWithProgress(isQuizMode, isQuizRoute));
+  const handleCompleteLevel = () => {
+    completeAndNavigate(
+      "two",
+      () => statisticsApi.setLevelCompleted("two", true),
+      router.push,
+      getRouteWithProgress(isQuizMode, isQuizRoute)
+    );
   };
 
-  const handleSkip = async () => {
-    await statisticsApi.incrementSkipButtonClicks();
-    router.push(getRouteWithSkip(isQuizMode, isQuizRoute));
+  const handleCompleteLevelAsync = async () => {
+    handleCompleteLevel();
+  };
+
+  const handleSkip = () => {
+    skipAndNavigate(
+      () => statisticsApi.incrementSkipButtonClicks(),
+      router.push,
+      getRouteWithSkip(isQuizMode, isQuizRoute)
+    );
   };
 
   return (
     <>
-      <SpacerElement size="medium">
-        <UnlockToolTip
-          content={TooltipMessages.LEVEL_TWO_CONGRATS}
-          onClick={handleSetLock}
-          data-testid="unlockButton"
-        />
-      </SpacerElement>
-      <Title
-        label={LevelTwoMessages.HINT}
-        theme={settings?.theme}
-        align="center"
-      />
-      <Button
-        size="medium"
-        isLocked={isLocked}
-        primary={isLocked}
-        onClick={handleCompleteLevel}
-      />
+      {isCompleted ? (
+        <LevelCompleted handleContinue={handleCompleteLevelAsync} />
+      ) : (
+        <>
+          <SpacerElement size="medium">
+            <UnlockToolTip
+              content={TooltipMessages.LEVEL_TWO_CONGRATS}
+              onClick={handleSetLock}
+              data-testid="unlockButton"
+            />
+          </SpacerElement>
+          <Title
+            label={LevelTwoMessages.HINT}
+            theme={settings?.theme}
+            align="center"
+          />
+          <Button
+            size="medium"
+            isLocked={isLocked}
+            primary={isLocked}
+            onClick={handleCompleteLevel}
+          />
+        </>
+      )}
+
       {settings?.skipMode && (
         <SkipButton
           onClick={handleSkip}

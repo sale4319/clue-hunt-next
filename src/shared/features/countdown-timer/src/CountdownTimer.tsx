@@ -4,14 +4,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Countdown, { CountdownRenderProps } from "react-countdown";
 import cx from "classnames";
 import { useRouter } from "next/navigation";
-import { useIsClient } from "src/shared/hooks/useIsClient";
 
 import { useSettings, useStatistics } from "@app/context/client";
 import { useAuth } from "@app/context/client";
 import { quizApi, settingsApi, statisticsApi } from "@app/lib/client";
 import { calculateFrozenTime, formatTimeFromMs, twoDigits } from "@app/utils";
-
-import { CountdownLoader } from "./CountdownLoader/CountdownLodaer";
 
 import styles from "./CountdownTimer.module.css";
 
@@ -22,7 +19,6 @@ const renderer = ({ hours, minutes, seconds }: CountdownRenderProps) => (
 );
 
 export const CountdownTimer = () => {
-  const isClient = useIsClient();
   const router = useRouter();
   const { settings, isLoading, refreshSettings } = useSettings();
   const {
@@ -243,10 +239,6 @@ export const CountdownTimer = () => {
 
     setEndDate(savedDate && savedDate - Date.now() > 0 ? savedDate : null);
   }, [settings, isLoading, gameCompleted, statistics, endDate]);
-
-  if (!isClient) {
-    return <CountdownLoader />;
-  }
 
   if (
     gameCompleted &&

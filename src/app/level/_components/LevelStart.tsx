@@ -1,25 +1,45 @@
 "use client";
 
+import { useState } from "react";
 import { Button, QuestionIconToolTip, SkipButton, Title } from "clue-hunt-ui";
 import { useRouter } from "next/navigation";
 
 import { useSettings, useStatistics } from "@app/context/client";
 import { CountdownTimer } from "@app/countdown-timer";
+import { useRefreshOnPageShow } from "@app/hooks";
+import { LevelCompleted } from "@app/level-completed";
 import { statisticsApi } from "@app/lib/client";
 import { LevelStartMessages, TooltipMessages } from "@app/messages-contract";
 import { getRouteWithProgress, getRouteWithSkip } from "@app/utils";
 
+import {
+  completeAndNavigate,
+  skipAndNavigate,
+} from "../_utils/optimizedNavigation";
+
 export default function LevelStart() {
-  const { settings, isTimerStarted } = useSettings();
-  const { statistics, refreshStatistics } = useStatistics();
   const router = useRouter();
+  const [isLocked, setIsLocked] = useState(true);
+  const {
+    settings,
+    isTimerStarted,
+    isLoading: settingsLoading,
+  } = useSettings();
+  const {
+    statistics,
+    refreshStatistics,
+    isLoading: statisticsLoading,
+  } = useStatistics();
+
+  useRefreshOnPageShow(refreshStatistics);
+
+  const isLoading = settingsLoading || statisticsLoading;
 
   const savedDate = settings?.timerEndDate;
   const showStartButton =
     savedDate && savedDate !== null && savedDate !== undefined;
 
   const isCompleted = statistics?.completedLevelsMap?.start || false;
-  const isLocked = !isCompleted && !statistics?.levelLocks?.start;
   const isQuizMode = settings?.quizMode ? "quiz" : "level";
   const isQuizRoute = settings?.quizMode ? "start" : "one";
   const theme = settings?.theme || "dark";
@@ -35,57 +55,87 @@ export default function LevelStart() {
 
   const shouldShowStartButton = showStartButton && !isGameComplete;
 
+  if (isLoading) {
+    return null;
+  }
+
   const handleSetLock = async () => {
-    await statisticsApi.setLevelLock("start", true);
+    setIsLocked(false);
     await refreshStatistics();
   };
 
-  const handleSkip = async () => {
-    await statisticsApi.incrementSkipButtonClicks();
-    router.push(getRouteWithSkip(isQuizMode, isQuizRoute));
+  const handleSkip = () => {
+    skipAndNavigate(
+      () => statisticsApi.incrementSkipButtonClicks(),
+      router.push,
+      getRouteWithSkip(isQuizMode, isQuizRoute)
+    );
   };
 
-  const handleCompleteLevel = async () => {
-    await statisticsApi.setLevelCompleted("start", true);
-    router.push(getRouteWithProgress(isQuizMode, isQuizRoute));
+  const handleCompleteLevel = () => {
+    completeAndNavigate(
+      "start",
+      () => statisticsApi.setLevelCompleted("start", true),
+      router.push,
+      getRouteWithProgress(isQuizMode, isQuizRoute)
+    );
+  };
+
+  const handleCompleteLevelAsync = async () => {
+    handleCompleteLevel();
   };
 
   return (
     <>
-      <Title
-        titleSize="medium"
-        label={LevelStartMessages.TITLE}
-        theme={theme}
-        align="center"
-      />
-      <Title
-        titleSize="small"
-        color={theme === "dark" ? "#75F8E2" : "#e91e63"}
-        label={LevelStartMessages.INSTRUCTION}
-        align="center"
-      />
-      <CountdownTimer />
-      {isTimerStarted && (
-        <div style={{ display: "flex", alignItems: "center" }}>
+      {isCompleted ? (
+        <>
+          <LevelCompleted handleContinue={handleCompleteLevelAsync} />
+        </>
+      ) : (
+        <>
           <Title
             titleSize="medium"
-            label={LevelStartMessages.HINT}
+            label={LevelStartMessages.TITLE}
             theme={theme}
+            align="center"
           />
-          <QuestionIconToolTip
-            size="large"
-            onClick={handleSetLock}
-            content={TooltipMessages.START_HINT}
+          <Title
+            titleSize="small"
+            color={theme === "dark" ? "#75F8E2" : "#e91e63"}
+            label={LevelStartMessages.INSTRUCTION}
+            align="center"
           />
-        </div>
-      )}
-      {shouldShowStartButton && (
-        <Button
-          size="medium"
-          isLocked={isLocked}
-          primary={isLocked}
-          onClick={handleCompleteLevel}
-        />
+          <CountdownTimer />
+
+          <div
+            style={{
+              display: isTimerStarted ? "flex" : "none",
+              alignItems: "center",
+            }}
+          >
+            <Title
+              titleSize="medium"
+              label={LevelStartMessages.HINT}
+              theme={theme}
+            />
+            <QuestionIconToolTip
+              size="large"
+              onClick={handleSetLock}
+              content={TooltipMessages.START_HINT}
+            />
+          </div>
+
+          <div
+            style={{ visibility: shouldShowStartButton ? "visible" : "hidden" }}
+          >
+            <Button
+              size="medium"
+              isLocked={isLocked}
+              primary={isLocked}
+              onClick={handleCompleteLevel}
+            />
+          </div>
+        </>
       )}
       {settings?.skipMode && (
         <SkipButton
