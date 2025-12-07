@@ -9,7 +9,7 @@ import { useIsClient } from "src/shared/hooks/useIsClient";
 import { useSettings, useStatistics } from "@app/context/client";
 import { useAuth } from "@app/context/client";
 import { quizApi, settingsApi, statisticsApi } from "@app/lib/client";
-import { formatTimeFromMs, twoDigits, calculateFrozenTime } from "@app/utils";
+import { calculateFrozenTime, formatTimeFromMs, twoDigits } from "@app/utils";
 
 import { CountdownLoader } from "./CountdownLoader/CountdownLodaer";
 
@@ -242,13 +242,7 @@ export const CountdownTimer = () => {
     if (endDate === savedDate && savedDate != null) return;
 
     setEndDate(savedDate && savedDate - Date.now() > 0 ? savedDate : null);
-  }, [
-    settings,
-    isLoading,
-    gameCompleted,
-    statistics?.gameCompletedAt,
-    endDate,
-  ]);
+  }, [settings, isLoading, gameCompleted, statistics, endDate]);
 
   if (!isClient) {
     return <CountdownLoader />;

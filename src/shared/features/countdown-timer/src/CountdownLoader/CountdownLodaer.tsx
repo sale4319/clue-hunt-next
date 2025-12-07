@@ -10,9 +10,9 @@ export const CountdownLoader = () => {
   const hasActiveTimer = settings?.timerEndDate != null;
 
   const difficultyButtons = [
-    { label: "Easy (1h)", style: "easyButton" },
-    { label: "Normal (30m)", style: "normalButton" },
-    { label: "Hard (15m)", style: "hardButton" },
+    { hours: 1, label: "Easy (1h)", style: "easyButton" },
+    { hours: 0.5, label: "Normal (30m)", style: "normalButton" },
+    { hours: 0.25, label: "Hard (15m)", style: "hardButton" },
   ];
   return (
     <div className={styles.container}>
